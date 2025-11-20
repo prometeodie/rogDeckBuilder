@@ -1,0 +1,17 @@
+.actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+
+  ion-icon {
+    font-size: 1.6rem;
+    opacity: 0.8;
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+  }
+}

@@ -1,0 +1,147 @@
+/* ----------- HEADER ----------- */
+.title-centered {
+  text-align: center;
+  width: 100%;
+}
+
+.icon {
+  font-size: 1.6rem;
+  margin-right: 0.7rem;
+}
+
+.icon-l {
+  margin-right: 0;
+  margin-left: 0.7rem;
+}
+
+/* ----------- NAVBAR ----------- */
+.sticky-nav {
+  position: sticky;
+  top: 56px;
+  z-index: 30; /* por encima del contenido */
+  background: #111;
+  display: flex;
+  justify-content: center;
+  padding: 6px 0;
+  height: 48px;
+}
+
+.nav-items {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-item {
+  padding: 6px 10px;
+  border-radius: 6px;
+  background-color: #ddd;
+  border: none;
+}
+
+/* ----------- SEARCHBAR ----------- */
+.searchbar {
+  --background: #252222;
+  --color: #ffffff;
+  --placeholder-color: #aaaaaa;
+  position: relative;
+  z-index: 99;
+  margin: 0;
+}
+
+/* ----------- MAIN LAYOUT ----------- */
+/* Wrapper principal: contiene sidebar (fixed) y content-area */
+.main-container {
+  display: block; /* no queremos que el header se corra por un padding en main */
+  width: 100%;
+  position: relative;
+}
+
+/* Content-area: aquí se aplica el espacio reservado para la sidebar fija.
+   De esta forma el header no se mueve, solo el contenido dentro de ion-content. */
+.content-area {
+  width: 100%;
+  /* Reservamos el ancho de la sidebar para todo el contenido aquí */
+  padding-left: 6rem; /* igual al width de .sidebar */
+  box-sizing: border-box;
+}
+
+/* Wrapper que contiene la grid/scroll de las cards */
+.cards-wrapper {
+  width: 100%;
+  min-height: calc(100vh - (56px + 48px)); /* opcional: para asegurar alto mínimo bajo header */
+  /* si querés scroll independiente dentro del content, podes usar overflow auto */
+  /* overflow-y: auto; */
+}
+
+/* ----------- SIDEBAR (fixed) ----------- */
+.sidebar {
+  position: fixed;
+  left: 0;
+
+  top: 104px;
+  height: calc(100vh - 104px);
+
+  width: 6rem;
+  min-width: 6rem;
+
+  overflow-y: auto;
+  background: #f8f8f8;
+  display: flex;
+  flex-direction: column;
+  z-index: 999;
+}
+
+/* sidebar items */
+.sidebar-item {
+  padding: 0.7rem;
+  background: #000;
+  color: #fff;
+  font-size: 0.7rem;
+  border-bottom: 1px solid #444;
+}
+
+.sidebar-btn {
+  display: flex;
+  padding:0.3rem;
+  justify-content: space-around;
+}
+
+.sb-btn {
+  width: 2.5rem;
+  height: 40px;
+  font-size: 0.6rem;
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+/* ----------- CARDS GRID ----------- */
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;             /* si querés una sola fila: use nowrap */
+  justify-content: space-around; /* o space-evenly si preferís */
+  gap: 0.5rem;
+  padding: 0.5rem;
+  margin: 0;
+  box-sizing: border-box;
+  align-items: flex-start;
+}
+
+/* Forzamos que el custom element 'card' no cause problemas de inline/alto */
+card, app-card, .test-card {
+  display: block;
+  box-sizing: border-box;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 5rem;
+  min-width: 0; /* importante para que flex-shrink funcione */
+}
+
+/* Si querés que las cards no hagan wrap y se adapten en ancho, usa:
+   .cards-container { flex-wrap: nowrap; overflow-x: auto; } */
+
+/* ----------- FIX GLOBAL ----------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}

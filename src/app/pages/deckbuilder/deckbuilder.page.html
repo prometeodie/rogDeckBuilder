@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-icon slot="start" name="arrow-back-outline" class="icon icon-l" routerLink="/home"></ion-icon>
+    <ion-title class="title-centered">Deck Builder</ion-title>
+    <ion-icon name="search-outline" slot="end" class="icon" (click)="toggleSearch($event)"></ion-icon>
+  </ion-toolbar>
+
+  <div class="sticky-nav">
+    <div class="nav-items">
+      <button class="nav-item">1</button>
+      <button class="nav-item">2</button>
+      <button class="nav-item">3</button>
+      <button class="nav-item">4</button>
+      <button class="nav-item">5</button>
+      <button class="nav-item">6</button>
+    </div>
+  </div>
+</ion-header>
+
+<!-- SEARCHBAR -->
+ @if (searchOpen) {
+   <ng-container>
+     <ion-searchbar show-clear-button="always" placeholder="Buscar..." class="searchbar"></ion-searchbar>
+   </ng-container>
+ }
+
+<ion-content class="deck-layout" (click)="closeSearch()">
+  <div class="main-container">
+
+    <!-- SIDEBAR (fixed) -->
+    <div class="sidebar">
+      <div class="sidebar-btn sidebar-item">
+        <ion-button expand="block" class="sb-btn" fill="solid" color="dark">Mazo</ion-button>
+        <ion-button expand="block" class="sb-btn" fill="solid" color="dark">SD</ion-button>
+      </div>
+
+      <div class="sidebar-item">Cartas seleccionadas</div>
+      <div class="sidebar-item" *ngFor="let item of items">{{ item }}</div>
+    </div>
+
+    <!-- CONTENT AREA: aquí reservamos el espacio para la sidebar -->
+    <div class="content-area">
+      <!-- opcional: wrapper para controlar padding y scroll -->
+      <div class="cards-wrapper">
+        <div class="cards-container">
+          <!-- tus componentes card -->
+          <card class="test-card" imgUrl="https://riseofgods.store/wp-content/uploads/2024/06/Sello-Jupiter.png" [initialCount]="0"></card>
+          <card class="test-card" imgUrl="https://riseofgods.store/wp-content/uploads/2024/06/Sello-Jupiter.png" [initialCount]="0"></card>
+          <card class="test-card" imgUrl="https://riseofgods.store/wp-content/uploads/2024/06/Sello-Jupiter.png" [initialCount]="0"></card>
+          <card class="test-card" imgUrl="https://riseofgods.store/wp-content/uploads/2024/06/Sello-Jupiter.png" [initialCount]="0"></card>
+          <card class="test-card" imgUrl="https://riseofgods.store/wp-content/uploads/2024/06/Sello-Jupiter.png" [initialCount]="0"></card>
+          <card class="test-card" imgUrl="https://riseofgods.store/wp-content/uploads/2024/06/Sello-Jupiter.png" [initialCount]="0"></card>
+          <card class="test-card" imgUrl="https://riseofgods.store/wp-content/uploads/2024/06/Sello-Jupiter.png" [initialCount]="0"></card>
+          <card class="test-card" imgUrl="https://riseofgods.store/wp-content/uploads/2024/06/Sello-Jupiter.png" [initialCount]="0"></card>
+          <card class="test-card" imgUrl="https://riseofgods.store/wp-content/uploads/2024/06/Sello-Jupiter.png" [initialCount]="0"></card>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ion-content>

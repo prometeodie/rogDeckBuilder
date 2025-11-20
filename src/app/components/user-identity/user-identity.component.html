@@ -1,0 +1,43 @@
+<div class="overlay">
+  <div class="modal-card">
+
+    <div class="close-x" *ngIf="hasUser" (click)="closeModal()">✕</div>
+
+    <form [formGroup]="form">
+      <ion-list>
+        <ion-item>
+          <ion-label position="floating">Nombre</ion-label>
+          <ion-input formControlName="name"></ion-input>
+        </ion-item>
+          @if (form.get('name')?.touched && form.get('name')?.hasError('required')) {
+        <ion-text color="danger">
+          <small>El nombre es obligatorio</small>
+        </ion-text>
+      }
+
+        <ion-item>
+          <ion-label position="floating">Apellido</ion-label>
+          <ion-input formControlName="lastname"></ion-input>
+        </ion-item>
+
+        <ion-text color="danger" *ngIf="form.get('lastname')?.touched && form.get('lastname')?.hasError('required')">
+          <small>El apellido es obligatorio</small>
+        </ion-text>
+
+        <ion-item>
+          <ion-label position="floating">Player Nickname</ion-label>
+          <ion-input formControlName="nickname"></ion-input>
+        </ion-item>
+
+        <ion-text color="danger" *ngIf="form.get('nickname')?.touched && form.get('nickname')?.hasError('required')">
+          <small>El nickname es obligatorio</small>
+        </ion-text>
+      </ion-list>
+
+      <div class="btns">
+        <ion-button expand="block" (click)="save()">Guardar</ion-button>
+      </div>
+
+    </form>
+  </div>
+</div>

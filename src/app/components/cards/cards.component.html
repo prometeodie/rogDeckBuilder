@@ -1,0 +1,17 @@
+<ion-card class="card-component">
+  <ion-img [src]="imgUrl"></ion-img>
+
+  <ion-card-content>
+    <div class="counter-box">
+      <ion-button fill="clear" class="counter-btn" (click)="decrease()">
+        <ion-icon name="remove"></ion-icon>
+      </ion-button>
+
+      <span class="count">{{ count }}</span>
+
+      <ion-button fill="clear" class="counter-btn" (click)="increase()">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-card-content>
+</ion-card>

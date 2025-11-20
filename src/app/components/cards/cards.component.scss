@@ -1,0 +1,53 @@
+/* === CARD BASE === */
+ion-card {
+  width: 5rem;       /* tamaño fijo en ancho */
+  height: auto;      /* ❗ permite crecer según contenido */
+  margin: 0;
+  padding: 0;
+  border-radius: 0.3rem;
+  overflow: hidden;
+
+  --padding-start: 0;
+  --padding-end: 0;
+  --inner-padding: 0;
+}
+
+/* === IMAGEN QUE SE ADAPTA === */
+ion-img {
+  width: 100%;
+  height: auto;       /* ❗ deja que su altura sea natural */
+  object-fit: contain;
+}
+
+/* === CONTENEDOR DEL CONTADOR === */
+ion-card-content {
+  padding: 0;         /* ❗ evita padding extra */
+  display: flex;
+  justify-content: center;
+}
+
+/* === CONTADOR EXACTO DE 5rem === */
+.counter-box {
+  width: 5rem;
+  height: auto;       /* ❗ permite que se ajuste */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* === BOTONES === */
+.counter-btn {
+  --padding-start: 0;
+  --padding-end: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0;
+}
+
+/* === NÚMERO === */
+.count {
+  width: 1.5rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+}

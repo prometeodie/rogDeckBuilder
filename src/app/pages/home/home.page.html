@@ -1,0 +1,27 @@
+<ion-header>
+<ion-toolbar>
+  <ion-title class="home-title ion-text-center">
+    {{ identity?.name }} - {{ identity?.nickname }}
+  </ion-title>
+
+  <ion-icon
+    slot="end"
+    name="create-outline"
+    class="edit-icon"
+    (click)="editIdentity()">
+  </ion-icon>
+</ion-toolbar>
+
+
+</ion-header>
+ @if (showUserModal) {
+  <div class="overlay">
+    <user-identity (closed)="onIdentitySaved()"></user-identity>
+  </div>
+}
+
+<ion-content class="ion-padding">
+     <ion-title class="home-title ion-text-center"><h5>MIS MAZOS</h5></ion-title>
+  <decks/>
+  <ion-button class="floating-btn" routerLink="/deckbuilder">+</ion-button>
+</ion-content>
