@@ -12,13 +12,19 @@ import {
   IonToolbar,
   IonIcon,
   IonSearchbar,
-  IonButton
+  IonButton,
+  IonInput
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { arrowBackOutline, searchOutline } from 'ionicons/icons';
+
 import { CardsComponent } from "src/app/components/cards/cards.component";
 
+import { Deck } from 'src/app/interfaces/deck.interface';
+import { DecksCardsService } from 'src/app/services/decks-cards';
+
 addIcons({ searchOutline, arrowBackOutline });
+
 @Component({
   selector: 'deckbuilder',
   templateUrl: './deckbuilder.page.html',
@@ -27,61 +33,86 @@ addIcons({ searchOutline, arrowBackOutline });
   imports: [
     IonContent, IonHeader, IonTitle, IonToolbar,
     CommonModule, FormsModule, IonIcon, IonSearchbar, IonButton, RouterModule,
-    CardsComponent
-]
+    CardsComponent, IonInput
+  ]
 })
 export class DeckbuilderPage implements OnInit, AfterViewInit {
 
-  items = [
-  'Intro Pack',
-  'Orc Warrior',
-  'Orc Archer',
-  'Elven Ranger',
-  'Fireball',
-  'Healing Potion',
-  'Loaded Sling',
-  'Magic Bolt',
-  'Conscript',
-  'Mana Potion',
-  'Shield Bash',
-  'Guardian Knight',
-  'Assassin',
-  'Dragon Whelp',
-  'Lightning Arrow',
-];
-
-ngAfterViewInit() {
-  const nav = document.querySelector('.sticky-nav') as HTMLElement;
-  document.documentElement.style.setProperty('--nav-height', nav.offsetHeight + 'px');
-}
-
   private route = inject(ActivatedRoute);
-  public searchOpen: boolean = false;
+  private deckService = inject(DecksCardsService);
 
-  deckId = toSignal(this.route.paramMap.pipe(
-    map(params => params.get('id'))
-  ));
+  public searchOpen = false;
 
-  ngOnInit() {
-    console.log('ngOnInit ID:', this.deckId());
-    if (this.deckId()) {
-      this.loadDeck(this.deckId()!);
+  editingTitle = false;
+  deckName: string = '';
+
+  currentDeck!: Deck;
+
+  deckId = toSignal(
+    this.route.paramMap.pipe(map(params => params.get('id')))
+  );
+
+  ngAfterViewInit() {
+    const nav = document.querySelector('.sticky-nav') as HTMLElement;
+    document.documentElement.style.setProperty('--nav-height', nav.offsetHeight + 'px');
+  }
+
+  async ngOnInit() {
+    const id = this.deckId();
+
+    // =============================================
+    // SI EDITA MAZO EXISTENTE
+    // =============================================
+    if (id) {
+      const deck = await this.deckService.getDeckById(id);
+
+      if (deck) {
+        this.currentDeck = deck;
+        this.deckName = deck.name; // cargar título
+        return;
+      }
     }
   }
 
-  loadDeck(id: string) {
-    console.log('Cargar datos del deck con ID:', id);
-    // llamada a tu servicio aquí
+  // ======================================================
+  // SEARCH
+  // ======================================================
+
+  toggleSearch(event: Event) {
+    event.stopPropagation();
+    this.searchOpen = !this.searchOpen;
   }
 
-toggleSearch(event: Event) {
-  event.stopPropagation();
-  this.searchOpen = !this.searchOpen;
-}
-
-closeSearch() {
-  if (this.searchOpen) {
-    this.searchOpen = false;
+  closeSearch() {
+    if (this.searchOpen) this.searchOpen = false;
   }
-}
+
+  // ======================================================
+  // TITLE EDIT
+  // ======================================================
+
+  enableEdit() {
+    this.editingTitle = true;
+
+    setTimeout(() => {
+      const el = document.querySelector('.title-input input') as HTMLInputElement;
+      if (el) el.select();
+    }, 50);
+  }
+
+  async saveTitle() {
+    this.editingTitle = false;
+
+    // evita títulos vacíos
+    if (!this.deckName.trim()) {
+      this.deckName = 'New Deck';
+    }
+
+    // actualiza el Deck
+    this.currentDeck.name = this.deckName;
+
+    // 🔥 GUARDA REAL EN CAPACITOR STORAGE
+    await this.deckService.updateDeck(this.currentDeck);
+  }
+
 }

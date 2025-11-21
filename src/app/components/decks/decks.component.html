@@ -1,15 +1,16 @@
 <ion-list>
-  <ion-item *ngFor="let deck of decks">
-    <ion-label>
-      <h2>{{ deck.name }}</h2>
-      <p>{{ deck.cardsNumber }} cartas</p>
-      <p>{{ deck.sdNumber }} Side Deck</p>
-    </ion-label>
+  @for (deck of decks; track deck.id; let last = $last) {
+    <ion-item [class.last-item]="last">
+      <ion-label>
+        <span class="deck-title">{{ deck.name }}</span>
+      </ion-label>
 
-    <div class="actions" slot="end">
-      <ion-icon name="trash-outline" (click)="deleteDeck(deck.id)"></ion-icon>
-      <ion-icon name="create-outline" routerLink="/deckbuilder/{{deck.id}}"></ion-icon>
-      <ion-icon name="download-outline" (click)="downloadDeck(deck.id)"></ion-icon>
-    </div>
-  </ion-item>
+      <div class="actions" slot="end">
+        <ion-icon name="eye-outline"></ion-icon>
+        <ion-icon name="trash-outline" (click)="deleteDeck(deck.id)"></ion-icon>
+        <ion-icon name="create-outline" routerLink="/deckbuilder/{{ deck.id }}"></ion-icon>
+        <ion-icon name="download-outline" (click)="downloadDeck(deck.id)"></ion-icon>
+      </div>
+    </ion-item>
+  }
 </ion-list>

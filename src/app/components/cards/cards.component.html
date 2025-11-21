@@ -2,6 +2,13 @@
   <ion-img [src]="imgUrl"></ion-img>
 
   <ion-card-content>
+
+    <!-- Barra de coste -->
+    <div class="cost-bar">
+      <div class="cost"><img class="cost-img" src="https://riseofgods.store/wp-content/uploads/2024/06/SELLO-de-Pluton-733x1024.png">x{{ factionCost }}</div>
+       <div class="roman">{{ romanCost }}</div>
+    </div>
+
     <div class="counter-box">
       <ion-button fill="clear" class="counter-btn" (click)="decrease()">
         <ion-icon name="remove"></ion-icon>
@@ -13,5 +20,6 @@
         <ion-icon name="add"></ion-icon>
       </ion-button>
     </div>
+
   </ion-card-content>
 </ion-card>

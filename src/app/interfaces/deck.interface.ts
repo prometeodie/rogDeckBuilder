@@ -1,10 +1,11 @@
 import { Card } from "./card.interface";
+import { SideDeck } from "./side'deck.interface";
 
 export interface Deck {
-  id: number;
+  id: string;
   name: string;
-  cardsNumber?: number;
-  sdNumber?: number;
-  cards?: Card[];
-  sd?: Card[];
+  cards: Card[];
+  sideDeck: SideDeck;
 }
+
+

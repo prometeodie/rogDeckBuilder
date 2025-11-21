@@ -21,7 +21,15 @@
 }
 
 <ion-content class="ion-padding">
-     <ion-title class="home-title ion-text-center"><h5>MIS MAZOS</h5></ion-title>
-  <decks/>
-  <ion-button class="floating-btn" routerLink="/deckbuilder">+</ion-button>
+
+  @if (decks.length === 0) {
+    <ion-title class="home-title ion-text-center">
+      <h5>Aún no tienes mazos guardados</h5>
+    </ion-title>
+  } @else {
+    <decks [decks]="decks" (deckDeleted)="loadDecks()"/>
+  }
+
+  <ion-button class="floating-btn" (click)="createNewDeck()">+</ion-button>
+
 </ion-content>
