@@ -1,13 +1,16 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   IonCard, IonCardContent, IonButton, IonIcon, IonImg
 } from '@ionic/angular/standalone';
-import {
-  removeOutline,
-  addOutline
-} from 'ionicons/icons';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import { DecksCardsService } from 'src/app/services/decks-cards';
+import { Card } from 'src/app/interfaces/card.interface';
+import { DeckCard } from 'src/app/interfaces/deck-card.interface';
 import { addIcons } from 'ionicons';
+import { addOutline, removeOutline } from 'ionicons/icons';
+import { RomanPipe } from 'src/app/pipes/roman-pipe';
 
 @Component({
   selector: 'card',
@@ -20,67 +23,90 @@ import { addIcons } from 'ionicons';
     IonCardContent,
     IonButton,
     IonIcon,
-    IonImg
+    IonImg,
+    RomanPipe
   ]
 })
-export class CardsComponent {
+export class CardsComponent implements OnInit, OnDestroy, OnChanges {
 
-  @Input() imgUrl: string = '';
-  @Input() initialCount: number = 0;
+  @Input() initialCount = 0;
+  @Input() deckId?: string;
+  @Input() cardData!: Card;
+  @Output() ImgView = new EventEmitter<string>();
+  @Output() amountChange = new EventEmitter<void>();
 
-  public count: number = 0;
-  public factionCost: number = 3;
-  public cost: number = 5; // este va en romano
+  public count = 0;
+  private saveSubject = new Subject<number>();
+  private sub?: Subscription;
 
-   constructor() {
-      addIcons({
-        'remove': removeOutline,
-        'add': addOutline,
-      });
-    }
-  ngOnInit() {
+  private rarityLimits: Record<string, number> = {
+    common: 4,
+    rare: 3,
+    epic: 2,
+    legendary: 1
+  };
+
+  constructor(private deckService: DecksCardsService) {
+    addIcons({ 'remove': removeOutline, 'add': addOutline });
+  }
+
+  ngOnInit(): void {
     this.count = this.initialCount;
+
+    this.sub = this.saveSubject
+      .pipe(debounceTime(350))
+      .subscribe(async (amount) => {
+        await this.attemptSave(amount);
+        // notificar padre que hubo cambio persistido
+        this.amountChange.emit();
+      });
   }
 
-  increase() {
-    this.count++;
-  }
-
-  decrease() {
-    if (this.count > 0) this.count--;
-  }
-
-
-get romanCost(): string {
-  return this.toRoman(this.cost);
-}
-
-private toRoman(num: number): string {
-  if (num <= 0) return '';
-
-  const romanMap: { value: number; symbol: string }[] = [
-    { value: 1000, symbol: 'M' },
-    { value: 900, symbol: 'CM' },
-    { value: 500, symbol: 'D' },
-    { value: 400, symbol: 'CD' },
-    { value: 100, symbol: 'C' },
-    { value: 90, symbol: 'XC' },
-    { value: 50, symbol: 'L' },
-    { value: 40, symbol: 'XL' },
-    { value: 10, symbol: 'X' },
-    { value: 9, symbol: 'IX' },
-    { value: 5, symbol: 'V' },
-    { value: 4, symbol: 'IV' },
-    { value: 1, symbol: 'I' },
-  ];
-
-  let roman = '';
-  for (const obj of romanMap) {
-    while (num >= obj.value) {
-      roman += obj.symbol;
-      num -= obj.value;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['initialCount'] && changes['initialCount'].currentValue !== undefined) {
+      this.count = changes['initialCount'].currentValue;
     }
   }
-  return roman;
-}
+
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
+  }
+
+  async increase(): Promise<void> {
+    if (!this.deckId) return;
+
+    // límite por rareza
+    const maxRarity = this.rarityLimits[this.cardData.rarity ?? 'common'] ?? 4;
+    if (this.count >= maxRarity) return;
+
+    // límite 40 por mazo
+    const totalNow = await this.deckService.getTotalCardsCount(this.deckId);
+    if (totalNow >= 40) return;
+
+    this.count++;
+    this.saveSubject.next(this.count);
+  }
+
+  decrease(): void {
+    if (this.count > 0) {
+      this.count--;
+      this.saveSubject.next(this.count);
+    }
+  }
+
+  private async attemptSave(amount: number): Promise<void> {
+    if (!this.deckId) return;
+
+    const deckCard: DeckCard = {
+      id: this.cardData.id,
+      faction: this.cardData.faction,
+      amount: amount
+    };
+
+    await this.deckService.upsertCardInDeck(this.deckId, deckCard);
+  }
+
+  showImg(): void {
+    this.ImgView.emit(this.cardData.img);
+  }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
 import { Deck } from '../interfaces/deck.interface';
-import { Card } from '../interfaces/card.interface';
+import { DeckCard } from '../interfaces/deck-card.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -13,45 +13,21 @@ export class DecksCardsService {
   constructor() {}
 
   /** =============================
-   *    SAVE ALL DECKS TO STORAGE
+   *       NORMALIZADOR
    * ============================= */
-   private async saveDecks(decks: Deck[]): Promise<void> {
-    await Preferences.set({
-      key: this.STORAGE_KEY,
-      value: JSON.stringify(decks),
-    });
+  private normalize(deck: Deck): Deck {
+    return {
+      ...deck,
+      cards: deck.cards ?? [],
+      sideDeck: deck.sideDeck ?? { cards: [] }
+    };
   }
 
   /** =============================
-   *       GET ALL DECKS
+   *    GET + SAVE DECKS
    * ============================= */
-   async getDecks(): Promise<Deck[]> {
-    const result = await Preferences.get({ key: this.STORAGE_KEY });
-
-    if (!result.value) return [];
-
-    try {
-      return JSON.parse(result.value);
-    } catch {
-      return [];
-    }
-  }
 
 
-  /** =============================
-   *       GET DECK BY ID
-   * ============================= */
-  async getDeckById(id: string): Promise<Deck | undefined> {
-    const decks = await this.getDecks();
-    return decks.find(deck => deck.id === id);
-  }
-
-  /** =============================
-   *        ADD NEW DECK
-   * ============================= */
- /** =============================
- *        ADD NEW DECK
- * ============================= */
 async addDeck(): Promise<Deck> {
   const decks = await this.getDecks();
 
@@ -85,21 +61,48 @@ async addDeck(): Promise<Deck> {
   return newDeck;
 }
 
-  /** =============================
-   *        UPDATE DECK
-   * ============================= */
+  private async saveDecks(decks: Deck[]): Promise<void> {
+    await Preferences.set({
+      key: this.STORAGE_KEY,
+      value: JSON.stringify(decks)
+    });
+  }
+
+  async getDecks(): Promise<Deck[]> {
+    const result = await Preferences.get({ key: this.STORAGE_KEY });
+
+    if (!result.value) return [];
+
+    let decks: Deck[] = [];
+
+    try {
+      decks = JSON.parse(result.value);
+    } catch {
+      return [];
+    }
+
+    // Normalizar todos
+    return decks.map(d => this.normalize(d));
+  }
+
+  async getDeckById(id: string): Promise<Deck | undefined> {
+    const decks = await this.getDecks();
+    const deck = decks.find(d => d.id === id);
+    return deck ? this.normalize(deck) : undefined;
+  }
+
   async updateDeck(updatedDeck: Deck): Promise<void> {
     const decks = await this.getDecks();
     const index = decks.findIndex(d => d.id === updatedDeck.id);
 
     if (index !== -1) {
-      decks[index] = updatedDeck;
+      decks[index] = this.normalize(updatedDeck);
       await this.saveDecks(decks);
     }
   }
 
   /** =============================
-   *        DELETE DECK
+   *           DELETE
    * ============================= */
   async deleteDeck(id: string): Promise<void> {
     let decks = await this.getDecks();
@@ -107,67 +110,74 @@ async addDeck(): Promise<Deck> {
     await this.saveDecks(decks);
   }
 
-  /** =============================
-   *   CLEAR ALL DECKS (opcional)
-   * ============================= */
-    async clearAllDecks(): Promise<void> {
+  async clearAllDecks(): Promise<void> {
     await Preferences.remove({ key: this.STORAGE_KEY });
   }
 
-   // ----------------------------------------------------
-  // add cart LOGIC
-  // -----------------------------------------------------
+  /** =============================
+   *        HELPERS
+   * ============================= */
 
-   async addCardToDeck(deckId: string, card: Card): Promise<void> {
-    const deck = await this.getDeckById(deckId);
-    if (!deck) return;
-
-    deck.cards.push(card);
-    await this.updateDeck(deck);
-  }
-
-  async removeCardFromDeck(deckId: string, cardId: string): Promise<void> {
-    const deck = await this.getDeckById(deckId);
-    if (!deck) return;
-
-    deck.cards = deck.cards.filter(c => c.id !== cardId);
-    await this.updateDeck(deck);
-  }
-
-  // ----------------------------------------------------
-  // SIDE DECK LOGIC
-  // ----------------------------------------------------
-
-  async addCardToSideDeck(deckId: string, card: Card): Promise<void> {
-    const deck = await this.getDeckById(deckId);
-    if (!deck) return;
-
-    deck.sideDeck.cards.push(card);
-    await this.updateDeck(deck);
-  }
-
-  async removeCardFromSideDeck(deckId: string, cardId: string): Promise<void> {
-    const deck = await this.getDeckById(deckId);
-    if (!deck) return;
-
-    deck.sideDeck.cards = deck.sideDeck.cards.filter(c => c.id !== cardId);
-    await this.updateDeck(deck);
-  }
-
-  // ----------------------------------------------------
-  // HELPERS
-  // ----------------------------------------------------
-
-  async countCardInDeck(deckId: string, cardId: string): Promise<number> {
+  async getTotalCardsCount(deckId: string): Promise<number> {
     const deck = await this.getDeckById(deckId);
     if (!deck) return 0;
-    return deck.cards.filter(c => c.id === cardId).length;
+    return deck.cards.reduce((acc, c) => acc + (c.amount || 0), 0);
   }
 
+  async getCardAmount(deckId: string, cardId: string): Promise<number> {
+    const deck = await this.getDeckById(deckId);
+    if (!deck) return 0;
+
+    const found = deck.cards.find(c => c.id === cardId);
+    return found ? found.amount : 0;
+  }
+
+  /** =============================
+   *        UPSERT CARD
+   * ============================= */
+  async upsertCardInDeck(deckId: string, deckCard: DeckCard): Promise<void> {
+    const decks = await this.getDecks();
+    const deckIndex = decks.findIndex(d => d.id === deckId);
+    if (deckIndex === -1) return;
+
+    const deck = this.normalize(decks[deckIndex]);
+
+    const cards = deck.cards;
+    const existingIndex = cards.findIndex(c => c.id === deckCard.id);
+
+    if (deckCard.amount <= 0) {
+      // eliminar
+      if (existingIndex !== -1) {
+        cards.splice(existingIndex, 1);
+      }
+    } else {
+      if (existingIndex !== -1) {
+        cards[existingIndex].amount = deckCard.amount;
+      } else {
+        cards.push({
+          id: deckCard.id,
+          faction: deckCard.faction,
+          amount: deckCard.amount
+        });
+      }
+    }
+
+    deck.cards = cards;
+    decks[deckIndex] = deck;
+
+    await this.saveDecks(decks);
+  }
+
+  /** =============================
+   *         SIDE DECK
+   * ============================= */
   async countCardInSideDeck(deckId: string, cardId: string): Promise<number> {
     const deck = await this.getDeckById(deckId);
     if (!deck) return 0;
-    return deck.sideDeck.cards.filter(c => c.id === cardId).length;
+
+    return deck.sideDeck.cards.reduce((acc, c) =>
+      c.id === cardId ? acc + (c.amount || 0) : acc,
+    0);
   }
 }
 

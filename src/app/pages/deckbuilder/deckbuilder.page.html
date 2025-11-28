@@ -1,15 +1,9 @@
 <ion-header>
   <ion-toolbar>
+    <!-- back -->
+    <ion-icon slot="start" name="arrow-back-outline" class="icon icon-l" routerLink="/home"></ion-icon>
 
-    <!-- Botón back -->
-    <ion-icon
-      slot="start"
-      name="arrow-back-outline"
-      class="icon icon-l"
-      routerLink="/home">
-    </ion-icon>
-
-    <!-- TÍTULO EDITABLE -->
+    <!-- título editable -->
     <div class="editable-title">
 
       @if (!editingTitle) {
@@ -34,32 +28,36 @@
 
     </div>
 
-    <!-- Botón buscar -->
+    <!-- buscar -->
     <ion-icon
       name="search-outline"
       slot="end"
       class="icon"
       (click)="toggleSearch($event)">
     </ion-icon>
-
   </ion-toolbar>
-</ion-header>
 
-<div class="sticky-nav">
-  <div class="nav-items">
-    <button class="nav-item">1</button>
-    <button class="nav-item">2</button>
-    <button class="nav-item">3</button>
-    <button class="nav-item">4</button>
-    <button class="nav-item">5</button>
-    <button class="nav-item">6</button>
+  <!-- sticky nav -->
+  <div class="sticky-nav">
+    <div class="nav-items">
+      <button class="nav-item">1</button>
+      <button class="nav-item">2</button>
+      <button class="nav-item">3</button>
+      <button class="nav-item">4</button>
+      <button class="nav-item">5</button>
+      <button class="nav-item">6</button>
+    </div>
   </div>
-</div>
+</ion-header>
 
 @if (searchOpen) {
   <ng-container>
     <ion-searchbar show-clear-button="always" placeholder="Buscar..." class="searchbar"></ion-searchbar>
   </ng-container>
+}
+
+@if (viewImg) {
+  <image-viewer [img]="imgSelected" (closeViewer)="toggleImageViewer()" />
 }
 
 <ion-content class="deck-layout" (click)="closeSearch()">
@@ -71,18 +69,38 @@
         <ion-button expand="block" class="sb-btn" fill="solid" color="dark">SD</ion-button>
       </div>
 
-      <div class="sidebar-item">Cartas seleccionadas</div>
+      <h4 class="sidebar-title">Cartas seleccionadas</h4>
+
+      @if (selectedCards.length === 0) {
+        <div class="sidebar-empty">No hay cartas agregadas</div>
+      }
+
+      @if (selectedCards.length > 0) {
+        <ul class="selected-list">
+          @for (item of selectedCards; track item.id) {
+            <li class="sidebar-item">
+              <span class="item-name">{{ item.name }}</span>
+              <span class="item-amount">x{{ item.amount }}</span>
+              <button class="delete-x" (click)="removeCard(item.id)">✕</button>
+            </li>
+          }
+        </ul>
+      }
     </div>
 
     <div class="content-area">
       <div class="cards-wrapper">
         <div class="cards-container">
-
-          <!-- tus cards -->
-          <card class="card" imgUrl="https://riseofgods.store/wp-content/uploads/2024/06/Sello-Jupiter.png" [initialCount]="0"></card>
-          <card class="card" imgUrl="https://riseofgods.store/wp-content/uploads/2024/06/ESTRUCTURA-4-Canon-de-Zagh-733x1024.png" [initialCount]="0"></card>
-          <card class="card" imgUrl="https://riseofgods.store/wp-content/uploads/2024/06/ESTRUCTURA-4-Canon-de-Zagh-733x1024.png" [initialCount]="0"></card>
-
+          @for (card of testCards; track card.id) {
+            <card
+              class="card"
+              [deckId]="deckId()!"
+              [cardData]="card"
+              [initialCount]="savedAmounts[card.id] ?? 0"
+              (ImgView)="openImageViewer($event)"
+              (amountChange)="refreshDeck()">
+            </card>
+          }
         </div>
       </div>
     </div>
