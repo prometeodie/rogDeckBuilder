@@ -40,12 +40,11 @@
   <!-- sticky nav -->
   <div class="sticky-nav">
     <div class="nav-items">
-      <button class="nav-item">1</button>
-      <button class="nav-item">2</button>
-      <button class="nav-item">3</button>
-      <button class="nav-item">4</button>
-      <button class="nav-item">5</button>
-      <button class="nav-item">6</button>
+      @for (sello of sellos; track sello) {
+  <img class="nav-item"
+       [src]="'../../../assets/SELLOS/'+sello"
+       [alt]="sello">
+}
     </div>
   </div>
 </ion-header>
@@ -64,43 +63,66 @@
   <div class="main-container">
 
     <div class="sidebar">
-      <div class="sidebar-btn sidebar-item">
-        <ion-button expand="block" class="sb-btn" fill="solid" color="dark">Mazo</ion-button>
-        <ion-button expand="block" class="sb-btn" fill="solid" color="dark">SD</ion-button>
-      </div>
 
-      <h4 class="sidebar-title">Cartas seleccionadas</h4>
+  <div class="sidebar-btn sidebar-item">
+  <ion-button expand="block" class="sb-btn"
+              fill="solid"
+              color="dark"
+              [color]="deckMode() === 'main' ? 'primary' : 'dark'"
+              (click)="setDeckMode('main')">
+    Mazo
+  </ion-button>
 
-      @if (selectedCards.length === 0) {
-        <div class="sidebar-empty">No hay cartas agregadas</div>
+  <ion-button expand="block" class="sb-btn"
+              fill="solid"
+              [color]="deckMode() === 'side' ? 'primary' : 'dark'"
+              (click)="setDeckMode('side')">
+    SD
+  </ion-button>
+</div>
+
+
+  <h4 class="sidebar-title">
+    Cartas seleccionadas
+  </h4>
+
+  <!-- CONTADOR 20/40 -->
+  <div class="card-counter" [class.animate]="counterAnimation()">
+  {{ totalSelected }}/{{ deckMode() === 'main' ? 40 : 15 }}
+</div>
+
+  @if (selectedCards.length === 0) {
+    <div class="sidebar-empty">No hay cartas agregadas</div>
+  }
+
+  @if (selectedCards.length > 0) {
+    <ul class="selected-list">
+      @for (item of selectedCards; track item.id) {
+        <li class="sidebar-item">
+          <span class="item-name">{{ item.name }}</span>
+          <span class="item-amount">x{{ item.amount }}</span>
+          <button class="delete-x" (click)="removeCard(item.id)">✕</button>
+        </li>
       }
+    </ul>
+  }
+</div>
 
-      @if (selectedCards.length > 0) {
-        <ul class="selected-list">
-          @for (item of selectedCards; track item.id) {
-            <li class="sidebar-item">
-              <span class="item-name">{{ item.name }}</span>
-              <span class="item-amount">x{{ item.amount }}</span>
-              <button class="delete-x" (click)="removeCard(item.id)">✕</button>
-            </li>
-          }
-        </ul>
-      }
-    </div>
 
     <div class="content-area">
       <div class="cards-wrapper">
         <div class="cards-container">
           @for (card of testCards; track card.id) {
-            <card
-              class="card"
-              [deckId]="deckId()!"
-              [cardData]="card"
-              [initialCount]="savedAmounts[card.id] ?? 0"
-              (ImgView)="openImageViewer($event)"
-              (amountChange)="refreshDeck()">
-            </card>
-          }
+          <card
+          class="card"
+          [deckId]="deckId()!"
+          [cardData]="card"
+          [mode]="deckMode()"
+          [initialCount]="savedAmounts[card.id] ?? 0"
+          (ImgView)="openImageViewer($event)"
+          (amountChange)="refreshDeck()">
+        </card>
+  }
         </div>
       </div>
     </div>

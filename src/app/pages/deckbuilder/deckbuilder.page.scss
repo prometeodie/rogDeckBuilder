@@ -29,10 +29,14 @@
 }
 
 .nav-item {
-  padding: 6px 10px;
-  border-radius: 6px;
-  background-color: #ddd;
+  border-radius: 50%;
   border: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  cursor: pointer;
+  &:active{
+    transform: scale(0.9);
+  }
 }
 
 /* ----------- SEARCHBAR ----------- */
@@ -82,7 +86,7 @@
   min-width: 6rem;
 
   overflow-y: auto;
-  background: #f8f8f8;
+  background: #333;
   display: flex;
   flex-direction: column;
   z-index: 999;
@@ -101,6 +105,11 @@
   display: flex;
   padding:0.3rem;
   justify-content: space-around;
+}
+
+.sidebar-empty{
+  text-align: center;
+  font-size: smaller;
 }
 
 .sb-btn {
@@ -167,10 +176,11 @@ card, app-card, .card {
 }
 
 .sidebar-title{
-    background: grey;
+    background: #333;
     font-size: 12px;
     padding: 0.5rem;
     text-align: center;
+    padding-bottom: 0;
 }
 
 .selected-list {
@@ -214,5 +224,32 @@ card, app-card, .card {
         opacity: 1;
       }
     }
+  }
+}
+
+.card-counter {
+      font-size: 17px;
+    font-weight: 600;
+    color: #fff;
+    background: #333;
+    padding: 4px 8px;
+    text-align: center;
+  &.animate {
+    animation: softPulse 0.35s ease-out;
+  }
+}
+
+@keyframes softPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
+  40% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
   }
 }

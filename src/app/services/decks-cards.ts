@@ -118,12 +118,6 @@ async addDeck(): Promise<Deck> {
    *        HELPERS
    * ============================= */
 
-  async getTotalCardsCount(deckId: string): Promise<number> {
-    const deck = await this.getDeckById(deckId);
-    if (!deck) return 0;
-    return deck.cards.reduce((acc, c) => acc + (c.amount || 0), 0);
-  }
-
   async getCardAmount(deckId: string, cardId: string): Promise<number> {
     const deck = await this.getDeckById(deckId);
     if (!deck) return 0;
@@ -135,38 +129,97 @@ async addDeck(): Promise<Deck> {
   /** =============================
    *        UPSERT CARD
    * ============================= */
-  async upsertCardInDeck(deckId: string, deckCard: DeckCard): Promise<void> {
+  async upsertCardInDeck(
+    deckId: string,
+    deckCard: DeckCard,
+    mode: 'main' | 'side' = 'main'
+  ): Promise<number> {
+
     const decks = await this.getDecks();
     const deckIndex = decks.findIndex(d => d.id === deckId);
-    if (deckIndex === -1) return;
+    if (deckIndex === -1) return 0;
 
     const deck = this.normalize(decks[deckIndex]);
 
-    const cards = deck.cards;
-    const existingIndex = cards.findIndex(c => c.id === deckCard.id);
+    const target = mode === 'main' ? deck.cards : deck.sideDeck.cards;
 
+    const existingIndex = target.findIndex(c => c.id === deckCard.id);
+    const existingAmount = existingIndex !== -1 ? (target[existingIndex].amount ?? 0) : 0;
+
+    // Si amount <= 0 -> eliminar y retornar 0
     if (deckCard.amount <= 0) {
-      // eliminar
-      if (existingIndex !== -1) {
-        cards.splice(existingIndex, 1);
-      }
-    } else {
-      if (existingIndex !== -1) {
-        cards[existingIndex].amount = deckCard.amount;
-      } else {
-        cards.push({
-          id: deckCard.id,
-          faction: deckCard.faction,
-          amount: deckCard.amount
-        });
-      }
+      if (existingIndex !== -1) target.splice(existingIndex, 1);
+      if (mode === 'main') deck.cards = target; else deck.sideDeck.cards = target;
+      decks[deckIndex] = deck;
+      await this.saveDecks(decks);
+      return 0;
     }
 
-    deck.cards = cards;
-    decks[deckIndex] = deck;
+    // ---------------------------
+    // LÓGICA DE LÍMITES (side/main)
+    // ---------------------------
+    const isSide = mode === 'side';
+    const cap = isSide ? 15 : 40;
 
+    // total actual en target (sin contar esta carta)
+    const totalExcludingThis = target.reduce((acc, c) => {
+      if (c.id === deckCard.id) return acc; // excluimos la carta en cuestión
+      return acc + (c.amount ?? 0);
+    }, 0);
+
+    // cantidad máxima posible para esta carta sin exceder cap
+    const maxForThisGivenCap = cap - totalExcludingThis;
+    // la cantidad deseada que intentan guardar para esta carta:
+    const desired = deckCard.amount;
+
+    // si maxForThisGivenCap < 0 -> no hay lugar
+    if (maxForThisGivenCap <= 0) {
+      // nada se puede guardar para esta carta
+      // devolvemos existingAmount (si existe) o 0
+      return existingAmount;
+    }
+
+    // cantidad final que guardaremos para esta carta
+    const finalAmount = Math.min(desired, maxForThisGivenCap);
+
+    if (existingIndex !== -1) {
+      target[existingIndex].amount = finalAmount;
+    } else {
+      target.push({
+        id: deckCard.id,
+        faction: deckCard.faction,
+        amount: finalAmount
+      });
+    }
+
+    if (mode === 'main') deck.cards = target;
+    else deck.sideDeck.cards = target;
+
+    decks[deckIndex] = deck;
     await this.saveDecks(decks);
+
+    return finalAmount;
   }
+
+  // Helpers que quizá ya tenías (asegúrate de mantenerlas)
+  async getTotalCardsCount(deckId: string): Promise<number> {
+    const deck = await this.getDeckById(deckId);
+    if (!deck) return 0;
+    return deck.cards.reduce((acc, c) => acc + (c.amount || 0), 0);
+  }
+
+  async getTotalCardsCountInMain(deckId: string): Promise<number> {
+    const deck = await this.getDeckById(deckId);
+    if (!deck) return 0;
+    return deck.cards.reduce((a, c) => a + (c.amount ?? 0), 0);
+  }
+
+  async getTotalCardsCountInSide(deckId: string): Promise<number> {
+    const deck = await this.getDeckById(deckId);
+    if (!deck?.sideDeck) return 0;
+    return deck.sideDeck.cards.reduce((a, c) => a + (c.amount ?? 0), 0);
+  }
+
 
   /** =============================
    *         SIDE DECK
@@ -179,5 +232,6 @@ async addDeck(): Promise<Deck> {
       c.id === cardId ? acc + (c.amount || 0) : acc,
     0);
   }
+
 }
 

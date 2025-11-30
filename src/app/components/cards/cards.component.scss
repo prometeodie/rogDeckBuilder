@@ -59,18 +59,36 @@ ion-card-content {
   align-items: center;
   font-size: 0.9rem;
   font-weight: 600;
-  padding: 00 0.4rem;
+  padding: 00 0.2rem;
   background: rgba(0,0,0,0.06);
   border-radius: 0.3rem;
 
 }
 .roman {
   letter-spacing: 1px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 31px;
+  height: 31px;
+
+
+  background-color: #d6d6d6;   // gris del interior
+  border: 3px solid #5a5a5a;   // borde oscuro
+  border-radius: 50%;
+
+  font-family: "Times New Roman", serif; // tipografía romana clásica
+  font-size: 10px;
+  font-weight: 700;
+  color: #111;                 // letra negra
+  margin: 0.2rem 0 0 0.2rem;
+
+  box-shadow: 0 0 4px rgba(0,0,0,0.4);   // leve sombra como en la imagen
 }
 
 .cost{
   display: flex;
-  // justify-content: space-around;
   align-items: center;
 }
 .cost-img{

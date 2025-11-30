@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
 import { ActivatedRoute, RouterModule } from '@angular/router';
@@ -24,7 +24,7 @@ import { ImageViewerComponent } from 'src/app/components/image-viewer/image-view
 import { Deck } from 'src/app/interfaces/deck.interface';
 import { DecksCardsService } from 'src/app/services/decks-cards';
 import { Card } from 'src/app/interfaces/card.interface';
-import { DeckCard } from 'src/app/interfaces/deck-card.interface';
+import { testCards } from 'src/app/cards-testing';
 
 addIcons({ searchOutline, arrowBackOutline });
 
@@ -41,63 +41,8 @@ addIcons({ searchOutline, arrowBackOutline });
 })
 export class DeckbuilderPage implements OnInit, AfterViewInit {
 
-  testCards: Card[] = [
-    {
-      id: '1',
-      name: 'Guardián del Abismo',
-      faction: 'pluton',
-      rarity: 'common',
-      img: 'https://riseofgods.store/wp-content/uploads/2024/06/ESTRUCTURA-4-Canon-de-Zagh-733x1024.png',
-      factionCost: 2,
-      cost: 3,
-      banned: false,
-      isSeal: false
-    },
-    {
-      id: '2',
-      name: 'Martillo Celeste',
-      faction: 'jupiter',
-      rarity: 'rare',
-      img: 'https://riseofgods.store/wp-content/uploads/2024/06/Sello-Jupiter.png',
-      factionCost: 1,
-      cost: 2,
-      banned: false,
-      isSeal: true
-    },
-    {
-      id: '3',
-      name: 'Centinela Carmesí',
-      faction: 'marte',
-      rarity: 'epic',
-      img: 'https://riseofgods.store/wp-content/uploads/2024/06/ESTRUCTURA-4-Canon-de-Zagh-733x1024.png',
-      factionCost: 3,
-      cost: 5,
-      banned: false,
-      isSeal: false
-    },
-    {
-      id: '4',
-      name: 'Sello del Oleaje Eterno',
-      faction: 'neptuno',
-      rarity: 'legendary',
-      img: 'https://riseofgods.store/wp-content/uploads/2024/06/Sello-Jupiter.png',
-      factionCost: 2,
-      cost: 4,
-      banned: false,
-      isSeal: true
-    },
-    {
-      id: '5',
-      name: 'Protector de Gaia',
-      faction: 'tierra',
-      rarity: 'common',
-      img: 'https://riseofgods.store/wp-content/uploads/2024/06/ESTRUCTURA-4-Canon-de-Zagh-733x1024.png',
-      factionCost: 1,
-      cost: 1,
-      banned: false,
-      isSeal: false
-    }
-  ];
+  testCards: Card[] = testCards;
+  public sellos:string[] =['SELLO-JUPITER.png','SELLO-MARTE.png','SELLO-PLUTON.png','SELLO-SATURNO.png','SELLO-TIERRA.png','SELLO-NEPTUNO.png'];
 
   private route = inject(ActivatedRoute);
   private deckService = inject(DecksCardsService);
@@ -105,6 +50,8 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
   public searchOpen = false;
   public viewImg = false;
   public imgSelected = '';
+  public counterAnimation = signal(false);
+  public deckMode = signal<'main' | 'side'>('main');
 
   public editingTitle = false;
   public deckName = '';
@@ -112,6 +59,9 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
   public selectedCards: { id: string; name: string; amount: number }[] = [];
 
   public currentDeck!: Deck;
+
+  // ➕ contador total de cartas
+  public totalSelected: number = 0;
 
   public deckId = toSignal(
     this.route.paramMap.pipe(map(params => params.get('id')))
@@ -134,15 +84,12 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
         this.currentDeck = deck;
         this.deckName = deck.name;
 
-        // crear mapa con cantidades guardadas por id
         this.savedAmounts = {};
         for (const c of deck.cards) {
           this.savedAmounts[c.id] = c.amount ?? 0;
         }
 
-        // llenar sidebar
         this.updateSelectedCardsList();
-
         return;
       }
     }
@@ -202,51 +149,106 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
   // SIDEBAR / SELECTED CARDS
   // =======================
   private updateSelectedCardsList(): void {
-    if (!this.currentDeck || !this.currentDeck.cards) {
-      this.selectedCards = [];
-      return;
-    }
-
-    this.selectedCards = this.currentDeck.cards
-      .map((c: DeckCard) => {
-        const full = this.testCards.find(t => t.id === c.id);
-        return {
-          id: c.id,
-          name: full?.name ?? 'Sin nombre',
-          amount: c.amount ?? 0
-        };
-      })
-      .filter(item => item.amount > 0);
+  if (!this.currentDeck) {
+    this.selectedCards = [];
+    this.totalSelected = 0;
+    return;
   }
 
-  // llamado desde child cuando cambia la cantidad (debounced save)
-  async refreshDeck(): Promise<void> {
-    const id = this.deckId();
-    if (!id) return;
+  const mode = this.deckMode();
+  const source = mode === 'main'
+    ? this.currentDeck.cards
+    : this.currentDeck.sideDeck.cards;
 
-    const updated = await this.deckService.getDeckById(id);
-    if (!updated) return;
+  this.selectedCards = source
+    .map((c: any) => {
+      const full = this.testCards.find(t => t.id === c.id);
+      return {
+        id: c.id,
+        name: full?.name ?? 'Sin nombre',
+        amount: c.amount ?? 0
+      };
+    })
+    .filter(c => c.amount > 0);
 
-    this.currentDeck = updated;
-    // actualizar savedAmounts
-    this.savedAmounts = {};
-    for (const c of this.currentDeck.cards) {
-      this.savedAmounts[c.id] = c.amount ?? 0;
-    }
+  const oldTotal = this.totalSelected;
+  this.totalSelected = this.selectedCards.reduce((a, c) => a + c.amount, 0);
 
-    this.updateSelectedCardsList();
+  if (this.totalSelected !== oldTotal) {
+    this.triggerCounterAnimation();
+  }
+}
+
+
+private triggerCounterAnimation(): void {
+  this.counterAnimation.set(true); // signal o boolean
+  setTimeout(() => this.counterAnimation.set(false), 300);
+}
+
+async setDeckMode(mode: 'main' | 'side'): Promise<void> {
+  this.deckMode.set(mode);
+
+  const id = this.deckId();
+  if (!id) return;
+
+  // recargar deck entero
+  const updated = await this.deckService.getDeckById(id);
+  if (!updated) return;
+
+  this.currentDeck = updated;
+
+  // seleccionar origen segun modo
+  const source = mode === 'main'
+    ? updated.cards
+    : updated.sideDeck.cards;
+
+  // reconstruir savedAmounts para las <card>
+  this.savedAmounts = {};
+  for (const c of source) {
+    this.savedAmounts[c.id] = c.amount ?? 0;
   }
 
-  async removeCard(cardId: string): Promise<void> {
-    const id = this.deckId();
-    if (!id) return;
+  // refrescar sidebar
+  this.updateSelectedCardsList();
+}
 
-    await this.deckService.upsertCardInDeck(id, {
-      id: cardId,
-      faction: '',
-      amount: 0
-    });
 
-    await this.refreshDeck();
+
+ async refreshDeck(): Promise<void> {
+  const id = this.deckId();
+  if (!id) return;
+
+  const updated = await this.deckService.getDeckById(id);
+  if (!updated) return;
+
+  this.currentDeck = updated;
+
+  const mode = this.deckMode();
+
+  const source = mode === 'main'
+    ? updated.cards
+    : updated.sideDeck.cards;
+
+  this.savedAmounts = {};
+  for (const c of source) {
+    this.savedAmounts[c.id] = c.amount ?? 0;
   }
+
+  this.updateSelectedCardsList();
+}
+
+
+
+async removeCard(cardId: string): Promise<void> {
+  const id = this.deckId();
+  if (!id) return;
+
+  await this.deckService.upsertCardInDeck(id, {
+    id: cardId,
+    faction: '',
+    amount: 0
+  }, this.deckMode());
+
+  await this.refreshDeck();
+}
 }

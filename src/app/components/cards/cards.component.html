@@ -5,8 +5,10 @@
     <div class="cost-bar">
       <div class="cost">
         <img class="cost-img"
-             src="https://riseofgods.store/wp-content/uploads/2024/06/Sello-Jupiter.png">
-         X{{ cardData.factionCost }}
+             [src]="getSelloImg()">
+             <span>
+               X{{ cardData.factionCost }}
+             </span>
       </div>
       <div class="roman">{{ cardData.cost | roman }}</div>
     </div>
