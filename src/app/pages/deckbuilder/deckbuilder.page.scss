@@ -23,11 +23,18 @@
   justify-content: center;
   z-index: 10; /* en el header */
 }
-.nav-items {
+.nav-items{
   display: flex;
-  gap: 10px;
+  gap: 0.40rem;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
+
+.nav-item.selected {
+  filter: grayscale(60%) brightness(0.7);
+  transition: 0.25s ease;
+}
 .nav-item {
   border-radius: 50%;
   border: none;
@@ -79,7 +86,7 @@
   position: fixed;
   left: 0;
 
-  top: 104px;
+  top: 113px;
   height: calc(100vh - 104px);
 
   width: 6rem;
@@ -237,6 +244,11 @@ card, app-card, .card {
   &.animate {
     animation: softPulse 0.35s ease-out;
   }
+}
+
+.faction-selected{
+  margin-top: 0.3rem;
+  text-align: center;
 }
 
 @keyframes softPulse {

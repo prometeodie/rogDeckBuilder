@@ -155,7 +155,7 @@ export const testCards =  [
 {
   id: '15',
   name: 'Guardiana del Brote Sagrado',
-  faction: 'tierra',
+  faction: 'saturno',
   rarity: 'common',
   img: 'https://riseofgods.store/wp-content/uploads/2024/06/ESTRUCTURA-4-Canon-de-Zagh-733x1024.png',
   factionCost: 1,

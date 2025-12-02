@@ -41,8 +41,14 @@ addIcons({ searchOutline, arrowBackOutline });
 })
 export class DeckbuilderPage implements OnInit, AfterViewInit {
 
-  testCards: Card[] = testCards;
-  public sellos:string[] =['SELLO-JUPITER.png','SELLO-MARTE.png','SELLO-PLUTON.png','SELLO-SATURNO.png','SELLO-TIERRA.png','SELLO-NEPTUNO.png'];
+  public testCards: Card[] = testCards;
+  public sellos =[{img:'SELLO-ALL.png', faction: 'all'},
+                  {img:'SELLO-JUPITER.png',faction:'jupiter'},
+                  {img:'SELLO-MARTE.png', faction:'marte'},
+                  {img:'SELLO-PLUTON.png',faction:'pluton'},
+                  {img:'SELLO-SATURNO.png',faction:'saturno'},
+                  {img:'SELLO-TIERRA.png',faction:'tierra'},
+                  {img:'SELLO-NEPTUNO.png',faction:'neptuno'}];
 
   private route = inject(ActivatedRoute);
   private deckService = inject(DecksCardsService);
@@ -52,6 +58,7 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
   public imgSelected = '';
   public counterAnimation = signal(false);
   public deckMode = signal<'main' | 'side'>('main');
+  public selectedFaction: string = 'all';
 
   public editingTitle = false;
   public deckName = '';
@@ -212,8 +219,6 @@ async setDeckMode(mode: 'main' | 'side'): Promise<void> {
   this.updateSelectedCardsList();
 }
 
-
-
  async refreshDeck(): Promise<void> {
   const id = this.deckId();
   if (!id) return;
@@ -237,8 +242,6 @@ async setDeckMode(mode: 'main' | 'side'): Promise<void> {
   this.updateSelectedCardsList();
 }
 
-
-
 async removeCard(cardId: string): Promise<void> {
   const id = this.deckId();
   if (!id) return;
@@ -250,5 +253,10 @@ async removeCard(cardId: string): Promise<void> {
   }, this.deckMode());
 
   await this.refreshDeck();
+}
+
+filterCardsByFaction(faction: string) {
+ this.testCards = this.deckService.filteredCards(testCards, faction);
+ this.selectedFaction = faction;
 }
 }

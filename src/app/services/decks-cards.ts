@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
 import { Deck } from '../interfaces/deck.interface';
 import { DeckCard } from '../interfaces/deck-card.interface';
+import { Card } from '../interfaces/card.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -220,6 +221,13 @@ async addDeck(): Promise<Deck> {
     return deck.sideDeck.cards.reduce((a, c) => a + (c.amount ?? 0), 0);
   }
 
+ filteredCards(cards:Card[], selectedFaction:string) {
+  if(selectedFaction === 'all'){
+    return cards;
+  }else{
+    return cards.filter(card => card.faction === selectedFaction);
+  }
+}
 
   /** =============================
    *         SIDE DECK

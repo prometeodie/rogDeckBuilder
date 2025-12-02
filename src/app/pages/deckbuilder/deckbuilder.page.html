@@ -40,11 +40,16 @@
   <!-- sticky nav -->
   <div class="sticky-nav">
     <div class="nav-items">
-      @for (sello of sellos; track sello) {
-  <img class="nav-item"
-       [src]="'../../../assets/SELLOS/'+sello"
-       [alt]="sello">
+   @for (sello of sellos; track $index) {
+  <img
+    class="nav-item"
+    [src]="'../../../assets/SELLOS/' + sello.img"
+    (click)="filterCardsByFaction(sello.faction)"
+    [alt]="sello.faction"
+    [class.selected]="selectedFaction === sello.faction"
+  >
 }
+
     </div>
   </div>
 </ion-header>
@@ -110,6 +115,7 @@
 
 
     <div class="content-area">
+      <h2 class="faction-selected">{{selectedFaction | titlecase}}</h2>
       <div class="cards-wrapper">
         <div class="cards-container">
           @for (card of testCards; track card.id) {
