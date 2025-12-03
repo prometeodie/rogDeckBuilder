@@ -41,7 +41,9 @@ addIcons({ searchOutline, arrowBackOutline });
 })
 export class DeckbuilderPage implements OnInit, AfterViewInit {
 
-  public testCards: Card[] = testCards;
+public allCards: Card[] = testCards;   // 👈 SIEMPRE intactas
+public currentCards: Card[] = testCards;  // 👈 filtradas
+
   public sellos =[{img:'SELLO-ALL.png', faction: 'all'},
                   {img:'SELLO-JUPITER.png',faction:'jupiter'},
                   {img:'SELLO-MARTE.png', faction:'marte'},
@@ -59,11 +61,12 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
   public counterAnimation = signal(false);
   public deckMode = signal<'main' | 'side'>('main');
   public selectedFaction: string = 'all';
+  public searchTerm: string = '';
 
   public editingTitle = false;
   public deckName = '';
   public savedAmounts: { [id: string]: number | undefined } = {};
-  public selectedCards: { id: string; name: string; amount: number }[] = [];
+  public selectedCards: { id: string; name: string; amount: number; faction:string}[] = [];
 
   public currentDeck!: Deck;
 
@@ -169,11 +172,12 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
 
   this.selectedCards = source
     .map((c: any) => {
-      const full = this.testCards.find(t => t.id === c.id);
+      const card = this.currentCards.find(t => t.id === c.id);
       return {
         id: c.id,
-        name: full?.name ?? 'Sin nombre',
-        amount: c.amount ?? 0
+        name: card?.name ?? 'Sin nombre',
+        amount: c.amount ?? 0,
+        faction: card?.faction ?? 'neutral'
       };
     })
     .filter(c => c.amount > 0);
@@ -256,7 +260,48 @@ async removeCard(cardId: string): Promise<void> {
 }
 
 filterCardsByFaction(faction: string) {
- this.testCards = this.deckService.filteredCards(testCards, faction);
+ this.currentCards = this.deckService.filteredCards(this.allCards, faction);
  this.selectedFaction = faction;
 }
+
+filterCards(searchTerm: string) {
+  this.searchTerm = searchTerm.trim().toLowerCase();
+
+  // 👉 Si está vacío, mostrar todo
+  if (!this.searchTerm) {
+    this.currentCards = [...this.allCards];
+    return;
+  }
+
+  // 👉 Filtrar normalmente
+  const filtered = this.deckService.filterItems(
+    this.allCards,
+    this.searchTerm,
+    ['name', 'faction', 'rarity']
+  );
+
+  // 👉 Acá el cambio REAL
+  // NO restaurar allCards si no encuentra nada
+  this.currentCards = filtered;  // si da [], muestra []
+}
+
+onSearchKeydown(ev: any) {
+  const e: KeyboardEvent =
+    ev?.detail?.event ||  // iOS/Android/Ionic wrapper
+    ev;                   // Web direct keydown
+
+  if (!e) return;
+
+  if (e.key === 'Enter') {
+    // cerrar searchbar
+    this.searchOpen = false;
+
+    // blur para cerrar teclado en mobile
+    const sb = document.querySelector('ion-searchbar') as HTMLIonSearchbarElement;
+    sb?.blur();
+
+    e.preventDefault();
+    e.stopPropagation();
+    }
+  }
 }

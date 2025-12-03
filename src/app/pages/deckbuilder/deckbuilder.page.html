@@ -55,9 +55,17 @@
 </ion-header>
 
 @if (searchOpen) {
-  <ng-container>
-    <ion-searchbar show-clear-button="always" placeholder="Buscar..." class="searchbar"></ion-searchbar>
-  </ng-container>
+ <ng-container>
+  <ion-searchbar
+    show-clear-button="always"
+    placeholder="Buscar..."
+    class="searchbar"
+    (ionInput)="filterCards($any($event.target).value)"
+    (ionKeydown)="onSearchKeydown($event)"
+  >
+  </ion-searchbar>
+</ng-container>
+
 }
 
 @if (viewImg) {
@@ -103,11 +111,11 @@
   @if (selectedCards.length > 0) {
     <ul class="selected-list">
       @for (item of selectedCards; track item.id) {
-        <li class="sidebar-item">
-          <span class="item-name">{{ item.name }}</span>
-          <span class="item-amount">x{{ item.amount }}</span>
-          <button class="delete-x" (click)="removeCard(item.id)">✕</button>
-        </li>
+      <li class="sidebar-item" [ngClass]="item.faction">
+        <span class="item-name">{{ item.name }}</span>
+        <span class="item-amount">x{{ item.amount }}</span>
+        <button class="delete-x" (click)="removeCard(item.id)">✕</button>
+      </li>
       }
     </ul>
   }
@@ -118,17 +126,26 @@
       <h2 class="faction-selected">{{selectedFaction | titlecase}}</h2>
       <div class="cards-wrapper">
         <div class="cards-container">
-          @for (card of testCards; track card.id) {
-          <card
-          class="card"
-          [deckId]="deckId()!"
-          [cardData]="card"
-          [mode]="deckMode()"
-          [initialCount]="savedAmounts[card.id] ?? 0"
-          (ImgView)="openImageViewer($event)"
-          (amountChange)="refreshDeck()">
-        </card>
-  }
+          @if (currentCards.length > 0) {
+          @for (card of currentCards; track card.id) {
+            <card
+              class="card"
+              [deckId]="deckId()!"
+              [cardData]="card"
+              [mode]="deckMode()"
+              [initialCount]="savedAmounts[card.id] ?? 0"
+              (ImgView)="openImageViewer($event)"
+              (amountChange)="refreshDeck()">
+            </card>
+          }
+        }
+
+        <!-- not found -->
+        @if (currentCards.length === 0 && searchTerm) {
+          <div class="no-results">
+              <h3>No se encontró ninguna carta... :C</h3>
+          </div>
+        }
         </div>
       </div>
     </div>

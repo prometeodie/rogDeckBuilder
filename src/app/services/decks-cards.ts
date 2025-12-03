@@ -202,6 +202,18 @@ async addDeck(): Promise<Deck> {
     return finalAmount;
   }
 
+  // filter by term
+filterItems<T>(items: T[], term: string, properties: (keyof T)[]): T[] {
+  const normalizedTerm = term.toLowerCase().trim();
+
+  return items.filter(item =>
+    properties.some(prop =>
+      String(item[prop] ?? '').toLowerCase().includes(normalizedTerm)
+    )
+  );
+}
+
+
   // Helpers que quizá ya tenías (asegúrate de mantenerlas)
   async getTotalCardsCount(deckId: string): Promise<number> {
     const deck = await this.getDeckById(deckId);
