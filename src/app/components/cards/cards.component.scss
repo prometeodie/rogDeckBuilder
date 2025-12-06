@@ -98,3 +98,34 @@ ion-card-content {
     object-fit: cover;
     margin-right: 0.2rem;
 }
+
+.banned-stamp {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-20deg);
+
+  padding: 2px 10px;
+  font-size: 0.8rem;
+  font-weight: 900;              /* Más fuerte */
+  letter-spacing: 1px;
+
+  color: #ff1a1a;                /* Rojo más brillante */
+  text-transform: uppercase;
+
+  border: 2px solid #ff1a1a;
+  border-radius: 4px;
+
+  opacity: 1;                    /* 100% */
+  background-color: rgba(255, 255, 255, 0.158); /* Más sólido → más contraste */
+
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.9);    /* Más definido */
+
+  mix-blend-mode: multiply;        /* Para que no se apague el color */
+  pointer-events: none;
+}
+
+
+.banned{
+  filter: grayscale(70%) brightness(85%);
+}

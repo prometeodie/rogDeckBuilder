@@ -134,11 +134,10 @@ ion-button.sb-btn.ion-color-primary::part(native) {
 /* sidebar items */
 .sidebar-item {
   padding: 0.7rem;
-  background: #000;
   color: #fff;
   font-size: 0.7rem;
   border-bottom: 1px solid #444;
-    font-family: 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 .sidebar-item .item-name,
@@ -269,8 +268,8 @@ card, app-card, .card {
 
     .item-amount {
       font-weight: bold;
-      font-size: larger;
-      margin-top: 0.5rem;
+      font-size: medium;
+      margin: 0.5rem 0 0 0.3rem;
     }
 
     .delete-x {
@@ -331,4 +330,22 @@ card, app-card, .card {
     transform: scale(1);
     opacity: 1;
   }
+}
+
+.banned-stamp {
+    position: absolute;
+    top: 26px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-20deg);
+    padding: 2px 10px;
+    font-size: 0.5rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: #ff1a1a;
+    text-transform: uppercase;
+    border: 2px solid #ff1a1a;
+    border-radius: 4px;
+    // opacity: 1;
+    mix-blend-mode: plus-lighter;
+    pointer-events: none;
 }

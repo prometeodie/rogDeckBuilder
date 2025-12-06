@@ -171,8 +171,8 @@ export const testCards =  [
   img: 'https://riseofgods.store/wp-content/uploads/2024/06/Sello-Jupiter.png',
   factionCost: 2,
   cost: 3,
-  banned: false,
-  isSeal: true
+  banned: true,
+  isSeal: false
 },
 {
   id: '17',
@@ -193,29 +193,30 @@ export const testCards =  [
   img: 'https://riseofgods.store/wp-content/uploads/2024/06/ESTRUCTURA-4-Canon-de-Zagh-733x1024.png',
   factionCost: 1,
   cost: 2,
-  banned: false,
+  banned: true,
   isSeal: false
 },
 {
   id: '19',
   name: 'Titán de Obsidiana',
   faction: 'pluton',
-  rarity: 'legendary',
+  rarity: 'unlimited',
   img: 'https://riseofgods.store/wp-content/uploads/2024/06/ESTRUCTURA-4-Canon-de-Zagh-733x1024.png',
   factionCost: 3,
   cost: 9,
   banned: false,
-  isSeal: false
+  isSeal: false,
+  isToken: true
 },
 {
   id: '20',
   name: 'Sello de la Armonía Terrenal',
   faction: 'tierra',
-  rarity: 'rare',
+  rarity: 'unlimited',
   img: 'https://riseofgods.store/wp-content/uploads/2024/06/Sello-Jupiter.png',
   factionCost: 1,
   cost: 2,
-  banned: false,
+  banned: true,
   isSeal: true
 }
 

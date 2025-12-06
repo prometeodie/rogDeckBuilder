@@ -1,5 +1,9 @@
 <ion-card class="card-component">
-  <ion-img [src]="cardData.img" (click)="showImg()"></ion-img>
+  <ion-img [src]="cardData.img" (click)="showImg()" [ngClass]="{'banned':cardData.banned}"></ion-img>
+
+  @if (cardData.banned) {
+    <h4 class="banned-stamp">baneada</h4>
+  }
 
   <ion-card-content>
     <div class="cost-bar">

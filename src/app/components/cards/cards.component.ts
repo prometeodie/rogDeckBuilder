@@ -49,24 +49,18 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
     common: 4,
     rare: 3,
     epic: 2,
-    legendary: 1
+    legendary: 1,
+    unlimited: 0
   };
 
   public selloPorFaccion: Record<string, string> = {
-  jupiter: 'SELLO-JUPITER.png',
-  marte: 'SELLO-MARTE.png',
-  pluton: 'SELLO-PLUTON.png',
-  saturno: 'SELLO-SATURNO.png',
-  tierra: 'SELLO-TIERRA.png',
-  neptuno: 'SELLO-NEPTUNO.png'
-};
-
-getSelloImg(): string {
-  const fac = this.cardData.faction?.toLowerCase();
-  const file = this.selloPorFaccion[fac] ?? 'SELLO-TIERRA.png';
-  return `../../../assets/SELLOS/${file}`;
-}
-
+    jupiter: 'SELLO-JUPITER.png',
+    marte: 'SELLO-MARTE.png',
+    pluton: 'SELLO-PLUTON.png',
+    saturno: 'SELLO-SATURNO.png',
+    tierra: 'SELLO-TIERRA.png',
+    neptuno: 'SELLO-NEPTUNO.png'
+  };
 
   constructor(private deckService: DecksCardsService) {
     addIcons({ 'remove': removeOutline, 'add': addOutline });
@@ -93,13 +87,21 @@ getSelloImg(): string {
     this.sub?.unsubscribe();
   }
 
+  getSelloImg(): string {
+    const fac = this.cardData.faction?.toLowerCase();
+    const file = this.selloPorFaccion[fac] ?? 'SELLO-TIERRA.png';
+    return `../../../assets/SELLOS/${file}`;
+  }
+
   /** Incremento local optimista; validaciones rápidas antes de incrementar */
   async increase(): Promise<void> {
     if (!this.deckId) return;
 
     // límite por rareza (local)
     const maxRarity = this.rarityLimits[this.cardData.rarity ?? 'common'] ?? 4;
-    if (this.count >= maxRarity) return;
+    if (maxRarity > 0 && this.count >= maxRarity) {
+      return;
+    }
 
     // chequeo rápido del tope del deck/side (para evitar increments inútiles)
     const mode = this.mode;
@@ -110,7 +112,7 @@ getSelloImg(): string {
     const cap = mode === 'main' ? 40 : 15;
     if (totalNow >= cap) {
       // ya está lleno
-      this.presentAlert(mode === 'main' ? 'El mazo principal ya está completo.' : 'El Side Deck ya está completo.');
+      this.presentToast(mode === 'main' ? 'El mazo principal ya está completo.' : 'El Side Deck ya está completo.', 'warning', 'middle');
       return;
     }
 
@@ -130,33 +132,56 @@ getSelloImg(): string {
   private async attemptSave(amount: number): Promise<void> {
     if (!this.deckId) return;
 
+    // 1) Obtengo el valor guardado actualmente en el storage para esta carta y modo
+    const deck = await this.deckService.getDeckById(this.deckId);
+    let prevSaved = 0;
+    if (deck) {
+      const source = this.mode === 'main' ? (deck.cards ?? []) : (deck.sideDeck?.cards ?? []);
+      const found = source.find(c => c.id === this.cardData.id);
+      prevSaved = found ? (found.amount ?? 0) : 0;
+    }
+
+    // 2) preparo objeto y pido al servicio que upserte; el servicio devuelve la cantidad final guardada
     const deckCard: DeckCard = {
       id: this.cardData.id,
       faction: this.cardData.faction,
       amount: amount
     };
 
-    // servicio ahora devuelve la cantidad final guardada para esa carta
-    const savedAmount = await this.deckService.upsertCardInDeck(this.deckId, deckCard, this.mode);
+    const finalAmount = await this.deckService.upsertCardInDeck(this.deckId, deckCard, this.mode);
 
-    // si el servicio recortó o modificó la cantidad, sincronizamos
-    if (savedAmount !== this.count) {
+    // 3) sincronizo contador local si el servicio recortó o ajustó
+    if (finalAmount !== this.count) {
       // actualizar contador local al valor REAL
-      this.count = savedAmount;
+      this.count = finalAmount;
 
       // notificar al usuario si hubo recorte (por tope)
-      if (savedAmount < amount) {
+      if (finalAmount < amount) {
         const capMsg = this.mode === 'main'
           ? 'Se alcanzó el límite del mazo principal. Cantidad ajustada.'
           : 'Se alcanzó el límite del Side Deck. Cantidad ajustada.';
-        this.presentAlert(capMsg);
+        this.presentToast(capMsg, 'warning', 'middle' );
       }
     }
 
-    // notifico al padre (UI: sidebar, totales, etc) con la cantidad real
+    // 4) determino si se "sumó realmente" comparando finalAmount con prevSaved (valor anterior en storage)
+    const added = finalAmount > prevSaved;
+    const removed = finalAmount < prevSaved; // no usamos para toasts en tu pedido, pero lo dejo claro
+
+    if (added) {
+      // mostrar toasts especiales sólo si se agregó realmente
+      if (this.cardData.banned) {
+        this.presentToast('Atención: agregaste una carta BANEADA.', 'danger','top');
+      }
+      if ((this.cardData as any).isToken) {
+        this.presentToast('Agregaste un TOKEN al mazo.', 'primary','top');
+      }
+    }
+
+    // 5) notifico al padre con la cantidad REAL guardada
     this.amountChange.emit({
       id: this.cardData.id,
-      amount: this.count,
+      amount: finalAmount,
       mode: this.mode
     });
   }
@@ -165,13 +190,16 @@ getSelloImg(): string {
     this.ImgView.emit(this.cardData.img);
   }
 
-  async presentAlert(message: string) {
-    const alert = document.createElement('ion-alert');
-    alert.header = 'Aviso';
-    alert.message = message;
-    alert.buttons = ['OK'];
-    document.body.appendChild(alert);
-    await alert.present();
-  }
+  async presentToast(message: string, color: string, position: 'top' | 'middle' | 'bottom') {
+  const toast = document.createElement('ion-toast');
+  toast.message = message;
+  toast.color = color;
+  toast.duration = 2000;
+  toast.position = position;
+
+  document.body.appendChild(toast);
+  await toast.present();
+}
+
 
 }

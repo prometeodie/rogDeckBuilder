@@ -115,6 +115,9 @@
         <span class="item-name">{{ item.name }}</span>
         <span class="item-amount">x{{ item.amount }}</span>
         <button class="delete-x" (click)="removeCard(item.id)">✕</button>
+        @if (item.banned) {
+        <h4 class="banned-stamp">baneada</h4>
+  }
       </li>
       }
     </ul>

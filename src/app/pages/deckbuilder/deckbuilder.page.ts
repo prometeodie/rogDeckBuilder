@@ -66,7 +66,7 @@ public currentCards: Card[] = testCards;  // 👈 filtradas
   public editingTitle = false;
   public deckName = '';
   public savedAmounts: { [id: string]: number | undefined } = {};
-  public selectedCards: { id: string; name: string; amount: number; faction:string}[] = [];
+  public selectedCards: { id: string; name: string; amount: number; faction:string, banned:boolean}[] = [];
 
   public currentDeck!: Deck;
 
@@ -177,7 +177,8 @@ public currentCards: Card[] = testCards;  // 👈 filtradas
         id: c.id,
         name: card?.name ?? 'Sin nombre',
         amount: c.amount ?? 0,
-        faction: card?.faction ?? 'neutral'
+        faction: card?.faction ?? 'neutral',
+        banned: card?.banned ?? false
       };
     })
     .filter(c => c.amount > 0);
