@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, OnInit, signal } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit, signal, ViewChild} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
 import { ActivatedRoute, RouterModule } from '@angular/router';
@@ -12,7 +12,6 @@ import {
   IonToolbar,
   IonIcon,
   IonSearchbar,
-  IonButton,
   IonInput
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
@@ -25,6 +24,7 @@ import { Deck } from 'src/app/interfaces/deck.interface';
 import { DecksCardsService } from 'src/app/services/decks-cards';
 import { Card } from 'src/app/interfaces/card.interface';
 import { testCards } from 'src/app/cards-testing';
+import { SideBarComponent } from 'src/app/components/side-bar/side-bar.component';
 
 addIcons({ searchOutline, arrowBackOutline });
 
@@ -35,11 +35,13 @@ addIcons({ searchOutline, arrowBackOutline });
   standalone: true,
   imports: [
     IonContent, IonHeader, IonTitle, IonToolbar,
-    CommonModule, FormsModule, IonIcon, IonSearchbar, IonButton, RouterModule,
-    CardsComponent, IonInput, ImageViewerComponent
+    CommonModule, FormsModule, IonIcon, IonSearchbar, RouterModule,
+    CardsComponent, IonInput, ImageViewerComponent, SideBarComponent
   ]
 })
 export class DeckbuilderPage implements OnInit, AfterViewInit {
+
+@ViewChild(IonContent) ionContent!: IonContent;
 
 public allCards: Card[] = testCards;   // 👈 SIEMPRE intactas
 public currentCards: Card[] = testCards;  // 👈 filtradas
@@ -61,7 +63,9 @@ public currentCards: Card[] = testCards;  // 👈 filtradas
   public counterAnimation = signal(false);
   public deckMode = signal<'main' | 'side'>('main');
   public selectedFaction: string = 'all';
+  public selectedFactionTitle: string = 'all';
   public searchTerm: string = '';
+  public sortBy: string = '';
 
   public editingTitle = false;
   public deckName = '';
@@ -69,13 +73,11 @@ public currentCards: Card[] = testCards;  // 👈 filtradas
   public selectedCards: { id: string; name: string; amount: number; faction:string, banned:boolean}[] = [];
 
   public currentDeck!: Deck;
-
-  // ➕ contador total de cartas
   public totalSelected: number = 0;
-
   public deckId = toSignal(
     this.route.paramMap.pipe(map(params => params.get('id')))
   );
+
 
   ngAfterViewInit(): void {
     const nav = document.querySelector('.sticky-nav') as HTMLElement | null;
@@ -83,6 +85,23 @@ public currentCards: Card[] = testCards;  // 👈 filtradas
       document.documentElement.style.setProperty('--nav-height', nav.offsetHeight + 'px');
     }
   }
+
+  ionViewDidEnter() {
+
+  // Siempre resetear a ALL
+  this.selectedFaction = 'all';
+  this.selectedFactionTitle = this.selectedFaction;
+  this.currentCards = [...this.allCards];
+
+  // Resetear búsqueda
+  this.searchTerm = '';
+  this.searchOpen = false;
+
+  // Scroll arriba
+  requestAnimationFrame(() => {
+    this.ionContent?.scrollToTop(300);
+  });
+}
 
   async ngOnInit(): Promise<void> {
     const id = this.deckId();
@@ -158,7 +177,7 @@ public currentCards: Card[] = testCards;  // 👈 filtradas
   // =======================
   // SIDEBAR / SELECTED CARDS
   // =======================
-  private updateSelectedCardsList(): void {
+ private updateSelectedCardsList(): void {
   if (!this.currentDeck) {
     this.selectedCards = [];
     this.totalSelected = 0;
@@ -172,7 +191,7 @@ public currentCards: Card[] = testCards;  // 👈 filtradas
 
   this.selectedCards = source
     .map((c: any) => {
-      const card = this.currentCards.find(t => t.id === c.id);
+      const card = this.allCards.find(t => t.id === c.id);  // <-- FIX
       return {
         id: c.id,
         name: card?.name ?? 'Sin nombre',
@@ -189,7 +208,13 @@ public currentCards: Card[] = testCards;  // 👈 filtradas
   if (this.totalSelected !== oldTotal) {
     this.triggerCounterAnimation();
   }
+
+  if (this.sortBy) {
+    this.applySorting(this.sortBy);
+  }
 }
+
+
 
 
 private triggerCounterAnimation(): void {
@@ -222,6 +247,10 @@ async setDeckMode(mode: 'main' | 'side'): Promise<void> {
 
   // refrescar sidebar
   this.updateSelectedCardsList();
+
+  if (this.sortBy) {
+    this.applySorting(this.sortBy);
+  }
 }
 
  async refreshDeck(): Promise<void> {
@@ -245,6 +274,10 @@ async setDeckMode(mode: 'main' | 'side'): Promise<void> {
   }
 
   this.updateSelectedCardsList();
+
+if (this.sortBy) {
+  this.applySorting(this.sortBy);
+}
 }
 
 async removeCard(cardId: string): Promise<void> {
@@ -260,9 +293,16 @@ async removeCard(cardId: string): Promise<void> {
   await this.refreshDeck();
 }
 
+private scrollToTop(): void {
+  if (!this.ionContent) return;
+  this.ionContent.scrollToTop(300);
+}
+
 filterCardsByFaction(faction: string) {
- this.currentCards = this.deckService.filteredCards(this.allCards, faction);
- this.selectedFaction = faction;
+  this.currentCards = this.deckService.filteredCards(this.allCards, faction);
+  this.selectedFaction = faction;
+  this.selectedFactionTitle = faction;
+  this.scrollToTop();
 }
 
 filterCards(searchTerm: string) {
@@ -271,6 +311,7 @@ filterCards(searchTerm: string) {
   // 👉 Si está vacío, mostrar todo
   if (!this.searchTerm) {
     this.currentCards = [...this.allCards];
+    this.selectedFactionTitle = this.selectedFaction;
     return;
   }
 
@@ -284,6 +325,8 @@ filterCards(searchTerm: string) {
   // 👉 Acá el cambio REAL
   // NO restaurar allCards si no encuentra nada
   this.currentCards = filtered;  // si da [], muestra []
+
+  this.selectedFactionTitle = 'resultados de busqueda';
 }
 
 onSearchKeydown(ev: any) {
@@ -305,4 +348,44 @@ onSearchKeydown(ev: any) {
     e.stopPropagation();
     }
   }
+
+  applySorting(sortBy: string): void {
+    this.sortBy = sortBy;
+    if (!this.selectedCards) return;
+
+    this.selectedCards.sort((a, b) => {
+
+      switch (sortBy) {
+
+        case 'name':
+          return a.name.localeCompare(b.name);
+
+          case 'amount':
+            return b.amount - a.amount;
+
+            case 'faction':
+              return a.faction.localeCompare(b.faction);
+
+              case 'rarity':
+                const r1 = this.getRarityValue(a.id);
+                const r2 = this.getRarityValue(b.id);
+                return r2 - r1;
+              }
+
+              return 0;
+            });
+    this.selectedCards = [...this.selectedCards];  // fuerza cambio
+}
+
+private getRarityValue(cardId: string): number {
+  const card = this.currentCards.find(c => c.id === cardId);
+  const rarityOrder: Record<string, number> = {
+    legendary: 5,
+    epic:      4,
+    rare:      3,
+    common:    2,
+    unlimited: 1
+  };
+  return rarityOrder[card?.rarity ?? 'common'];
+}
 }

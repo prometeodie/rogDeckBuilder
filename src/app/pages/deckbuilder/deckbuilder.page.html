@@ -61,9 +61,7 @@
     placeholder="Buscar..."
     class="searchbar"
     (ionInput)="filterCards($any($event.target).value)"
-    (ionKeydown)="onSearchKeydown($event)"
-  >
-  </ion-searchbar>
+    (ionKeydown)="onSearchKeydown($event)" ?/>
 </ng-container>
 
 }
@@ -75,60 +73,20 @@
 <ion-content class="deck-layout" (click)="closeSearch()">
   <div class="main-container">
 
-    <div class="sidebar">
+ <side-bar
+  [deckMode]="deckMode()"
+  [totalSelected]="totalSelected"
+  [selectedCards]="selectedCards"
+  [savedAmounts]="savedAmounts"
 
-  <div class="sidebar-btn sidebar-item">
-  <ion-button expand="block" class="sb-btn"
-              fill="solid"
-              color="dark"
-              [color]="deckMode() === 'main' ? 'primary' : 'dark'"
-              (click)="setDeckMode('main')">
-    Mazo
-  </ion-button>
+  (setMode)="setDeckMode($event)"
+  (removeCard)="removeCard($event)"
+  (sortChanged)="applySorting($event)"/>
 
-  <ion-button expand="block" class="sb-btn"
-              fill="solid"
-              [color]="deckMode() === 'side' ? 'primary' : 'dark'"
-              (click)="setDeckMode('side')">
-    SD
-  </ion-button>
-</div>
-
-
-  <h4 class="sidebar-title">
-    Cartas seleccionadas
-  </h4>
-
-  <!-- CONTADOR 20/40 -->
-  <div class="card-counter" [class.animate]="counterAnimation()">
-  {{ totalSelected }}/{{ deckMode() === 'main' ? 40 : 15 }}
-</div>
-
-  @if (selectedCards.length === 0) {
-    <div class="sidebar-empty">No hay cartas agregadas</div>
-  }
-
-  @if (selectedCards.length > 0) {
-    <ul class="selected-list">
-      @for (item of selectedCards; track item.id) {
-      <li class="sidebar-item" [ngClass]="item.faction">
-        <span class="item-name">{{ item.name }}</span>
-        <span class="item-amount">x{{ item.amount }}</span>
-        <button class="delete-x" (click)="removeCard(item.id)">✕</button>
-        @if (item.banned) {
-        <h4 class="banned-stamp">baneada</h4>
-  }
-      </li>
-      }
-    </ul>
-  }
-</div>
-
-
-    <div class="content-area">
-      <h2 class="faction-selected">{{selectedFaction | titlecase}}</h2>
+    <div class="content-area" >
+      <h2 class="faction-selected">{{selectedFactionTitle | titlecase}}</h2>
       <div class="cards-wrapper">
-        <div class="cards-container">
+        <div class="cards-container"#cardsContainer>
           @if (currentCards.length > 0) {
           @for (card of currentCards; track card.id) {
             <card

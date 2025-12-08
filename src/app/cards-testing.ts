@@ -168,7 +168,7 @@ export const testCards =  [
   name: 'Sello del Núcleo Ardiente',
   faction: 'marte',
   rarity: 'rare',
-  img: 'https://riseofgods.store/wp-content/uploads/2024/06/Sello-Jupiter.png',
+  img: 'https://riseofgods.store/wp-content/uploads/2025/09/Marte-44-Juez-del-volcan-733x1024.png',
   factionCost: 2,
   cost: 3,
   banned: true,

@@ -1,0 +1,71 @@
+<!-- src/app/components/deck-sidebar/deck-sidebar.component.html -->
+<div class="sidebar">
+
+  <div class="sidebar-btn sidebar-item">
+    <ion-button expand="block"
+                class="sb-btn"
+                fill="solid"
+                color="dark"
+                [color]="deckMode === 'main' ? 'primary' : 'grey'"
+                (click)="onSetMode('main')">
+      Mazo
+    </ion-button>
+
+    <ion-button expand="block"
+                class="sb-btn"
+                fill="solid"
+                [color]="deckMode === 'side' ? 'primary' : 'grey'"
+                (click)="onSetMode('side')">
+      SD
+    </ion-button>
+  </div>
+
+  <div class="sort-container">
+<div class="sort-wrapper">
+  <ion-icon
+    class="sort-icon"
+    name="grid-outline"
+    (click)="toggleSortMenu()">
+  </ion-icon>
+
+  <div class="sort-overlay" *ngIf="sortMenuOpen" (click)="toggleSortMenu()"></div>
+
+  <div class="sort-popup" *ngIf="sortMenuOpen" (click)="$event.stopPropagation()">
+    <label class="sort-title">Ordenar por:</label>
+
+    <select class="sort-select" [(ngModel)]="sortBy" (change)="onSortChangeAndClose()">
+      <option value="amount">Cantidad</option>
+      <option value="name">Nombre</option>
+      <option value="faction">Facción</option>
+      <option value="rarity">Rareza</option>
+    </select>
+  </div>
+</div>
+
+  </div>
+
+  <span class="sidebar-title">Cartas seleccionadas</span>
+
+  <div class="card-counter" [class.animate]="false">
+    {{ totalSelected }}/{{ deckMode === 'main' ? 40 : 15 }}
+  </div>
+
+  @if (selectedCards.length === 0) {
+    <div class="sidebar-empty">No hay cartas agregadas</div>
+  }
+
+  @if (selectedCards.length > 0) {
+    <ul class="selected-list">
+      @for (item of selectedCards; track item.id) {
+        <li class="sidebar-item" [ngClass]="item.faction">
+          <span class="item-name">{{ item.name }}</span>
+          <span class="item-amount">x{{ item.amount }}</span>
+          <button class="delete-x" (click)="onRemoveCard(item.id)">✕</button>
+          @if (item.banned) {
+            <h4 class="banned-stamp">baneada</h4>
+          }
+        </li>
+      }
+    </ul>
+  }
+</div>

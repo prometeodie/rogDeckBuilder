@@ -203,16 +203,44 @@ async addDeck(): Promise<Deck> {
   }
 
   // filter by term
-filterItems<T>(items: T[], term: string, properties: (keyof T)[]): T[] {
-  const normalizedTerm = term.toLowerCase().trim();
+private fuzzyMatch(a: string, b: string): boolean {
+  if (Math.abs(a.length - b.length) > 2) return false;
 
-  return items.filter(item =>
-    properties.some(prop =>
-      String(item[prop] ?? '').toLowerCase().includes(normalizedTerm)
-    )
-  );
+  let mismatches = 0;
+  let i = 0, j = 0;
+
+  while (i < a.length && j < b.length) {
+    if (a[i] === b[j]) {
+      i++; j++;
+    } else {
+      mismatches++;
+      if (mismatches > 2) return false;
+      i++; // salteo en "a"
+    }
+  }
+  return true;
 }
 
+filterItems<T>(items: T[], term: string, properties: (keyof T)[]): T[] {
+  const normalize = (str: string) =>
+    str.normalize("NFD")
+       .replace(/[\u0300-\u036f]/g, "")
+       .toLowerCase()
+       .trim();
+
+  const normalizedTerm = normalize(term);
+
+  return items.filter(item =>
+    properties.some(prop => {
+      const value = normalize(String(item[prop] ?? ""));
+
+      return (
+        value.includes(normalizedTerm) ||
+        this.fuzzyMatch(value, normalizedTerm)
+      );
+    })
+  );
+}
 
   // Helpers que quizá ya tenías (asegúrate de mantenerlas)
   async getTotalCardsCount(deckId: string): Promise<number> {

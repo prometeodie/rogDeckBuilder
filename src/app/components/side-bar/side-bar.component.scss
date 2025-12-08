@@ -1,0 +1,209 @@
+/* src/app/components/deck-sidebar/deck-sidebar.component.scss */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 113px;
+  height: calc(100vh - 113px);
+  width: 6.5rem;
+  min-width: 6rem;
+  overflow-y: auto;
+  background: #333;
+  display: flex;
+  flex-direction: column;
+  z-index: 999;
+  padding-bottom: 1rem;
+}
+
+.sidebar-btn {
+   display: flex;
+   padding: 0.3rem;
+   justify-content: space-around;
+  }
+
+.sb-btn {
+  width: 2.5rem;
+  height: 40px;
+  font-size: 0.6rem;
+  min-width: 0;
+  --color: #fff;
+  box-shadow: #727a7d 0px 2px 6px -1px;
+  border-radius: 6px;
+}
+
+.sort-container {
+  text-align: end;
+  padding: 0.2rem 0.4rem 0 0;
+}
+.sort-select {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #1b1b1b;
+  color: white;
+  border: 1px solid #3a3a3a;
+  font-weight: 500;
+}
+.sort-select:focus { outline: none; border-color: var(--ion-color-primary); }
+
+.sidebar-title {
+    background: #333;
+    font-size: 9.5px;
+    text-align: center;
+    padding: 0 0.3rem;
+    margin: 0;
+}
+
+.card-counter {
+  font-size: 17px;
+  font-weight: 600;
+  color: #fff;
+  background: #333;
+  padding: 4px 8px;
+  text-align: center;
+  margin: 0.25rem;
+}
+.selected-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.sidebar-item {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1a1a1a;
+  padding: 0.6rem;
+  border-bottom: 1px solid #444;
+  color: #fff;
+}
+.item-name { font-size: 0.7rem; line-height: 1.4; font-weight: 600; }
+.item-amount { font-weight: bold; font-size: 0.9rem; margin-left: .25rem; }
+
+.delete-x {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-size: 14px;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+  opacity: 0.6;
+}
+.delete-x:hover { opacity: 1; }
+
+.banned-stamp {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-20deg);
+  padding: 2px 8px;
+  font-size: 0.6rem;
+  font-weight: 900;
+  color: #ff1a1a;
+  text-transform: uppercase;
+  border: 1px solid #ff1a1a;
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+
+$faction-colors: (
+  marte: #d7161e,
+  tierra: #a4a37c,
+  pluton: #6662c1,
+  saturno: #059c6a,
+  neptuno: #0c9bc1,
+  jupiter: #d49f43
+);
+
+@each $faction, $color in $faction-colors {
+  .#{$faction} {
+    background: linear-gradient(
+      to right,
+      rgba($color, 0.85),
+      rgba(0, 0, 0, 0.4)
+    ) !important;
+  }
+}
+
+.sort-wrapper {
+  position: relative;
+}
+
+/* Icono */
+.sort-icon {
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+/* Overlay para que esté por arriba de todo */
+.sort-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 200vh; /* cubre bien el área visible */
+  background: transparent;
+  z-index: 998;
+}
+
+/* POPUP flotante que ocupa 100% del ancho */
+.sort-popup {
+  position: absolute;
+  top: 1.3rem;         /* debajo del icono */
+  left: 0;
+  width: 100%;
+
+  background: #333;
+  backdrop-filter: blur(6px);
+
+  padding: 0.2rem;
+  border-radius: 5px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 1);
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+
+  z-index: 999; /* por encima de todo */
+  animation: slideDown 0.18s ease-out;
+}
+
+/* Título */
+.sort-title{
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.3rem 0 ;
+  color: #ffffff;
+  text-align: center;
+}
+
+/* Select responsivo y moderno */
+.sort-select {
+  width: 100%;
+  padding: 0.25rem;
+  font-size: 0.9rem;
+  background: #333;
+  border: 1px solid #d5d5d5;
+  border-radius: 3px;
+  outline: none;
+
+  &:focus {
+    border-color: var(--ion-color-primary);
+  }
+}
+
+/* Animación suave */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
