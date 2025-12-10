@@ -15,10 +15,14 @@ import {
   trashOutline,
   createOutline,
   downloadOutline,
-  eyeOutline
+  eyeOutline,
+  card
 } from 'ionicons/icons';
 import { Router, RouterModule } from '@angular/router';
 import { DecksCardsService } from 'src/app/services/decks-cards';
+import { ExportDeckImageService } from 'src/app/services/export-deck-image-service';
+import { Card } from 'src/app/interfaces/card.interface';
+import { testCards } from 'src/app/cards-testing';
 
 @Component({
   selector: 'decks',
@@ -40,7 +44,7 @@ export class DecksComponent {
   @Output() deckDeleted = new EventEmitter<void>();
 
   private deckService = inject(DecksCardsService);
-  private router = inject(Router);
+  private exportDeckImage = inject(ExportDeckImageService);
 
   constructor() {
     addIcons({
@@ -51,6 +55,12 @@ export class DecksComponent {
     });
   }
 
+  allCards: Card[] = [];
+
+ngOnInit() {
+  this.allCards = testCards;
+}
+
 async deleteDeck(id: string) {
   const shouldDelete = confirm('¿Seguro que querés borrar este mazo?');
   if (!shouldDelete) return;
@@ -60,9 +70,36 @@ async deleteDeck(id: string) {
   this.deckDeleted.emit();
 }
 
+async downloadDeckImage(deckId: string) {
+  const deck = await this.deckService.getDeckById(deckId);
+  if (!deck) return;
+
+  const allCards: Card[] = this.allCards; // tu lista completa del TCG
+
+  const mainDeck = deck.cards.map(c => {
+    const card = allCards.find(x => x.id === c.id);
+    return {
+      id: c.id,
+      title: card?.name ?? '???',
+      img: card?.img ?? '',
+      faction: card?.faction ?? '',
+      qty: c.amount
+    };
+  });
+
+  const sideDeck = deck.sideDeck.cards.map(c => {
+    const card = allCards.find(x => x.id === c.id);
+    return {
+      id: c.id,
+      title: card?.name ?? '???',
+      img: card?.img ?? '',
+      faction: card?.faction ?? '',
+      qty: c.amount
+    };
+  });
+
+  this.exportDeckImage.exportDeck(mainDeck, sideDeck);
+}
 
 
-  downloadDeck(id: string) {
-    console.log('Descargar mazo', id);
-  }
 }

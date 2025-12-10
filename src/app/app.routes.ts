@@ -23,4 +23,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/deckbuilder/deckbuilder.page').then(m => m.DeckbuilderPage)
   },
+
+  {
+    path: 'deckviewer/:id',
+    loadComponent: () =>
+      import('./pages/deck-viewer/deck-viewer.component').then(m => m.DeckViewerComponent)
+  },
 ];

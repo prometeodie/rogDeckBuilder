@@ -23,3 +23,14 @@
   font-size: smaller;
   font-weight: bolder;
 }
+
+.decks {
+  width: 100%;
+  max-width: 66rem;
+  margin: 0 auto;        /* centra el contenedor */
+  display: flex;
+  flex-direction: column;
+}
+
+
+

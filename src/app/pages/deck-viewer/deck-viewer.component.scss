@@ -1,0 +1,40 @@
+.content-container,
+.card-list{
+  width: 100%;
+}
+
+.content-container,
+.card-list {
+  width: 100%;
+}
+
+.content-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1rem;
+  overflow: hidden; /* importante */
+}
+
+
+.card-list {
+  width: 100%;
+  max-width: 52rem;
+  height: auto;
+  overflow: visible;
+}
+.title {
+  text-align: center;
+}
+
+.back-icon {
+  position: absolute;
+  font-size: larger;
+  padding-left: 0.5rem;
+  cursor: pointer;
+  z-index: 10;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}

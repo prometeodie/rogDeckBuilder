@@ -190,16 +190,15 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
     this.ImgView.emit(this.cardData.img);
   }
 
-  async presentToast(message: string, color: string, position: 'top' | 'middle' | 'bottom') {
-  const toast = document.createElement('ion-toast');
-  toast.message = message;
-  toast.color = color;
-  toast.duration = 2000;
-  toast.position = position;
+      async presentToast(message: string, color: string, position: 'top' | 'middle' | 'bottom') {
+      const toast = document.createElement('ion-toast');
+      toast.message = message;
+      toast.color = color;
+      toast.duration = 2000;
+      toast.position = position;
 
-  document.body.appendChild(toast);
-  await toast.present();
-}
-
+      document.body.appendChild(toast);
+      await toast.present();
+  }
 
 }

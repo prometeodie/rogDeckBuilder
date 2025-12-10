@@ -1,4 +1,4 @@
-<ion-list>
+<ion-list class=" decks" >
   @for (deck of decks; track deck.id; let last = $last) {
     <ion-item [class.last-item]="last">
       <ion-label>
@@ -6,10 +6,10 @@
       </ion-label>
 
       <div class="actions" slot="end">
-        <ion-icon name="eye-outline"></ion-icon>
+        <ion-icon name="eye-outline" routerLink="/deckviewer/{{ deck.id }}"></ion-icon>
         <ion-icon name="trash-outline" (click)="deleteDeck(deck.id)"></ion-icon>
         <ion-icon name="create-outline" routerLink="/deckbuilder/{{ deck.id }}"></ion-icon>
-        <ion-icon name="download-outline" (click)="downloadDeck(deck.id)"></ion-icon>
+        <ion-icon name="download-outline" (click)="downloadDeckImage(deck.id)"></ion-icon>
       </div>
     </ion-item>
   }

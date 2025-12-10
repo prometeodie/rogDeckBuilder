@@ -129,3 +129,33 @@ ion-card-content {
 .banned{
   filter: grayscale(75%) brightness(85%);
 }
+
+
+@media (min-width: 440px) {
+  ion-card {
+    width: 8rem;
+  }
+
+  .card-content {
+    display: flex;
+    align-items: center;
+  }
+
+  .cost-img{
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .roman{
+    margin: 0;
+  }
+
+  .cost-bar{
+    margin-top: 0.4rem;
+    gap: 1rem;
+  }
+
+  .cost-text{
+    font-size: large;
+  }
+}

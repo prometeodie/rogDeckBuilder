@@ -1,0 +1,67 @@
+.card-row {
+  display: flex;
+  align-items: center;
+
+  cursor: pointer;
+
+  &:hover {
+  color:  rgba(120, 80, 255, 0.7);
+  }
+
+  transition: all 0.5s ease;
+}
+
+.card-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.card-amount {
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.delete-btn {
+  --padding-start: 0;
+  --padding-end: 0;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.main-deck-label,
+.side-deck-label {
+  width: 100%;
+  display: block;
+  text-align: center;
+  background: #7045ffb5;
+  padding: 0.5rem 0;
+}
+
+.side-deck-label {
+  background: lab(40.79% 61.92 18.8 / 0.781);
+}
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.list-wrapper {
+  width: 100%;
+  height: auto;        /* DEJAR crecer libremente */
+  overflow: visible;   /* NO scroll */
+}
+
+ion-list {
+  width: 100%;
+  overflow: visible;
+}
+
+.empty-message {
+  color: #ccc;
+  font-style: italic;
+  text-align: center;
+  width: 100%;
+}

@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-icon slot="start" name="arrow-back-outline" class="icon icon-l back-icon" routerLink="/home"></ion-icon>
+    <ion-title class="title">{{ deck()?.name }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!-- MENÚ / TABS -->
+  <ion-segment value="view1" color="primary" (ionChange)="onSegmentChange($event)">
+
+    <ion-segment-button value="view1">
+      <ion-label>Mazo</ion-label>
+    </ion-segment-button>
+
+    <ion-segment-button value="view2">
+      <ion-label>Lista</ion-label>
+    </ion-segment-button>
+
+    <ion-segment-button value="view3">
+      <ion-icon name="bar-chart-outline"></ion-icon>
+    </ion-segment-button>
+
+  </ion-segment>
+
+  <!-- CONTENEDOR DINÁMICO -->
+  <div class="content-container">
+
+    @if (currentView() === 'view1') {
+      <deck-cards />
+    }
+
+    @if (currentView() === 'view2') {
+      <card-list class="card-list"
+           [mainCards]="expandedMain()"
+           [sideCards]="expandedSide()" />
+    }
+
+    @if (currentView() === 'view3') {
+      <estadistics />
+    }
+
+  </div>
+
+</ion-content>

@@ -1,0 +1,47 @@
+<div class="list-wrapper">
+
+  <ion-list lines="full">
+
+    <!-- MAIN DECK -->
+    <ion-label class="main-deck-label">MAZO</ion-label>
+
+    @if (mainCards.length === 0) {
+      <ion-item>
+        <ion-label class="empty-message">
+          Mazo vacío.
+        </ion-label>
+      </ion-item>
+    }
+
+    @for (card of mainCards; track card.id) {
+      <ion-item class="card-row" (click)="openCloseViewer(card.data!.img)">
+        <ion-label class="card-name">{{ card.data?.name }}</ion-label>
+        <div class="card-amount">x{{ card.amount }}</div>
+      </ion-item>
+    }
+
+    <!-- SIDE DECK -->
+    <ion-label class="side-deck-label">SIDE DECK</ion-label>
+
+    @if (sideCards.length === 0) {
+      <ion-item>
+        <ion-label class="empty-message">
+          side deck vacío.
+        </ion-label>
+      </ion-item>
+    }
+
+    @for (card of sideCards; track card.id) {
+      <ion-item class="card-row" (click)="openCloseViewer(card.data!.img)">
+        <ion-label class="card-name">{{ card.data?.name }}</ion-label>
+        <div class="card-amount">x{{ card.amount }}</div>
+      </ion-item>
+    }
+
+  </ion-list>
+
+</div>
+
+@if (showImg) {
+  <image-viewer (closeViewer)="openCloseViewer('')" [img]="img" />
+}

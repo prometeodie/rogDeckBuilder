@@ -46,7 +46,11 @@
 
 .title-centered { text-align: center; width: 100%; cursor: pointer; }
 
-.icon { font-size: 1.6rem; margin-right: 0.7rem; }
+.icon {
+  font-size: 1.6rem;
+  margin-right: 0.7rem;
+  cursor: pointer;
+}
 .icon-l { margin-left: 0.7rem; }
 
 /* =========================================================
@@ -302,5 +306,30 @@ ion-button.sb-btn.ion-color-primary::part(native) {
   &:focus {
     outline: none;
     border-color: var(--ion-color-primary);
+  }
+}
+
+
+// MEDIA QUERIES
+
+@media (min-width: 430px) {
+  .content-area {
+    padding-left: 7.5rem;
+  }
+}
+
+@media (min-width: 600px) {
+  .content-area {
+    padding-left: 9rem;
+  }
+}
+
+@media (min-width: 800px) {
+  .content-area {
+    padding-left: 11rem;
+  }
+
+  .cards-container {
+   padding: 1rem;
   }
 }

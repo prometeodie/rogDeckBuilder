@@ -28,18 +28,22 @@
     (click)="toggleSortMenu()">
   </ion-icon>
 
-  <div class="sort-overlay" *ngIf="sortMenuOpen" (click)="toggleSortMenu()"></div>
+  @if (sortMenuOpen) {
+    <div class="sort-overlay" (click)="toggleSortMenu()"></div>
+  }
+  @if (sortMenuOpen) {
+    <div class="sort-popup" (click)="$event.stopPropagation()">
+      <label class="sort-title">Ordenar por:</label>
 
-  <div class="sort-popup" *ngIf="sortMenuOpen" (click)="$event.stopPropagation()">
-    <label class="sort-title">Ordenar por:</label>
+      <select class="sort-select" [(ngModel)]="sortBy" (change)="onSortChangeAndClose()">
+        <option value="amount">Cantidad</option>
+        <option value="name">Nombre</option>
+        <option value="faction">Facción</option>
+        <option value="rarity">Rareza</option>
+      </select>
+    </div>
+  }
 
-    <select class="sort-select" [(ngModel)]="sortBy" (change)="onSortChangeAndClose()">
-      <option value="amount">Cantidad</option>
-      <option value="name">Nombre</option>
-      <option value="faction">Facción</option>
-      <option value="rarity">Rareza</option>
-    </select>
-  </div>
 </div>
 
   </div>

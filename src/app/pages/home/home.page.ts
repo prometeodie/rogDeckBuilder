@@ -86,4 +86,5 @@ export class HomePage implements OnInit {
   const newDeck = await this.decksService.addDeck();
   this.router.navigate(['/deckbuilder', newDeck.id]);
 }
+
 }

@@ -200,6 +200,10 @@ $faction-colors: (
   }
 }
 
+.sidebar-empty{
+  text-align: center;
+}
+
 /* Animación suave */
 @keyframes slideDown {
   from { opacity: 0; transform: translateY(-8px); }
@@ -207,3 +211,45 @@ $faction-colors: (
 }
 
 
+// MEDIA QUERIES
+
+@media (min-width: 430px) {
+.sidebar{
+  width: 7.5rem;
+}
+}
+
+
+.delete-x{
+  top: 1px;
+  right: 2px;
+}
+
+@media (min-width: 600px) {
+.sidebar{
+  width: 9rem;
+}
+
+.sidebar-item{
+  padding: 1rem 0.4rem;
+}
+.sidebar-btn{
+  justify-content: center;
+  gap: 1rem;
+}
+
+.sidebar-title {
+    font-size: 0.8rem;
+}
+}
+
+@media (min-width: 800px) {
+.sidebar{
+  width: 11rem;
+}
+
+.sb-btn{
+  width: 3.5rem;
+}
+
+}
