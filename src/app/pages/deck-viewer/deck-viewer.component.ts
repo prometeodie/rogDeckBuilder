@@ -1,15 +1,17 @@
-import { IonHeader, IonSegment, IonSegmentButton, IonLabel, IonToolbar, IonContent, IonTitle, IonIcon } from '@ionic/angular/standalone';
+import { IonHeader, IonSegment, IonSegmentButton, IonToolbar, IonContent, IonTitle, IonIcon } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Deck } from '../../interfaces/deck.interface';
 import { DecksCardsService } from 'src/app/services/decks-cards';
 import { testCards } from 'src/app/cards-testing';
-import { arrowBackOutline, barChartOutline } from 'ionicons/icons';
+import { arrowBackOutline, barChartOutline, listOutline, tabletPortraitOutline } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { CardListComponent } from 'src/app/components/card-list/card-list.component';
 import { EstadisticsComponent } from 'src/app/components/estadistics/estadistics.component';
 import { DeckCardsComponent } from 'src/app/components/deck-cards/deck-cards.component';
+import { ViewWillEnter } from '@ionic/angular/standalone';
+
 
 @Component({
   selector: 'deck-viewer',
@@ -18,12 +20,12 @@ import { DeckCardsComponent } from 'src/app/components/deck-cards/deck-cards.com
   standalone: true,
   imports: [
     CommonModule,
-    IonHeader, IonSegment, IonSegmentButton, IonLabel, IonToolbar,
+    IonHeader, IonSegment, IonSegmentButton, IonToolbar,
     IonContent, IonTitle, IonIcon, RouterModule,
     CardListComponent, EstadisticsComponent, DeckCardsComponent
   ],
 })
-export class DeckViewerComponent implements OnInit {
+export class DeckViewerComponent implements ViewWillEnter {
 
   public deck = signal<Deck | null>(null);
   public loading = signal(true);
@@ -49,16 +51,34 @@ export class DeckViewerComponent implements OnInit {
     }));
   });
 
+  public totalMainCards = computed(() => {
+  const d = this.deck();
+  if (!d || !d.cards) return 0;
+
+  return d.cards.reduce((acc, c) => acc + c.amount, 0);
+});
+
+public totalSideCards = computed(() => {
+  const d = this.deck();
+  if (!d || !d.sideDeck) return 0;
+
+  return d.sideDeck.cards.reduce((acc, c) => acc + c.amount, 0);
+});
+
+
   private route = inject(ActivatedRoute);
   private decksService = inject(DecksCardsService);
 
   constructor() {
-    addIcons({ 'arrow-back-outline': arrowBackOutline, 'bar-chart-outline': barChartOutline });
+    addIcons({ 'arrow-back-outline': arrowBackOutline,
+               'bar-chart-outline': barChartOutline,
+               'list-outline': listOutline,
+               'tablet-portrait-outline':tabletPortraitOutline });
   }
 
-  ngOnInit(): void {
-    this.loadDeck();
-  }
+  async ionViewWillEnter() {
+  await this.loadDeck();   // vuelve a cargar SIEMPRE al entrar
+}
 
   onSegmentChange(ev: any) {
     this.currentView.set(ev.detail.value);
@@ -79,4 +99,6 @@ export class DeckViewerComponent implements OnInit {
     this.deck.set(found ?? null);
     this.loading.set(false);
   }
+
+
 }

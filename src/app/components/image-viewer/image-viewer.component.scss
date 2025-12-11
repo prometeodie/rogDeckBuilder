@@ -1,6 +1,6 @@
 .img-viewer-container {
-  position: absolute;          /* Se posiciona relativo al ion-content */
-  top: 0;
+  position: fixed;          /* Se posiciona relativo al ion-content */
+  top: 3rem;
   left: 0;
   width: 100%;
   height: 100%;

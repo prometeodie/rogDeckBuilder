@@ -1,3 +1,54 @@
-<p>
-  deck-cards works!
-</p>
+<div class="cards-wrapper">
+
+  <!-- Título MAZO -->
+  <h2 class="section-title">Mazo
+    <span>{{mainCardsAmount}}/40</span>
+    <ion-icon name="grid-outline" class="icon" (click)="onSortChangeAndClose()"></ion-icon>
+    @if (sortMenuOpen) {
+      <select class="sort-select" [(ngModel)]="sortBy" (change)="onSortChangeAndClose()">
+          <option value="amount">Cantidad</option>
+          <option value="name">Nombre</option>
+          <option value="faction">Facción</option>
+          <option value="rarity">Rareza</option>
+        </select>
+    }
+  </h2>
+
+  <!-- Main Deck -->
+  @if (mainCards.length === 0) {
+    <p class="empty-msg">Tu mazo está vacío</p>
+  } @else {
+    <div class="cards-grid main-deck">
+      @for (card of mainCards; track card.id) {
+        <div class="card-item" (click)="openCloseViewer(card.data!.img)">
+          <img class="card-img" [src]="card.data?.img" [alt]="card.data?.name">
+          <span class="card-amount">X{{card.amount}}</span>
+        </div>
+      }
+    </div>
+  }
+
+  <div class="divider"></div>
+
+  <!-- Título SIDE DECK -->
+  <h2 class="section-title">Side Deck <span>{{sideCardsAmount}}/15</span></h2>
+
+  <!-- Side Deck -->
+  @if (sideCards.length === 0) {
+    <p class="empty-msg">Tu side deck está vacío</p>
+  } @else {
+    <div class="cards-grid">
+      @for (card of sideCards; track card.id) {
+        <div class="card-item" (click)="openCloseViewer(card.data!.img)">
+          <img class="card-img" [src]="card.data?.img" [alt]="card.data?.name">
+          <span class="card-amount">X{{card.amount}}</span>
+        </div>
+      }
+    </div>
+  }
+
+</div>
+
+@if (showImg) {
+  <image-viewer (closeViewer)="openCloseViewer('')" [img]="img" />
+}

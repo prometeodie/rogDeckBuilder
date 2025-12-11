@@ -1,9 +1,9 @@
 <div class="list-wrapper">
 
-  <ion-list lines="full">
+  <ion-list lines="full" class="list">
 
     <!-- MAIN DECK -->
-    <ion-label class="main-deck-label">MAZO</ion-label>
+    <ion-label class="main-deck-label">MAZO <span>{{mainCardsAmount}}/40</span></ion-label>
 
     @if (mainCards.length === 0) {
       <ion-item>
@@ -21,7 +21,7 @@
     }
 
     <!-- SIDE DECK -->
-    <ion-label class="side-deck-label">SIDE DECK</ion-label>
+    <ion-label class="side-deck-label">SIDE DECK <span>{{sideCardsAmount}}/15</span></ion-label>
 
     @if (sideCards.length === 0) {
       <ion-item>

@@ -88,6 +88,10 @@
 /* =========================================================
    ====================== SEARCH BAR ========================
    ========================================================= */
+.searchbar-container{
+  display: flex;
+  justify-content: center;
+}
 
 .searchbar {
   --background:#333;
@@ -96,6 +100,7 @@
   position: relative;
   z-index: 99;
   margin: 0;
+  max-width: 30rem;
 }
 
 .no-results{

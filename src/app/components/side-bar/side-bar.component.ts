@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { gridOutline } from 'ionicons/icons';
 
 export type DeckMode = 'main' | 'side';
+export type SortBy = 'name' | 'amount' | 'faction' | 'rarity';
 
 @Component({
   selector: 'side-bar',
@@ -20,23 +21,23 @@ export class SideBarComponent {
   @Input() totalSelected: number = 0;
   @Input() selectedCards: { id: string; name: string; amount: number; faction: string; banned?: boolean }[] = [];
   @Input() savedAmounts: { [id: string]: number | undefined } = {};
-  @Input() sortBy: string = 'name';
 
-  /* ---------- Outputs (eventos que el padre debe escuchar) ---------- */
+  // *** AHORA: sortBy SIEMPRE ES SortBy (no string) ***
+  @Input() sortBy: SortBy = 'amount';
+
   @Output() setMode = new EventEmitter<DeckMode>();
   @Output() removeCard = new EventEmitter<string>();
-  @Output() sortChanged = new EventEmitter<string>();
 
+  // *** AHORA sortChanged emite SortBy ***
+  @Output() sortChanged = new EventEmitter<SortBy>();
 
-  public localSearch = '';
   public sortMenuOpen = false;
 
-
-    constructor() {
-        addIcons({
-          'grid-outline': gridOutline,
-        });
-      }
+  constructor() {
+    addIcons({
+      'grid-outline': gridOutline,
+    });
+  }
 
   onSetMode(mode: DeckMode) {
     if (mode === this.deckMode) return;
@@ -47,14 +48,13 @@ export class SideBarComponent {
     this.removeCard.emit(id);
   }
 
+  toggleSortMenu() {
+    this.sortMenuOpen = !this.sortMenuOpen;
+  }
 
-toggleSortMenu() {
-  this.sortMenuOpen = !this.sortMenuOpen;
-}
-
- onSortChangeAndClose() {
-  this.sortChanged.emit(this.sortBy);   // le manda al padre qué opción eligió
-  this.sortMenuOpen = false;
-}
-
+  // *** Se asegura que sortBy sea SortBy ***
+  onSortChangeAndClose() {
+    this.sortChanged.emit(this.sortBy);
+    this.sortMenuOpen = false;
+  }
 }

@@ -55,14 +55,14 @@
 </ion-header>
 
 @if (searchOpen) {
- <ng-container>
+ <div class="searchbar-container">
   <ion-searchbar
     show-clear-button="always"
     placeholder="Buscar..."
     class="searchbar"
     (ionInput)="filterCards($any($event.target).value)"
     (ionKeydown)="onSearchKeydown($event)" ?/>
-</ng-container>
+</div>
 
 }
 

@@ -8,11 +8,16 @@
   width: 100%;
 }
 
+.header {
+  --background: #3f51b5;
+  --color: #e2e2e2; /* si necesitás cambiar color del texto */
+}
+
+
 .content-container {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 1rem;
   overflow: hidden; /* importante */
 }
 

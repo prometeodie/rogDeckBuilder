@@ -21,6 +21,8 @@ export class CardListComponent{
 
   @Input() mainCards: ExpandedDeckCard[] = [];
   @Input() sideCards: ExpandedDeckCard[] = [];
+  @Input() mainCardsAmount: number = 0;
+  @Input() sideCardsAmount: number = 0;
 
   public showImg = false;
   public img = '';

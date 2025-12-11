@@ -3,6 +3,7 @@ import { Preferences } from '@capacitor/preferences';
 import { Deck } from '../interfaces/deck.interface';
 import { DeckCard } from '../interfaces/deck-card.interface';
 import { Card } from '../interfaces/card.interface';
+import { SortableCard } from '../interfaces/sortable.card.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -281,5 +282,34 @@ filterItems<T>(items: T[], term: string, properties: (keyof T)[]): T[] {
     0);
   }
 
+  sortCards(
+    cards: SortableCard[],
+    sortBy: 'name' | 'amount' | 'faction' | 'rarity',
+    getRarityValue?: (id: string) => number
+  ): SortableCard[] {
+
+    const list = [...cards]; // evitar mutar el array original
+
+    return list.sort((a, b) => {
+      switch (sortBy) {
+
+        case 'name':
+          return a.name.localeCompare(b.name);
+
+        case 'amount':
+          return b.amount - a.amount;
+
+        case 'faction':
+          return a.faction.localeCompare(b.faction);
+
+        case 'rarity':
+          if (!getRarityValue) return 0;
+          const r1 = getRarityValue(a.id);
+          const r2 = getRarityValue(b.id);
+          return r2 - r1;
+      }
+    });
+  }
 }
+
 

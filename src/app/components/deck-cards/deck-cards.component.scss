@@ -1,0 +1,85 @@
+.cards-wrapper {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.section-title {
+  width: 100%;
+  margin: 1rem 0 0.5rem 0;
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color:#e2e2e2;
+  text-shadow: 0 0 8px rgba(0,0,0,0.7);
+}
+
+.cards-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.2rem;
+}
+
+.card-item {
+  padding: 0.5rem;
+  position: relative;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.card-img {
+  width: 5rem;
+  object-fit: cover;
+
+  &:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s;
+  }
+}
+
+.card-amount {
+  position: absolute;
+  bottom: 0.6rem;
+  right: 0.6rem;
+  z-index: 10;
+
+  font-family: "Caveat", cursive;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #fff;
+
+  text-shadow:
+    0 0 4px rgba(0, 0, 0, 0.95),
+    0 0 8px rgba(0, 0, 0, 0.9),
+    0 3px 6px rgba(0, 0, 0, 0.95),
+    0 0 14px rgba(255, 255, 255, 0.25),
+    0 0 22px rgba(0, 0, 0, 1);
+
+  letter-spacing: 1px;
+}
+
+.divider {
+  width: 60%;
+  height: 3px;
+  margin: 1.2rem auto;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 20%,
+    rgba(255, 255, 255, 0.4) 80%,
+    transparent 100%
+  );
+  border-radius: 3px;
+}
+
+
+.empty-msg{
+  text-align: center;
+}
+
+.icon{
+  position: absolute;
+  right: 0.5rem;
+  font-size: small;
+  cursor: pointer;
+}
