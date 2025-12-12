@@ -3,15 +3,61 @@
   box-sizing: border-box;
 }
 
-.section-title {
+// .section-title {
+//   width: 100%;
+//   margin: 1rem 0 0.5rem 0;
+//   text-align: center;
+//   font-size: 1.6rem;
+//   font-weight: 700;
+//   color:#e2e2e2;
+//   text-shadow: 0 0 8px rgba(0,0,0,0.7);
+// }
+
+.section-header {
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
   margin: 1rem 0 0.5rem 0;
-  text-align: center;
+}
+
+.section-title {
+  margin: 0;
   font-size: 1.6rem;
   font-weight: 700;
-  color:#e2e2e2;
+  color: #e2e2e2;
   text-shadow: 0 0 8px rgba(0,0,0,0.7);
+  text-align: center;
 }
+
+.actions {
+  position: absolute;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.icon {
+  position:absolute;
+  right: 0.4rem;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.sort-select {
+  position: absolute;
+  right: 2rem;
+  bottom: -1.87rem;
+  background: rgb(34, 31, 31);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 2px;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.9rem;
+}
+
 
 .cards-grid {
   display: flex;
@@ -77,9 +123,25 @@
   text-align: center;
 }
 
-.icon{
-  position: absolute;
-  right: 0.5rem;
-  font-size: small;
-  cursor: pointer;
+// .icon{
+//   position: absolute;
+//   right: 0.5rem;
+//   font-size: small;
+//   cursor: pointer;
+// }
+
+// MEDIA QUERIES
+
+@media (min-width: 800px) {
+  .card-img {
+    width: 7rem;
+  }
 }
+
+@media (min-width: 900px) {
+  .card-img {
+    width: 8rem;
+  }
+}
+
+

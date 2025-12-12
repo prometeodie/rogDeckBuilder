@@ -43,7 +43,8 @@
     }
 
     @if (currentView() === 'view3') {
-      <estadistics />
+      <estadistics [maindeck]="expandedMain()"></estadistics>
+
     }
 
   </div>

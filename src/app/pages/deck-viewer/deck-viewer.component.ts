@@ -11,6 +11,7 @@ import { CardListComponent } from 'src/app/components/card-list/card-list.compon
 import { EstadisticsComponent } from 'src/app/components/estadistics/estadistics.component';
 import { DeckCardsComponent } from 'src/app/components/deck-cards/deck-cards.component';
 import { ViewWillEnter } from '@ionic/angular/standalone';
+import { Card } from 'src/app/interfaces/card.interface';
 
 
 @Component({
@@ -32,6 +33,7 @@ export class DeckViewerComponent implements ViewWillEnter {
   private cards = testCards;
 
   public currentView = signal<'view1' | 'view2' | 'view3'>('view1');
+  public selectedCards:Card[] =[];
 
   public expandedMain = computed(() => {
     const d = this.deck();
@@ -99,6 +101,5 @@ public totalSideCards = computed(() => {
     this.deck.set(found ?? null);
     this.loading.set(false);
   }
-
 
 }

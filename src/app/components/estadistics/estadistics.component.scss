@@ -1,0 +1,32 @@
+.charts-header {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.charts-header button {
+  padding: 0.4rem 0.8rem;
+  background: #444;
+  color: #ddd;
+  border: 1px solid #666;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.charts-header button.active {
+  background: #7a5cff;
+  color: white;
+  border-color: #a18aff;
+}
+
+.charts-container {
+  width: 100%;
+}
+
+.chart-box {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}

@@ -1,18 +1,32 @@
 <div class="cards-wrapper">
 
   <!-- Título MAZO -->
-  <h2 class="section-title">Mazo
-    <span>{{mainCardsAmount}}/40</span>
-    <ion-icon name="grid-outline" class="icon" (click)="onSortChangeAndClose()"></ion-icon>
-    @if (sortMenuOpen) {
-      <select class="sort-select" [(ngModel)]="sortBy" (change)="onSortChangeAndClose()">
-          <option value="amount">Cantidad</option>
-          <option value="name">Nombre</option>
-          <option value="faction">Facción</option>
-          <option value="rarity">Rareza</option>
-        </select>
-    }
+<div class="section-header">
+  <h2 class="section-title">
+    Mazo <span>{{ mainCardsAmount }}/40</span>
   </h2>
+
+  <div class="actions">
+    <ion-icon
+      name="grid-outline"
+      class="icon"
+      (click)="onSortChangeAndClose()"
+    ></ion-icon>
+
+    @if (sortMenuOpen) {
+      <select
+        class="sort-select"
+        [(ngModel)]="sortBy"
+        (change)="onSortChangeAndClose()"
+      >
+        <option value="amount">Cantidad</option>
+        <option value="name">Nombre</option>
+        <option value="faction">Facción</option>
+        <option value="rarity">Rareza</option>
+      </select>
+    }
+  </div>
+</div>
 
   <!-- Main Deck -->
   @if (mainCards.length === 0) {
@@ -27,6 +41,7 @@
       }
     </div>
   }
+
 
   <div class="divider"></div>
 

@@ -9,4 +9,7 @@ export interface Card {
   banned: boolean;
   isSeal: boolean;
   isToken?: boolean;
+  isQuickSpell?:boolean;
+  isSlowSpell?:boolean;
+  isArtifact?:boolean;
 }

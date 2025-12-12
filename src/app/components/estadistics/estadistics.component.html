@@ -1,3 +1,38 @@
-<p>
-  estadistics works!
-</p>
+<div class="charts-header">
+  <button (click)="onSelectChart('cost')" [class.active]="selectedChart === 'cost'">Costo</button>
+  <button (click)="onSelectChart('type')" [class.active]="selectedChart === 'type'">Tipo</button>
+  <button (click)="onSelectChart('faction')" [class.active]="selectedChart === 'faction'">Facción</button>
+  <button (click)="onSelectChart('rarity')" [class.active]="selectedChart === 'rarity'">Rareza</button>
+</div>
+
+<div class="charts-container">
+
+  @if(selectedChart === 'cost') {
+    <div class="chart-box">
+      <h3>Costo total</h3>
+      <canvas #costChart></canvas>
+    </div>
+  }
+
+  @if(selectedChart === 'type') {
+    <div class="chart-box">
+      <h3>Por tipo</h3>
+      <canvas #typeChart></canvas>
+    </div>
+  }
+
+  @if(selectedChart === 'faction') {
+    <div class="chart-box">
+      <h3>Por facción</h3>
+      <canvas #factionChart></canvas>
+    </div>
+  }
+
+  @if(selectedChart === 'rarity') {
+    <div class="chart-box">
+      <h3>Por rareza</h3>
+      <canvas #rarityChart></canvas>
+    </div>
+  }
+
+</div>
