@@ -1,0 +1,11 @@
+<div class="color-selector glass">
+  @for (color of colors; track $index) {
+    <button
+      class="color-item"
+      [style.background]="color"
+      [class.selected]="color === currentColor"
+      [ngStyle]="getCircleStyle($index, colors.length)"
+      (click)="selectColor(color)">
+    </button>
+  }
+</div>

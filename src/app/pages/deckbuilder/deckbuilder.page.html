@@ -1,5 +1,7 @@
 <ion-header>
-  <ion-toolbar>
+<ion-toolbar [style.--background]="getGradient()">
+
+
     <!-- back -->
     <ion-icon slot="start" name="arrow-back-outline" class="icon icon-l" routerLink="/home"></ion-icon>
 
@@ -10,7 +12,7 @@
         <ion-title
           class="title-centered"
           (click)="enableEdit()">
-          {{ deckName || 'Deck Builder' }}
+          {{ deckName || 'Deck Builder' |titlecase }}
         </ion-title>
       }
 
@@ -78,6 +80,7 @@
   [totalSelected]="totalSelected"
   [selectedCards]="selectedCards"
   [savedAmounts]="savedAmounts"
+  [deckId]="deckId()!"
 
   (setMode)="setDeckMode($event)"
   (removeCard)="removeCard($event)"

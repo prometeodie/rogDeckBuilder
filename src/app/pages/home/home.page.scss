@@ -35,3 +35,44 @@ ion-title.home-title {
   align-items: center;
   cursor: pointer;
 }
+
+
+.rog-logo-container {
+  position: relative;
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+
+/* Imagen */
+.rog-logo {
+  width: 4rem;
+  display: block;
+}
+
+/* Texto sobre la imagen */
+.rog-logo-title {
+  position: absolute;
+  right: 0.2rem;
+  bottom: -0.1rem;
+  transform: rotate(-7deg);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  font-family: "Shadows Into Light", cursive;
+  color: #ffffff;
+  text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.95), 1px -1px 0 rgba(0, 0, 0, 0.95), -1px 1px 0 rgba(0, 0, 0, 0.95), 1px 1px 0 rgba(0, 0, 0, 0.95), 0 0 6px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+  user-select: none;
+}
+
+// MEDIA QUERIES
+
+@media (min-width: 450px) {
+  .rog-logo {
+    width: 5rem;
+  }
+  .rog-logo-title {
+    font-size: 0.75rem;
+  }
+
+}

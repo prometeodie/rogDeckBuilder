@@ -1,5 +1,4 @@
-<!-- src/app/components/deck-sidebar/deck-sidebar.component.html -->
-<div class="sidebar">
+<div class="sidebar"  [class.no-scroll]="ColorPalette">
 
   <div class="sidebar-btn sidebar-item">
     <ion-button expand="block"
@@ -22,6 +21,10 @@
 
   <div class="sort-container">
 <div class="sort-wrapper">
+        @if (ColorPalette) {
+          <deck-color  #paletteContainer [deckId]="deckId" class="color-palette"/>
+        }
+    <ion-icon class="sort-icon color" (click)="openColorPalette()" #paletteButton name="color-palette-outline"></ion-icon>
   <ion-icon
     class="sort-icon"
     name="grid-outline"

@@ -16,13 +16,13 @@ import {
   createOutline,
   downloadOutline,
   eyeOutline,
-  card
 } from 'ionicons/icons';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { DecksCardsService } from 'src/app/services/decks-cards';
 import { ExportDeckImageService } from 'src/app/services/export-deck-image-service';
 import { Card } from 'src/app/interfaces/card.interface';
 import { testCards } from 'src/app/cards-testing';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'decks',
@@ -45,6 +45,7 @@ export class DecksComponent {
 
   private deckService = inject(DecksCardsService);
   private exportDeckImage = inject(ExportDeckImageService);
+  private nav:NavController  = inject(NavController);
 
   constructor() {
     addIcons({
@@ -55,7 +56,13 @@ export class DecksComponent {
     });
   }
 
-  allCards: Card[] = [];
+goToDeck(deckId: string) {
+  this.nav.navigateForward(`/deckbuilder/${deckId}`, {
+    animated: false
+  });
+}
+  public allCards: Card[] = [];
+  public deckColor = this.deckService.deckColor;
 
 ngOnInit() {
   this.allCards = testCards;
@@ -101,5 +108,10 @@ async downloadDeckImage(deckId: string) {
   this.exportDeckImage.exportDeck(mainDeck, sideDeck);
 }
 
+getDeckBackground(deck: Deck): string {
+  return deck.color
+    ? `linear-gradient(135deg, #1f1f1f 0%, ${deck.color} 100%)`
+    : '#1f1f1f';
+}
 
 }

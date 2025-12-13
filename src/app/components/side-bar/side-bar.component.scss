@@ -96,7 +96,7 @@
 
 .banned-stamp {
   position: absolute;
-  top: 8px;
+  top: -1px;
   left: 50%;
   transform: translateX(-50%) rotate(-20deg);
   padding: 2px 8px;
@@ -141,6 +141,22 @@ $faction-colors: (
   &:hover {
     transform: scale(1.1);
   }
+}
+
+.color{
+  position: absolute;
+  left: 0.3rem;
+}
+
+.color-palette{
+    position: fixed;
+    top: 9rem;
+    left: 1.5rem;
+    z-index: 9;
+}
+
+.no-scroll {
+  overflow: hidden !important;
 }
 
 /* Overlay para que esté por arriba de todo */

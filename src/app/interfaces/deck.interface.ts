@@ -6,6 +6,7 @@ export interface Deck {
   name: string;
   cards: DeckCard[];
   sideDeck: SideDeck;
+  color?:string;
 }
 
 

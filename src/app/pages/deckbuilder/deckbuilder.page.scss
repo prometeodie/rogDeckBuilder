@@ -133,6 +133,7 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   justify-content: center;
+  margin-bottom: 3rem;
 }
 
 .faction-selected{
@@ -314,6 +315,13 @@ ion-button.sb-btn.ion-color-primary::part(native) {
   }
 }
 
+.rog-logo-container:hover .rog-logo {
+  transform: scale(1.03);
+}
+
+.rog-logo {
+  transition: transform 0.2s ease;
+}
 
 // MEDIA QUERIES
 

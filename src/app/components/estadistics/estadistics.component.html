@@ -9,28 +9,28 @@
 
   @if(selectedChart === 'cost') {
     <div class="chart-box">
-      <h3>Costo total</h3>
+      <h3 class="title">Costo total</h3>
       <canvas #costChart></canvas>
     </div>
   }
 
   @if(selectedChart === 'type') {
     <div class="chart-box">
-      <h3>Por tipo</h3>
+      <h3 class="title">Por tipo</h3>
       <canvas #typeChart></canvas>
     </div>
   }
 
   @if(selectedChart === 'faction') {
     <div class="chart-box">
-      <h3>Por facción</h3>
+      <h3 class="title">Por facción</h3>
       <canvas #factionChart></canvas>
     </div>
   }
 
   @if(selectedChart === 'rarity') {
     <div class="chart-box">
-      <h3>Por rareza</h3>
+      <h3 class="title">Por rareza</h3>
       <canvas #rarityChart></canvas>
     </div>
   }

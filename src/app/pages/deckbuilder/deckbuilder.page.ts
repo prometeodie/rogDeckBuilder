@@ -15,7 +15,7 @@ import {
   IonInput
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, searchOutline } from 'ionicons/icons';
+import { arrowBackOutline, colorPaletteOutline, searchOutline } from 'ionicons/icons';
 
 import { CardsComponent } from "src/app/components/cards/cards.component";
 import { ImageViewerComponent } from 'src/app/components/image-viewer/image-viewer.component';
@@ -49,6 +49,7 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
   public allCards: Card[] = testCards;
   public currentCards: Card[] = testCards;
 
+
   public sellos = [
     {img:'SELLO-ALL.png', faction: 'all'},
     {img:'SELLO-JUPITER.png',faction:'jupiter'},
@@ -62,6 +63,7 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
   private route = inject(ActivatedRoute);
   private deckService = inject(DecksCardsService);
 
+  public deckColor = this.deckService.deckColor;
   public searchOpen = false;
   public viewImg = false;
   public imgSelected = '';
@@ -105,25 +107,29 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
   }
 
   async ngOnInit(): Promise<void> {
-    const id = this.deckId();
+  const id = this.deckId();
 
-    if (id) {
-      const deck = await this.deckService.getDeckById(id);
+  if (id) {
+    const deck = await this.deckService.getDeckById(id);
 
-      if (deck) {
-        this.currentDeck = deck;
-        this.deckName = deck.name;
+    if (deck) {
+      this.currentDeck = deck;
+      this.deckName = deck.name;
 
-        this.savedAmounts = {};
-        for (const c of deck.cards) {
-          this.savedAmounts[c.id] = c.amount ?? 0;
-        }
+      // 🔴 CARGA COLOR DESDE STORAGE
+      await this.deckService.getDeckColor(id);
 
-        this.updateSelectedCardsList();
-        return;
+      this.savedAmounts = {};
+      for (const c of deck.cards) {
+        this.savedAmounts[c.id] = c.amount ?? 0;
       }
+
+      this.updateSelectedCardsList();
+      return;
     }
   }
+}
+
 
   toggleSearch(event: Event): void {
     event.stopPropagation();
@@ -348,4 +354,9 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
     };
     return rarityOrder[card?.rarity ?? 'common'];
   }
+
+  getGradient(): string {
+  const color = this.deckColor() ?? '#1f1f1f'; // Usa el color del mazo si está disponible, si no, usa el color por defecto.
+  return `linear-gradient(to top, ${color}, #1f1f1f)`; // Degradado de abajo hacia arriba
+}
 }

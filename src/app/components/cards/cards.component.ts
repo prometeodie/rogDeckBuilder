@@ -98,10 +98,16 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
     if (!this.deckId) return;
 
     // límite por rareza (local)
-    const maxRarity = this.rarityLimits[this.cardData.rarity ?? 'common'] ?? 4;
-    if (maxRarity > 0 && this.count >= maxRarity) {
-      return;
-    }
+    // Sellos y Tokens NO tienen límite
+const isUnlimited = this.cardData.isSeal || this.cardData.isToken;
+
+if (!isUnlimited) {
+  const maxRarity = this.rarityLimits[this.cardData.rarity ?? 'common'] ?? 4;
+  if (maxRarity > 0 && this.count >= maxRarity) {
+    return;
+  }
+}
+
 
     // chequeo rápido del tope del deck/side (para evitar increments inútiles)
     const mode = this.mode;

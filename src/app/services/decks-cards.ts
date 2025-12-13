@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { IONIC_DEFAULT_GRAY } from './../constant/decks.colors';
+import { Injectable, signal } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
 import { Deck } from '../interfaces/deck.interface';
 import { DeckCard } from '../interfaces/deck-card.interface';
@@ -14,6 +15,13 @@ export class DecksCardsService {
 
   constructor() {}
 
+  // =============================
+//       DECK COLOR SIGNAL
+// =============================
+private _deckColor = signal<string | ''>( IONIC_DEFAULT_GRAY);
+deckColor = this._deckColor.asReadonly();
+
+
   /** =============================
    *       NORMALIZADOR
    * ============================= */
@@ -21,7 +29,8 @@ export class DecksCardsService {
     return {
       ...deck,
       cards: deck.cards ?? [],
-      sideDeck: deck.sideDeck ?? { cards: [] }
+      sideDeck: deck.sideDeck ?? { cards: [] },
+      color: deck.color || '#1f1f1f'
     };
   }
 
@@ -53,7 +62,8 @@ async addDeck(): Promise<Deck> {
     cards: [],
     sideDeck: {
       cards: []
-    }
+    },
+    color:'#1f1f1f'
   };
 
   // Guardar
@@ -310,6 +320,38 @@ filterItems<T>(items: T[], term: string, properties: (keyof T)[]): T[] {
       }
     });
   }
+
+  async setDeckColor(deckId: string, color?: string): Promise<void> {
+  const decks = await this.getDecks();
+  const index = decks.findIndex(d => d.id === deckId);
+  if (index === -1) return;
+
+  if (color) {
+    decks[index].color = color;
+    this._deckColor.set(color);
+  } else {
+    delete decks[index].color; // ✅ ahora es legal
+    this._deckColor.set('');
+  }
+
+  await this.saveDecks(decks);
+}
+
+
+
+async getDeckColor(deckId: string): Promise<string> {
+  const deck = await this.getDeckById(deckId);
+
+  const color = deck?.color ?? IONIC_DEFAULT_GRAY;
+
+  // siempre seteamos un valor válido
+  this._deckColor.set(color);
+
+  return color;
+}
+
+
+
 }
 
 
