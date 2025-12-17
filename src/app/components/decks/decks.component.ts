@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {
@@ -16,6 +16,8 @@ import {
   createOutline,
   downloadOutline,
   eyeOutline,
+  pencilOutline,
+  imageOutline,
 } from 'ionicons/icons';
 import { RouterModule } from '@angular/router';
 import { DecksCardsService } from 'src/app/services/decks-cards';
@@ -23,6 +25,8 @@ import { ExportDeckImageService } from 'src/app/services/export-deck-image-servi
 import { Card } from 'src/app/interfaces/card.interface';
 import { testCards } from 'src/app/cards-testing';
 import { NavController } from '@ionic/angular';
+import { DeckExportComponentComponent } from '../deck-export-component/deck-export-component.component';
+import { ExportCard } from 'src/app/interfaces/export.card.interface';
 
 @Component({
   selector: 'decks',
@@ -35,7 +39,8 @@ import { NavController } from '@ionic/angular';
     IonItem,
     IonLabel,
     IonIcon,
-    RouterModule
+    RouterModule,
+    DeckExportComponentComponent
   ]
 })
 export class DecksComponent {
@@ -46,12 +51,19 @@ export class DecksComponent {
   private deckService = inject(DecksCardsService);
   private exportDeckImage = inject(ExportDeckImageService);
   private nav:NavController  = inject(NavController);
+  private cdr = inject(ChangeDetectorRef);
+
+  public mainDeck!:ExportCard[];
+  public sideDeck!:ExportCard[];
+  public showExport:boolean = false;
 
   constructor() {
     addIcons({
       'trash-outline': trashOutline,
       'create-outline': createOutline,
+      'pencil-outline': pencilOutline,
       'download-outline': downloadOutline,
+      'image-outline': imageOutline,
       'eye-outline': eyeOutline
     });
   }
@@ -78,34 +90,46 @@ async deleteDeck(id: string) {
 }
 
 async downloadDeckImage(deckId: string) {
+  this.showExport = true;
   const deck = await this.deckService.getDeckById(deckId);
   if (!deck) return;
 
-  const allCards: Card[] = this.allCards; // tu lista completa del TCG
+  const allCards: Card[] = this.allCards;
 
-  const mainDeck = deck.cards.map(c => {
+  this.mainDeck = deck.cards.map(c => {
     const card = allCards.find(x => x.id === c.id);
     return {
       id: c.id,
       title: card?.name ?? '???',
       img: card?.img ?? '',
       faction: card?.faction ?? '',
-      qty: c.amount
+      qty: c.amount,
+      banned: card?.banned
     };
   });
 
-  const sideDeck = deck.sideDeck.cards.map(c => {
+  this.sideDeck = deck.sideDeck.cards.map(c => {
     const card = allCards.find(x => x.id === c.id);
     return {
       id: c.id,
       title: card?.name ?? '???',
       img: card?.img ?? '',
       faction: card?.faction ?? '',
-      qty: c.amount
+      qty: c.amount,
+      banned: card?.banned
     };
   });
 
-  this.exportDeckImage.exportDeck(mainDeck, sideDeck);
+
+  this.cdr.detectChanges();
+
+  requestAnimationFrame(() => {
+  this.exportDeckImage.exportRenderedDeck().then(() => {
+    this.showExport = false;
+    this.cdr.detectChanges();
+  });
+});
+
 }
 
 getDeckBackground(deck: Deck): string {

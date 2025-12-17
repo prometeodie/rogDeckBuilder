@@ -1,3 +1,4 @@
+import { DeckExportComponentComponent } from './components/deck-export-component/deck-export-component.component';
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
@@ -28,5 +29,5 @@ export const routes: Routes = [
     path: 'deckviewer/:id',
     loadComponent: () =>
       import('./pages/deck-viewer/deck-viewer.component').then(m => m.DeckViewerComponent)
-  },
+  }
 ];

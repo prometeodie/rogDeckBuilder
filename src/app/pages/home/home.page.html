@@ -1,13 +1,7 @@
 <ion-header>
 <ion-toolbar>
 
-  <a class="rog-logo-container"
-  class="rog-logo-container"
-  href="https://riseofgods.store/#elementor-action%3Aaction%3Dpopup%3Aopen%26settings%3DeyJpZCI6IjI3ODEiLCJ0b2dnbGUiOmZhbHNlfQ%3D%3D"
-   target="_blank">
-  <img class="rog-logo" src="../../../assets/icon/rog-logo.webp" alt="ROG logo">
-  <span class="rog-logo-title">Deckbuilder</span>
-</a>
+  <rog-logo [hasExtraLogoClasses]="false"/>
 
   <ion-title class="home-title ion-text-center">
     {{ identity?.name }} - {{ identity?.nickname }}
@@ -39,6 +33,5 @@
     <decks [decks]="decks" (deckDeleted)="loadDecks()"/>
   }
 
-  <ion-button class="floating-btn" (click)="createNewDeck()">+</ion-button>
-
+<new-upload-deck-btn (newDeck)="createNewDeck()" (uploadDeck)="uploadDeck()"/>
 </ion-content>

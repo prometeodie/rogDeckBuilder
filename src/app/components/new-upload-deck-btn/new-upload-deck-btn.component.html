@@ -1,0 +1,23 @@
+<ion-backdrop
+  *ngIf="isOpen"
+  (click)="closeFab()"
+  class="fab-backdrop">
+</ion-backdrop>
+
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button
+    class="square-fab"
+    (click)="toggleFab()">
+    <ion-icon name="add-outline"></ion-icon>
+  </ion-fab-button>
+
+  <ion-fab-list side="top" [class.open]="isOpen">
+    <ion-fab-button (click)="createNewDeck(); closeFab()">
+      <ion-icon name="create-outline"></ion-icon>
+    </ion-fab-button>
+
+    <ion-fab-button (click)="upload(); closeFab()">
+      <ion-icon name="cloud-upload-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab-list>
+</ion-fab>

@@ -8,9 +8,13 @@
       <div class="actions" slot="end">
         <ion-icon name="eye-outline" routerLink="/deckviewer/{{ deck.id }}"></ion-icon>
         <ion-icon name="trash-outline" (click)="deleteDeck(deck.id)"></ion-icon>
-        <ion-icon name="create-outline"  (click)="goToDeck(deck.id)"></ion-icon>
-        <ion-icon name="download-outline" (click)="downloadDeckImage(deck.id)"></ion-icon>
+        <ion-icon name="pencil-outline" (click)="goToDeck(deck.id)"></ion-icon>
+        <ion-icon name="image-outline" (click)="downloadDeckImage(deck.id)"></ion-icon>
+        <ion-icon name="download-outline" ></ion-icon>
       </div>
     </ion-item>
   }
 </ion-list>
+@if (showExport) {
+  <deck-export [mainDeck]="mainDeck" [sideDeck]="sideDeck" class="export-offscreen"/>
+}

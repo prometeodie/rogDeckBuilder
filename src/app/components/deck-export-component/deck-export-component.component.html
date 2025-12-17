@@ -1,0 +1,41 @@
+@if (user) {
+  <div id="deck-export-area" class="export-container">
+     <rog-logo class="logo"  [hasExtraLogoClasses]="true"/>
+    <div class="user-data">
+      <span><strong>Jugador:</strong> {{user.name | titlecase}} {{user.lastname | titlecase}}</span>
+      <br>
+      <span><strong>Nick:</strong> {{user.nickname | titlecase}}</span>
+      <br/>
+      <span class="date"><strong>Fecha:</strong>{{today  | date:'dd/MM/yyyy HH:mm'}}hs</span>
+    </div>
+
+    <h1 class="title">Main Deck ({{ mainDeck.length }})</h1>
+
+    <div class="cards-grid">
+      @for (card of mainDeck; track $index) {
+        <div class="card">
+           @if (card.banned) {
+      <h4 class="banned-stamp">baneada</h4>
+    }
+    <img src="../../../assets/MAGIA-RAPIDA-0-Tifon-Rafaga-733x1024.webp" crossorigin="anonymous">
+    <span class="qty">x{{ card.qty }}</span>
+        </div>
+      }
+    </div>
+
+    <div class="divider"></div>
+
+    <h1 class="title">Side Deck ({{sideDeck.length}})</h1>
+
+  <div class="cards-grid side-deck">
+    @for (card of sideDeck; track $index) {
+      <div class="card">
+        <img src="../../../assets/SELLOS/SELLO-MARTE.png" crossorigin="anonymous">
+        <span class="qty">x{{ card.qty }}</span>
+      </div>
+    }
+  </div>
+  <span class="sho">By: SHO</span>
+  </div>
+  <!-- TODO:poner las imagenes reales -->
+}

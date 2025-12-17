@@ -14,7 +14,7 @@
                X{{ cardData.factionCost }}
              </span>
       </div>
-      <div class="roman">{{ cardData.cost | roman }}</div>
+      <div class="roman"> @if(cardData.cost > 0){{{ cardData.cost | roman }}} @else {-}</div>
     </div>
 
     <div class="counter-box">

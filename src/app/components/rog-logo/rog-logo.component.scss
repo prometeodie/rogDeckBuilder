@@ -1,0 +1,38 @@
+
+
+.rog-logo-container {
+  position: relative;
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+
+.rog-logo-title {
+  position: absolute;
+  right: 0.2rem;
+  bottom: -0.1rem;
+  transform: rotate(-7deg);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  font-family: "Shadows Into Light", cursive;
+  color: #ffffff;
+  text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.95), 1px -1px 0 rgba(0, 0, 0, 0.95), -1px 1px 0 rgba(0, 0, 0, 0.95), 1px 1px 0 rgba(0, 0, 0, 0.95), 0 0 6px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+  user-select: none;
+}
+
+.rog-logo {
+  width: 4rem;
+  display: block;
+  position: relative;
+}
+
+
+.logo-bigger{
+  width: 7rem;
+
+  &-title{
+    font-size: 1rem;
+    right: 0.3rem;
+  }
+}

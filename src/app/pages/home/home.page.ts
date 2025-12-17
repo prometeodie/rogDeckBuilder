@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { IonButton, IonContent, IonHeader, IonTitle, IonToolbar, IonIcon } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonIcon,  IonFab, IonFabButton, IonFabList } from '@ionic/angular/standalone';
 import { Router, RouterModule } from '@angular/router';
 
 import { UserIdentityComponent } from 'src/app/components/user-identity/user-identity.component';
@@ -13,7 +13,9 @@ import { DecksComponent } from 'src/app/components/decks/decks.component';
 import { Deck } from 'src/app/interfaces/deck.interface';
 import { DecksCardsService } from 'src/app/services/decks-cards';
 import { addIcons } from 'ionicons';
-import { createOutline } from 'ionicons/icons';
+import { addOutline, cloudUploadOutline, createOutline } from 'ionicons/icons';
+import { RogLogoComponent } from "src/app/components/rog-logo/rog-logo.component";
+import { NewUploadDeckBtnComponent } from "src/app/components/new-upload-deck-btn/new-upload-deck-btn.component";
 
 @Component({
   selector: 'home',
@@ -21,7 +23,6 @@ import { createOutline } from 'ionicons/icons';
   styleUrls: ['./home.page.scss'],
   standalone: true,
   imports: [
-    IonButton,
     IonContent,
     IonHeader,
     IonTitle,
@@ -31,8 +32,10 @@ import { createOutline } from 'ionicons/icons';
     FormsModule,
     RouterModule,
     UserIdentityComponent,
-    DecksComponent
-  ]
+    DecksComponent,
+    RogLogoComponent,
+    NewUploadDeckBtnComponent
+]
 })
 export class HomePage implements OnInit {
 
@@ -47,6 +50,8 @@ export class HomePage implements OnInit {
   constructor() {
       addIcons({
         'create-outline': createOutline,
+        'cloud-upload-outline': cloudUploadOutline,
+        'add-outline': addOutline
       });
     }
 
@@ -85,6 +90,11 @@ export class HomePage implements OnInit {
   async createNewDeck() {
   const newDeck = await this.decksService.addDeck();
   this.router.navigate(['/deckbuilder', newDeck.id]);
+}
+
+async uploadDeck() {
+  console.log('Cargar mazo');
+  // lógica para importar mazo
 }
 
 }
