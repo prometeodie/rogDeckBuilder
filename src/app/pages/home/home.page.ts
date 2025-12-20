@@ -103,54 +103,18 @@ export class HomePage implements OnInit {
 }
 
 async uploadDeck() {
+  alert('UPLOAD CLICK');
+
   const input = document.createElement('input');
+  alert('INPUT CREATED');
+
   input.type = 'file';
   input.accept = '.json';
-  input.style.display = 'none';
-
-  document.body.appendChild(input);
 
   input.onchange = () => {
-    const file = input.files?.[0];
-    if (!file) {
-      document.body.removeChild(input);
-      return;
-    }
+    alert('ONCHANGE');
 
-    const reader = new FileReader();
-
-    reader.onload = async () => {
-      try {
-        const text = reader.result as string;
-        const parsed = JSON.parse(text);
-
-        // validación mínima
-        if (!parsed || !parsed.id || !parsed.cards) {
-          throw new Error('Archivo de mazo inválido');
-        }
-
-        await this.decksService.saveImportedDeck(parsed);
-        await this.loadDecks();
-
-        console.log('Mazo importado correctamente');
-      } catch (err) {
-        console.error('Error al importar el mazo', err);
-      } finally {
-        document.body.removeChild(input);
-      }
-    };
-
-    reader.onerror = () => {
-      console.error('Error leyendo el archivo');
-      document.body.removeChild(input);
-    };
-
-    reader.readAsText(file);
-  };
-
-  input.click();
 }
-
-
+}
 
 }
