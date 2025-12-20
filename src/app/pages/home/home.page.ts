@@ -1,4 +1,4 @@
-import { Component, inject, NgZone, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -44,7 +44,6 @@ export class HomePage implements OnInit {
   private userService = inject(User);
   private decksService = inject(DecksCardsService);
   private router = inject(Router);
-  private zone = inject(NgZone);
 
   public showUserModal: boolean = false;
   public identity: UserIdentityData | null = null;
@@ -103,87 +102,35 @@ export class HomePage implements OnInit {
   this.router.navigate(['/deckbuilder', newDeck.id]);
 }
 
-async uploadDeck(): Promise<void> {
-  console.log('[UPLOAD] click recibido');
-
+async uploadDeck() {
   const input = document.createElement('input');
   input.type = 'file';
-  input.accept = '.json';
-  input.style.display = 'none';
-
-  document.body.appendChild(input);
+  input.accept = 'application/json';
 
   input.onchange = async () => {
-    console.log('[UPLOAD] onchange disparado');
-
     const file = input.files?.[0];
-    console.log('[UPLOAD] archivo:', file);
+    if (!file) return;
 
-    if (!file) {
-      console.warn('[UPLOAD] no hay archivo');
-      document.body.removeChild(input);
-      return;
-    }
+    try {
+      const text = await file.text();
+      const parsed = JSON.parse(text);
 
-    const reader = new FileReader();
+      // Validación mínima
+      if (!parsed || !parsed.id || !parsed.cards) {
+        throw new Error('Archivo de mazo inválido');
+      }
 
-    reader.onload = async () => {
-  try {
-    const text = (reader.result as string)?.trim();
-    if (!text) throw new Error('El archivo está vacío');
-
-    const parsed = JSON.parse(text);
-
-    if (!parsed || typeof parsed !== 'object' || !parsed.id || !Array.isArray(parsed.cards)) {
-      throw new Error('Archivo de mazo inválido');
-    }
-
-    this.zone.run(async () => {
+      // Guardar en storage
       await this.decksService.saveImportedDeck(parsed);
-      await this.loadDecks();
-    });
 
-    console.log('Mazo importado correctamente');
-  } catch (err) {
-    console.error('Error al importar el mazo:', err);
-  } finally {
-    document.body.removeChild(input);
-  }
-};
-
-
-    reader.onerror = () => {
-      console.error('[UPLOAD] error leyendo archivo');
-      document.body.removeChild(input);
-    };
-
-    reader.readAsText(file);
+      console.log('Mazo importado correctamente');
+      this.loadDecks()
+    } catch (error) {
+      console.error('Error al importar el mazo', error);
+    }
   };
 
   input.click();
-}
-
-
-  async onDeckFileSelected(event: Event) {
-  const input = event.target as HTMLInputElement;
-  const file = input.files?.[0];
-  if (!file) return;
-
-  try {
-    const text = await file.text();
-    const parsed = JSON.parse(text);
-
-    if (!parsed || !parsed.id || !parsed.cards) {
-      throw new Error('Archivo de mazo inválido');
-    }
-
-    await this.decksService.saveImportedDeck(parsed);
-    await this.loadDecks();
-
-    console.log('Mazo importado correctamente');
-  } catch (err) {
-    console.error('Error al importar el mazo', err);
-  }
 }
 
 
