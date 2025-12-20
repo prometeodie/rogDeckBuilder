@@ -1,8 +1,15 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonIcon,  IonFab, IonFabButton, IonFabList } from '@ionic/angular/standalone';
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonIcon
+} from '@ionic/angular/standalone';
+
 import { Router, RouterModule } from '@angular/router';
 
 import { UserIdentityComponent } from 'src/app/components/user-identity/user-identity.component';
@@ -12,10 +19,12 @@ import { User } from 'src/app/services/user';
 import { DecksComponent } from 'src/app/components/decks/decks.component';
 import { Deck } from 'src/app/interfaces/deck.interface';
 import { DecksCardsService } from 'src/app/services/decks-cards';
+
 import { addIcons } from 'ionicons';
 import { addOutline, cloudUploadOutline, createOutline } from 'ionicons/icons';
-import { RogLogoComponent } from "src/app/components/rog-logo/rog-logo.component";
-import { NewUploadDeckBtnComponent } from "src/app/components/new-upload-deck-btn/new-upload-deck-btn.component";
+
+import { RogLogoComponent } from 'src/app/components/rog-logo/rog-logo.component';
+import { NewUploadDeckBtnComponent } from 'src/app/components/new-upload-deck-btn/new-upload-deck-btn.component';
 import { AnimationComponent } from 'src/app/components/animation/animation.component';
 
 @Component({
@@ -37,7 +46,7 @@ import { AnimationComponent } from 'src/app/components/animation/animation.compo
     RogLogoComponent,
     NewUploadDeckBtnComponent,
     AnimationComponent
-]
+  ]
 })
 export class HomePage implements OnInit {
 
@@ -45,23 +54,26 @@ export class HomePage implements OnInit {
   private decksService = inject(DecksCardsService);
   private router = inject(Router);
 
-  public showUserModal: boolean = false;
+  @ViewChild('deckFileInput')
+  deckFileInput!: ElementRef<HTMLInputElement>;
+
+  public showUserModal = false;
   public identity: UserIdentityData | null = null;
   public decks: Deck[] = [];
-  public showSplash: boolean = false;
+  public showSplash = false;
 
   constructor() {
-      addIcons({
-        'create-outline': createOutline,
-        'cloud-upload-outline': cloudUploadOutline,
-        'add-outline': addOutline
-      });
-    }
+    addIcons({
+      'create-outline': createOutline,
+      'cloud-upload-outline': cloudUploadOutline,
+      'add-outline': addOutline
+    });
+  }
 
   async ngOnInit() {
     this.showSplash = true;
-    this.identity = await this.userService.getUserIdentity();
 
+    this.identity = await this.userService.getUserIdentity();
     if (!this.identity) {
       this.showUserModal = true;
     }
@@ -70,10 +82,10 @@ export class HomePage implements OnInit {
   }
 
   ngAfterViewInit() {
-  setTimeout(() => {
-    this.showSplash = false;
-  }, 4000);
-}
+    setTimeout(() => {
+      this.showSplash = false;
+    }, 4000);
+  }
 
   async ionViewWillEnter() {
     await this.loadDecks();
@@ -83,87 +95,56 @@ export class HomePage implements OnInit {
     this.decks = await this.decksService.getDecks();
   }
 
-  async getIdentity() {
+  async onIdentitySaved() {
+    this.showUserModal = false;
     this.identity = await this.userService.getUserIdentity();
   }
 
-  async onIdentitySaved() {
-    this.showUserModal = false;
-    this.getIdentity();
-  }
-
-  async editIdentity() {
+  editIdentity() {
     this.showUserModal = true;
-    this.getIdentity();
   }
 
   async createNewDeck() {
-  const newDeck = await this.decksService.addDeck();
-  this.router.navigate(['/deckbuilder', newDeck.id]);
-}
+    const newDeck = await this.decksService.addDeck();
+    this.router.navigate(['/deckbuilder', newDeck.id]);
+  }
 
-async uploadDeck(): Promise<void> {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = '.json';
-  input.style.display = 'none';
+  // 👇 CLICK REAL → picker real
+  openDeckFilePicker() {
+    this.deckFileInput.nativeElement.value = '';
+    this.deckFileInput.nativeElement.click();
+  }
 
-  document.body.appendChild(input);
-
-  input.onchange = async () => {
+  // 👇 CHANGE REAL → SIEMPRE FUNCIONA
+  async onDeckFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
+    if (!file) return;
 
-    if (!file) {
-      document.body.removeChild(input);
-      return;
-    }
+    try {
+      const text = await file.text();
 
-    const reader = new FileReader();
-
-    reader.onload = async () => {
-      try {
-        const text = (reader.result as string)?.trim();
-
-        if (!text) {
-          throw new Error('El archivo está vacío');
-        }
-
-        const parsed = JSON.parse(text);
-
-        // validación mínima real
-        if (
-          !parsed ||
-          typeof parsed !== 'object' ||
-          !parsed.id ||
-          !Array.isArray(parsed.cards)
-        ) {
-          throw new Error('Archivo de mazo inválido');
-        }
-
-        await this.decksService.saveImportedDeck(parsed);
-        await this.loadDecks();
-
-        console.log('Mazo importado correctamente');
-      } catch (err) {
-        console.error('Error al importar el mazo:', err);
-      } finally {
-        document.body.removeChild(input);
+      if (!text.trim()) {
+        throw new Error('El archivo está vacío');
       }
-    };
 
-    reader.onerror = () => {
-      console.error('Error leyendo el archivo');
-      document.body.removeChild(input);
-    };
+      const parsed = JSON.parse(text);
 
-    reader.readAsText(file);
-  };
+      if (
+        !parsed ||
+        typeof parsed !== 'object' ||
+        !parsed.id ||
+        !Array.isArray(parsed.cards)
+      ) {
+        throw new Error('Archivo de mazo inválido');
+      }
 
-  /**
-   * ⚠️ Importante:
-   * Forzamos el click en el próximo tick para evitar
-   * problemas en producción con eventos bloqueados
-   */
-  setTimeout(() => input.click(), 0);
+      await this.decksService.saveImportedDeck(parsed);
+      await this.loadDecks();
+
+      console.log('Mazo importado correctamente');
+    } catch (err) {
+      console.error('Error al importar el mazo:', err);
+    }
   }
 }
