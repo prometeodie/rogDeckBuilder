@@ -354,33 +354,33 @@ async getDeckColor(deckId: string): Promise<string> {
 
 
 async saveImportedDeck(deck: Deck): Promise<void> {
-  const decks = await this.getDecks();
-  const normalizedDeck = this.normalize(deck);
+  try {
+    const decks = await this.getDecks();
+    const normalizedDeck = this.normalize(deck);
 
-  const idExists = decks.some(d => d.id === normalizedDeck.id);
-  const nameExists = decks.some(d => d.name === normalizedDeck.name);
+    const idExists = decks.some(d => d.id === normalizedDeck.id);
+    const nameExists = decks.some(d => d.name === normalizedDeck.name);
 
-  // ---------------------------
-  // Resolver ID duplicada
-  // ---------------------------
-  if (idExists) {
-  normalizedDeck.id = this.generateUUID();
-}
+    if (idExists) {
+      normalizedDeck.id = crypto.randomUUID();
+    }
 
-  // ---------------------------
-  // Resolver nombre duplicado
-  // ---------------------------
-  if (nameExists) {
-    normalizedDeck.name = this.generateCopyName(
-      normalizedDeck.name,
-      decks.map(d => d.name)
-    );
+    if (nameExists) {
+      normalizedDeck.name = this.generateCopyName(
+        normalizedDeck.name,
+        decks.map(d => d.name)
+      );
+    }
+
+    decks.push(normalizedDeck);
+    await this.showDeckInfo(normalizedDeck);
+    await this.saveDecks(decks);
+
+  } catch (error) {
+    console.error('[saveImportedDeck] Error:', error);
   }
-
-  decks.push(normalizedDeck);
-  await this.showDeckInfo(normalizedDeck);
-  await this.saveDecks(decks);
 }
+
 
 private generateCopyName(
   baseName: string,
