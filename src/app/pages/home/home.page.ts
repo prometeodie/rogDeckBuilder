@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, NgZone, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -44,6 +44,7 @@ export class HomePage implements OnInit {
   private userService = inject(User);
   private decksService = inject(DecksCardsService);
   private router = inject(Router);
+  private zone = inject(NgZone);
 
   public showUserModal: boolean = false;
   public identity: UserIdentityData | null = null;
@@ -127,28 +128,29 @@ async uploadDeck(): Promise<void> {
     const reader = new FileReader();
 
     reader.onload = async () => {
-      console.log('[UPLOAD] reader.onload');
+  try {
+    const text = (reader.result as string)?.trim();
+    if (!text) throw new Error('El archivo está vacío');
 
-      try {
-        const text = reader.result as string;
-        console.log('[UPLOAD] texto length:', text?.length);
+    const parsed = JSON.parse(text);
 
-        const parsed = JSON.parse(text);
-        console.log('[UPLOAD] JSON parseado OK', parsed);
+    if (!parsed || typeof parsed !== 'object' || !parsed.id || !Array.isArray(parsed.cards)) {
+      throw new Error('Archivo de mazo inválido');
+    }
 
-        console.log('[UPLOAD] llamando saveImportedDeck...');
-        await this.decksService.saveImportedDeck(parsed);
-        console.log('[UPLOAD] saveImportedDeck FINALIZÓ');
+    this.zone.run(async () => {
+      await this.decksService.saveImportedDeck(parsed);
+      await this.loadDecks();
+    });
 
-        await this.loadDecks();
-        console.log('[UPLOAD] loadDecks OK');
+    console.log('Mazo importado correctamente');
+  } catch (err) {
+    console.error('Error al importar el mazo:', err);
+  } finally {
+    document.body.removeChild(input);
+  }
+};
 
-      } catch (err) {
-        console.error('[UPLOAD] ERROR:', err);
-      } finally {
-        document.body.removeChild(input);
-      }
-    };
 
     reader.onerror = () => {
       console.error('[UPLOAD] error leyendo archivo');
