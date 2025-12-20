@@ -1,8 +1,8 @@
-import { ChangeDetectorRef, Component, inject, NgZone, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonIcon,  IonFab, IonFabButton, IonFabList } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonIcon } from '@ionic/angular/standalone';
 import { Router, RouterModule } from '@angular/router';
 
 import { UserIdentityComponent } from 'src/app/components/user-identity/user-identity.component';
@@ -17,6 +17,7 @@ import { addOutline, cloudUploadOutline, createOutline } from 'ionicons/icons';
 import { RogLogoComponent } from "src/app/components/rog-logo/rog-logo.component";
 import { NewUploadDeckBtnComponent } from "src/app/components/new-upload-deck-btn/new-upload-deck-btn.component";
 import { AnimationComponent } from 'src/app/components/animation/animation.component';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'home',
@@ -44,8 +45,7 @@ export class HomePage implements OnInit {
   private userService = inject(User);
   private decksService = inject(DecksCardsService);
   private router = inject(Router);
-  private cdr = inject(ChangeDetectorRef);
-
+  private alertCtrl = inject(AlertController);
 
   public showUserModal: boolean = false;
   public identity: UserIdentityData | null = null;
@@ -117,24 +117,38 @@ async uploadDeck() {
       const text = await file.text();
       const parsed = JSON.parse(text);
 
-      if (!parsed || !parsed.cards || !parsed.name) {
-        throw new Error('Archivo de mazo inválido');
-      }
+      const importedDeck = await this.decksService.saveImportedDeck(parsed);
 
-      await this.decksService.saveImportedDeck(parsed);
+      // refrescar lista
+      this.decks = [...await this.decksService.getDecks()];
 
-      // 🔴 clave: volver a asignar referencia
-      this.decks = await this.loadDecks().then();
-
-      // 🔴 forzar actualización visual
-      this.cdr.detectChanges();
+      // 🔴 MOSTRAR ALERT DESDE EL COMPONENTE
+      await this.showDeckInfo(importedDeck);
 
     } catch (error) {
-      console.error('Error al importar el mazo', error);
+      console.error(error);
     }
   };
 
   input.click();
 }
+
+async showDeckInfo(deck: Deck) {
+  const creator = deck.creator ?? 'desconocido';
+  const hasCollaborators = deck.colaborators?.length;
+  const collaboratorsText = hasCollaborators
+    ? ` y modificado por ${deck.colaborators!.join(', ')}`
+    : '';
+
+  const alert = await this.alertCtrl.create({
+    header: 'Información del mazo',
+    message: `Este mazo fue creado por ${creator}${collaboratorsText}.`,
+    buttons: ['OK'],
+    backdropDismiss: false,
+  });
+
+  await alert.present();
+}
+
 
 }

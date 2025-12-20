@@ -1,10 +1,9 @@
 import { IONIC_DEFAULT_GRAY } from './../constant/decks.colors';
-import { inject, Injectable, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Deck } from '../interfaces/deck.interface';
 import { DeckCard } from '../interfaces/deck-card.interface';
 import { Card } from '../interfaces/card.interface';
 import { SortableCard } from '../interfaces/sortable.card.interface';
-import { AlertController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +17,6 @@ export class DecksCardsService {
   // =============================
   private _deckColor = signal<string | ''>(IONIC_DEFAULT_GRAY);
   deckColor = this._deckColor.asReadonly();
-  private alertCtrl = inject(AlertController);
 
   // =============================
   // NORMALIZADOR
@@ -198,33 +196,24 @@ export class DecksCardsService {
     return color;
   }
 
-async saveImportedDeck(deck: Deck): Promise<void> {
-  try {
-    const decks = await this.getDecks();
-    const existingNames = decks.map(d => d.name);
+async saveImportedDeck(deck: Deck): Promise<Deck> {
+  const decks = await this.getDecks();
+  const existingNames = decks.map(d => d.name);
 
-    const normalizedDeck = this.normalize(deck);
+  const normalizedDeck = this.normalize(deck);
 
-    // si el nombre ya existe → generar copia
-    if (existingNames.includes(normalizedDeck.name)) {
-      normalizedDeck.name = this.generateCopyName(
-        normalizedDeck.name,
-        existingNames
-      );
-    }
-
-    decks.push(normalizedDeck);
-    await this.saveDecks(decks);
-
-    console.log('antes de la info')
-    await this.showDeckInfo(normalizedDeck);
-    console.log('desp de la info')
-
-  } catch (error) {
-    console.error('[SERVICE] ERROR:', error);
+  if (existingNames.includes(normalizedDeck.name)) {
+    normalizedDeck.name = this.generateCopyName(
+      normalizedDeck.name,
+      existingNames
+    );
   }
-}
 
+  decks.push(normalizedDeck);
+  await this.saveDecks(decks);
+
+  return normalizedDeck;
+}
 
 
   // =============================
@@ -292,23 +281,6 @@ async saveImportedDeck(deck: Deck): Promise<void> {
       newName = `${baseName} (copia ${copyIndex})`;
     }
     return newName;
-  }
-
-  async showDeckInfo(deck: Deck) {
-    console.log('entro a la info', deck)
-    const creator = deck.creator ?? 'desconocido';
-    const hasCollaborators = deck.colaborators && deck.colaborators.length > 0;
-    const collaboratorsText = hasCollaborators ? ` y modificado por ${deck.colaborators!.join(', ')}` : '';
-    const message = `Este mazo fue creado por ${creator}${collaboratorsText}.`;
-
-    const alert = await this.alertCtrl.create({
-      header: 'Información del mazo',
-      message,
-      buttons: ['OK'],
-      backdropDismiss: false,
-    });
-
-    await alert.present();
   }
 
   async getTotalCardsCount(deckId: string): Promise<number> {
