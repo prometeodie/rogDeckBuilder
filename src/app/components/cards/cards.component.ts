@@ -12,6 +12,7 @@ import { DeckCard } from 'src/app/interfaces/deck-card.interface';
 import { addIcons } from 'ionicons';
 import { addOutline, removeOutline } from 'ionicons/icons';
 import { RomanPipe } from 'src/app/pipes/roman-pipe';
+import Swal, { SweetAlertPosition, SweetAlertIcon } from 'sweetalert2';
 
 @Component({
   selector: 'card',
@@ -69,7 +70,6 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
   ngOnInit(): void {
     this.count = this.initialCount;
 
-    // debounced save: cuando emite, intentamos persistir y usamos lo que el servicio retorna
     this.sub = this.saveSubject
       .pipe(debounceTime(300))
       .subscribe(async (amount) => {
@@ -93,36 +93,35 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
     return `../../../assets/SELLOS/${file}`;
   }
 
-  /** Incremento local optimista; validaciones rápidas antes de incrementar */
   async increase(): Promise<void> {
     if (!this.deckId) return;
 
-    // límite por rareza (local)
-    // Sellos y Tokens NO tienen límite
-const isUnlimited = this.cardData.isSeal || this.cardData.isToken;
+    const isUnlimited = this.cardData.isSeal || this.cardData.isToken;
 
-if (!isUnlimited) {
-  const maxRarity = this.rarityLimits[this.cardData.rarity ?? 'common'] ?? 4;
-  if (maxRarity > 0 && this.count >= maxRarity) {
-    return;
-  }
-}
+    if (!isUnlimited) {
+      const maxRarity = this.rarityLimits[this.cardData.rarity ?? 'common'] ?? 4;
+      if (maxRarity > 0 && this.count >= maxRarity) {
+        return;
+      }
+    }
 
-
-    // chequeo rápido del tope del deck/side (para evitar increments inútiles)
-    const mode = this.mode;
-    const totalNow = mode === 'main'
+    const totalNow = this.mode === 'main'
       ? await this.deckService.getTotalCardsCountInMain(this.deckId)
       : await this.deckService.getTotalCardsCountInSide(this.deckId);
 
-    const cap = mode === 'main' ? 40 : 15;
+    const cap = this.mode === 'main' ? 40 : 15;
+
     if (totalNow >= cap) {
-      // ya está lleno
-      this.presentToast(mode === 'main' ? 'El mazo principal ya está completo.' : 'El Side Deck ya está completo.', 'warning', 'middle');
+      this.showToast(
+        this.mode === 'main'
+          ? 'El mazo principal ya está completo.'
+          : 'El Side Deck ya está completo.',
+        'warning',
+        'center'
+      );
       return;
     }
 
-    // todo ok -> incremento optimista local y programo guardado
     this.count++;
     this.saveSubject.next(this.count);
   }
@@ -134,57 +133,67 @@ if (!isUnlimited) {
     }
   }
 
-  /** intenta persistir y ajusta `this.count` al valor real guardado (retornado por el servicio) */
   private async attemptSave(amount: number): Promise<void> {
     if (!this.deckId) return;
 
-    // 1) Obtengo el valor guardado actualmente en el storage para esta carta y modo
     const deck = await this.deckService.getDeckById(this.deckId);
     let prevSaved = 0;
+
     if (deck) {
-      const source = this.mode === 'main' ? (deck.cards ?? []) : (deck.sideDeck?.cards ?? []);
+      const source = this.mode === 'main'
+        ? (deck.cards ?? [])
+        : (deck.sideDeck?.cards ?? []);
+
       const found = source.find(c => c.id === this.cardData.id);
       prevSaved = found ? (found.amount ?? 0) : 0;
     }
 
-    // 2) preparo objeto y pido al servicio que upserte; el servicio devuelve la cantidad final guardada
     const deckCard: DeckCard = {
       id: this.cardData.id,
       faction: this.cardData.faction,
-      amount: amount
+      amount
     };
 
-    const finalAmount = await this.deckService.upsertCardInDeck(this.deckId, deckCard, this.mode);
+    const finalAmount = await this.deckService.upsertCardInDeck(
+      this.deckId,
+      deckCard,
+      this.mode
+    );
 
-    // 3) sincronizo contador local si el servicio recortó o ajustó
     if (finalAmount !== this.count) {
-      // actualizar contador local al valor REAL
       this.count = finalAmount;
 
-      // notificar al usuario si hubo recorte (por tope)
       if (finalAmount < amount) {
-        const capMsg = this.mode === 'main'
-          ? 'Se alcanzó el límite del mazo principal. Cantidad ajustada.'
-          : 'Se alcanzó el límite del Side Deck. Cantidad ajustada.';
-        this.presentToast(capMsg, 'warning', 'middle' );
+        this.showToast(
+          this.mode === 'main'
+            ? 'Se alcanzó el límite del mazo principal. Cantidad ajustada.'
+            : 'Se alcanzó el límite del Side Deck. Cantidad ajustada.',
+          'warning',
+          'center'
+        );
       }
     }
 
-    // 4) determino si se "sumó realmente" comparando finalAmount con prevSaved (valor anterior en storage)
     const added = finalAmount > prevSaved;
-    const removed = finalAmount < prevSaved; // no usamos para toasts en tu pedido, pero lo dejo claro
 
     if (added) {
-      // mostrar toasts especiales sólo si se agregó realmente
       if (this.cardData.banned) {
-        this.presentToast('Atención: agregaste una carta BANEADA.', 'danger','top');
+        this.showToast(
+          'Atención: agregaste una carta BANEADA.',
+          'error',
+          'top'
+        );
       }
+
       if ((this.cardData as any).isToken) {
-        this.presentToast('Agregaste un TOKEN al mazo.', 'primary','top');
+        this.showToast(
+          'Agregaste un TOKEN al mazo.',
+          'info',
+          'top'
+        );
       }
     }
 
-    // 5) notifico al padre con la cantidad REAL guardada
     this.amountChange.emit({
       id: this.cardData.id,
       amount: finalAmount,
@@ -196,15 +205,31 @@ if (!isUnlimited) {
     this.ImgView.emit(this.cardData.img);
   }
 
-      async presentToast(message: string, color: string, position: 'top' | 'middle' | 'bottom') {
-      const toast = document.createElement('ion-toast');
-      toast.message = message;
-      toast.color = color;
-      toast.duration = 2000;
-      toast.position = position;
+  private showToast(
+    message: string,
+    icon: SweetAlertIcon,
+    position: SweetAlertPosition = 'top'
+  ) {
+    const backgroundByIcon: Record<SweetAlertIcon, string> = {
+      success: '#2ecc71',
+      warning: '#cfaf2eff',
+      error: '#c0392b',
+      info: '#2980b9',
+      question: '#34495e'
+    };
 
-      document.body.appendChild(toast);
-      await toast.present();
+    const textColor = icon === 'warning' ? '#000' : '#fff';
+
+    Swal.fire({
+      toast: true,
+      position,
+      icon,
+      title: message,
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+      background: backgroundByIcon[icon],
+      color: textColor
+    });
   }
-
 }

@@ -71,6 +71,21 @@ ion-title.home-title {
 }
 
 /* ===============================
+   SWEET ALERT
+================================ */
+
+.ionic-swal {
+  border-radius: 12px;
+  background: #1e1e1e;
+  color: #fff;
+}
+
+.swal2-container {
+  z-index: 99999 !important;
+}
+
+
+/* ===============================
    MEDIA QUERIES
 ================================ */
 

@@ -18,6 +18,7 @@ import { RogLogoComponent } from "src/app/components/rog-logo/rog-logo.component
 import { NewUploadDeckBtnComponent } from "src/app/components/new-upload-deck-btn/new-upload-deck-btn.component";
 import { AnimationComponent } from 'src/app/components/animation/animation.component';
 import { AlertController } from '@ionic/angular';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'home',
@@ -132,22 +133,35 @@ async uploadDeck() {
 
   input.click();
 }
-
 async showDeckInfo(deck: Deck) {
-  const creator = deck.creator ?? 'desconocido';
-  const hasCollaborators = deck.colaborators?.length;
-  const collaboratorsText = hasCollaborators
-    ? ` y modificado por ${deck.colaborators!.join(', ')}`
-    : '';
+  const creator = deck.creator ?? 'Desconocido';
 
-  const alert = await this.alertCtrl.create({
-    header: 'Información del mazo',
-    message: `Este mazo fue creado por ${creator}${collaboratorsText}.`,
-    buttons: ['OK'],
-    backdropDismiss: false,
+  const collaboratorsText =
+    deck.colaborators && deck.colaborators.length > 0
+      ? ` y modificado por <b> ${deck.colaborators.join(', ')}</b>`
+      : '';
+
+  await Swal.fire({
+    icon: 'info',
+    title: 'Información del mazo',
+    html: `
+      <p style="margin:0">
+        Este mazo fue creado por <b>${creator}</b>${collaboratorsText}.
+      </p>
+    `,
+    confirmButtonText: 'OK',
+    confirmButtonColor: '#3085d6',
+
+    /* 🔑 fixes Ionic */
+    heightAuto: false,
+    backdrop: true,
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+
+    customClass: {
+      popup: 'ionic-swal'
+    }
   });
-
-  await alert.present();
 }
 
 
