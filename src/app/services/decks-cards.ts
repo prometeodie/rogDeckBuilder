@@ -205,6 +205,7 @@ async saveImportedDeck(deck: Deck): Promise<void> {
 
     const normalizedDeck = this.normalize(deck);
 
+    // si el nombre ya existe → generar copia
     if (existingNames.includes(normalizedDeck.name)) {
       normalizedDeck.name = this.generateCopyName(
         normalizedDeck.name,
@@ -215,12 +216,14 @@ async saveImportedDeck(deck: Deck): Promise<void> {
     decks.push(normalizedDeck);
     await this.saveDecks(decks);
 
+    // mostrar info apenas se importa
     await this.showDeckInfo(normalizedDeck);
 
   } catch (error) {
     console.error('[SERVICE] ERROR:', error);
   }
 }
+
 
 
   // =============================

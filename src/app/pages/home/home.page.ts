@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, NgZone, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -102,6 +102,8 @@ export class HomePage implements OnInit {
   this.router.navigate(['/deckbuilder', newDeck.id]);
 }
 
+private zone = inject(NgZone);
+
 async uploadDeck() {
   const input = document.createElement('input');
   input.type = 'file';
@@ -115,16 +117,17 @@ async uploadDeck() {
       const text = await file.text();
       const parsed = JSON.parse(text);
 
-      // Validación mínima
-      if (!parsed || !parsed.id || !parsed.cards) {
+      // validación mínima
+      if (!parsed || !parsed.cards || !parsed.name) {
         throw new Error('Archivo de mazo inválido');
       }
 
-      // Guardar en storage
-      await this.decksService.saveImportedDeck(parsed);
+      // volver a Angular
+      this.zone.run(async () => {
+        await this.decksService.saveImportedDeck(parsed);
+        await this.loadDecks(); // refresca la lista inmediatamente
+      });
 
-      console.log('Mazo importado correctamente');
-      this.loadDecks()
     } catch (error) {
       console.error('Error al importar el mazo', error);
     }
