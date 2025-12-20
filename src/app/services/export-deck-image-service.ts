@@ -11,7 +11,7 @@ export class ExportDeckImageService {
   /** ==========================================
    *   EXPORTAR COMPONENTE deck-export
    * ========================================== */
-  async exportRenderedDeck(): Promise<void> {
+  async exportRenderedDeck(deckName:string): Promise<void> {
     const element = document.getElementById('deck-export-area');
 
     if (!element) {
@@ -31,7 +31,7 @@ export class ExportDeckImageService {
 
     const link = document.createElement('a');
     link.href = dataUrl;
-    link.download = 'deck.png';
+    link.download = `${deckName}.png`;
     link.click();
   }
 

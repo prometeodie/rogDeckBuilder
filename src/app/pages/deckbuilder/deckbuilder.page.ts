@@ -26,6 +26,7 @@ import { Card } from 'src/app/interfaces/card.interface';
 import { testCards } from 'src/app/cards-testing';
 import { SideBarComponent } from 'src/app/components/side-bar/side-bar.component';
 import { SortableCard } from 'src/app/interfaces/sortable.card.interface';
+import { AlertController } from '@ionic/angular';
 
 addIcons({ searchOutline, arrowBackOutline });
 
@@ -62,6 +63,8 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
 
   private route = inject(ActivatedRoute);
   private deckService = inject(DecksCardsService);
+  private alertCtrl = inject(AlertController);
+
 
   public deckColor = this.deckService.deckColor;
   public searchOpen = false;
@@ -150,17 +153,47 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
   }
 
   async saveTitle(): Promise<void> {
-    this.editingTitle = false;
+  this.editingTitle = false;
 
-    if (!this.deckName.trim()) {
-      this.deckName = 'New Deck';
-    }
+  const newName = this.deckName.trim() || 'New Deck';
 
-    if (this.currentDeck) {
-      this.currentDeck.name = this.deckName;
-      await this.deckService.updateDeck(this.currentDeck);
-    }
+  if (!this.currentDeck) return;
+
+  // 🔹 Obtener todos los mazos
+  const allDecks = await this.deckService.getDecks();
+
+  // 🔹 Verificar duplicado (excluyendo el mazo actual)
+  const nameExists = allDecks.some(
+    d => d.name === newName && d.id !== this.currentDeck.id
+  );
+
+  if (nameExists) {
+    // restaurar nombre anterior
+    this.deckName = this.currentDeck.name;
+
+    await this.showDuplicateNameAlert(newName);
+    return;
   }
+
+  // 🔹 Guardar si es válido
+  this.deckName = newName;
+  this.currentDeck.name = newName;
+
+  await this.deckService.updateDeck(this.currentDeck);
+}
+
+
+  private async showDuplicateNameAlert(name: string) {
+  const alert = await this.alertCtrl.create({
+    header: 'Nombre duplicado',
+    message: `Ya existe un mazo con el nombre ${name}. Elegí otro nombre.`,
+    buttons: ['OK'],
+    backdropDismiss: false,
+  });
+
+  await alert.present();
+}
+
 
   openImageViewer(imgUrl: string): void {
     this.imgSelected = imgUrl;
@@ -293,25 +326,25 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
     this.scrollToTop();
   }
 
-  filterCards(searchTerm: string) {
-    this.searchTerm = searchTerm.trim().toLowerCase();
+ filterCards(searchTerm: string) {
+  this.searchTerm = searchTerm.trim().toLowerCase();
 
-    if (!this.searchTerm) {
-      this.currentCards = [...this.allCards];
-      this.selectedFactionTitle = this.selectedFaction;
-      return;
-    }
-
-    const filtered = this.deckService.filterItems(
-      this.allCards,
-      this.searchTerm,
-      ['name', 'faction', 'rarity']
-    );
-
-    this.currentCards = filtered;
-
-    this.selectedFactionTitle = 'resultados de busqueda';
+  if (!this.searchTerm) {
+    this.currentCards = [...this.allCards];
+    this.selectedFactionTitle = this.selectedFaction;
+    return;
   }
+
+  const filtered = this.deckService.filterItems(
+    this.allCards,
+    this.searchTerm,
+    ['name', 'faction', 'rarity', 'tags']
+  );
+
+  this.currentCards = filtered;
+  this.selectedFactionTitle = 'resultados de búsqueda';
+}
+
 
   onSearchKeydown(ev: any) {
     const e: KeyboardEvent =

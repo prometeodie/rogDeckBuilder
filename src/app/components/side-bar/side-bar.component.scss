@@ -1,4 +1,7 @@
-/* src/app/components/deck-sidebar/deck-sidebar.component.scss */
+/* ======================================================
+   ================== SIDEBAR BASE ======================
+   ====================================================== */
+
 .sidebar {
   position: fixed;
   left: 0;
@@ -6,109 +9,255 @@
   height: calc(100vh - 113px);
   width: 6.5rem;
   min-width: 6rem;
-  overflow-y: auto;
-  background: #333;
+
   display: flex;
   flex-direction: column;
+
+  overflow-y: auto;
+  background: #333;
   z-index: 999;
   padding-bottom: 1rem;
 }
 
+/* ======================================================
+   ================== BOTONES ===========================
+   ====================================================== */
+
 .sidebar-btn {
-   display: flex;
-   padding: 0.3rem;
-   justify-content: space-around;
-  }
+  display: flex;
+  padding: 0.3rem;
+  justify-content: space-around;
+}
 
 .sb-btn {
   width: 2.5rem;
   height: 40px;
-  font-size: 0.6rem;
   min-width: 0;
+
+  font-size: 0.6rem;
   --color: #fff;
+
   box-shadow: #727a7d 0px 2px 6px -1px;
   border-radius: 6px;
 }
 
-.sort-container {
-  text-align: end;
-  padding: 0.2rem 0.4rem 0 0;
+/* ======================================================
+   ================== TITULOS / CONTADORES ==============
+   ====================================================== */
+
+.sidebar-title,
+.card-counter {
+  background: #333;
+  color: #fff;
+  text-align: center;
 }
-.sort-select {
-  width: 100%;
-  padding: 6px 10px;
-  border-radius: 6px;
-  background: #1b1b1b;
-  color: white;
-  border: 1px solid #3a3a3a;
-  font-weight: 500;
-}
-.sort-select:focus { outline: none; border-color: var(--ion-color-primary); }
 
 .sidebar-title {
-    background: #333;
-    font-size: 9.5px;
-    text-align: center;
-    padding: 0 0.3rem;
-    margin: 0;
+  font-size: 9.5px;
+  padding: 0 0.3rem;
+  margin: 0;
 }
 
 .card-counter {
   font-size: 17px;
   font-weight: 600;
-  color: #fff;
-  background: #333;
   padding: 4px 8px;
-  text-align: center;
   margin: 0.25rem;
 }
+
+/* ======================================================
+   ================== LISTA =============================
+   ====================================================== */
+
 .selected-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
+
 .sidebar-item {
   position: relative;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   background: #1a1a1a;
+  color: #fff;
+
   padding: 0.6rem;
   border-bottom: 1px solid #444;
-  color: #fff;
 }
-.item-name { font-size: 0.7rem; line-height: 1.4; font-weight: 600; }
-.item-amount { font-weight: bold; font-size: 0.9rem; margin-left: .25rem; }
+
+.item-name {
+  font-size: 0.7rem;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.item-amount {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-left: 0.25rem;
+}
+
+/* ======================================================
+   ================== DELETE ============================
+   ====================================================== */
 
 .delete-x {
   position: absolute;
-  top: 6px;
-  right: 6px;
+  top: 1px;
+  right: 2px;
+
   font-size: 14px;
   background: none;
   border: none;
   color: #fff;
+
   cursor: pointer;
   padding: 0;
   opacity: 0.6;
+
+  &:hover {
+    opacity: 1;
+  }
 }
-.delete-x:hover { opacity: 1; }
+
+/* ======================================================
+   ================== BANNED ============================
+   ====================================================== */
 
 .banned-stamp {
   position: absolute;
   top: -1px;
   left: 50%;
   transform: translateX(-50%) rotate(-20deg);
+
   padding: 2px 8px;
   font-size: 0.6rem;
   font-weight: 900;
+
   color: #ff1a1a;
   text-transform: uppercase;
+
   border: 1px solid #ff1a1a;
   border-radius: 4px;
+
   pointer-events: none;
 }
 
+/* ======================================================
+   ================== SORT ==============================
+   ====================================================== */
+
+.sort-container {
+  text-align: end;
+  padding: 0.2rem 0.4rem 0 0;
+}
+
+.sort-wrapper {
+  position: relative;
+}
+
+.sort-icon {
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+/* overlay */
+.sort-overlay {
+  position: absolute;
+  inset: 0;
+  height: 200vh;
+  background: transparent;
+  z-index: 998;
+}
+
+/* popup */
+.sort-popup {
+  position: absolute;
+  top: 1.3rem;
+  left: 0;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+
+  padding: 0.2rem;
+  background: #333;
+  backdrop-filter: blur(6px);
+
+  border-radius: 5px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 1);
+
+  z-index: 999;
+  animation: slideDown 0.18s ease-out;
+}
+
+.sort-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.3rem 0;
+  color: #fff;
+  text-align: center;
+}
+
+.sort-select {
+  width: 100%;
+  padding: 0.25rem;
+
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  background: #333;
+  color: white;
+
+  border: 1px solid #3a3a3a;
+  border-radius: 3px;
+  outline: none;
+
+  &:focus {
+    border-color: var(--ion-color-primary);
+  }
+}
+
+/* ======================================================
+   ================== COLOR PALETTE =====================
+   ====================================================== */
+
+.color {
+  position: absolute;
+  left: 0.3rem;
+}
+
+.color-palette {
+  position: fixed;
+  top: 9rem;
+  left: 1.5rem;
+  z-index: 9;
+}
+
+/* ======================================================
+   ================== ESTADOS ===========================
+   ====================================================== */
+
+.no-scroll {
+  overflow: hidden !important;
+}
+
+.sidebar-empty {
+  text-align: center;
+}
+
+/* ======================================================
+   ================== FACTIONS ==========================
+   ====================================================== */
 
 $faction-colors: (
   marte: #d7161e,
@@ -129,143 +278,44 @@ $faction-colors: (
   }
 }
 
-.sort-wrapper {
-  position: relative;
-}
+/* ======================================================
+   ================== ANIMACIONES =======================
+   ====================================================== */
 
-/* Icono */
-.sort-icon {
-  cursor: pointer;
-  transition: 0.2s ease;
-
-  &:hover {
-    transform: scale(1.1);
-  }
-}
-
-.color{
-  position: absolute;
-  left: 0.3rem;
-}
-
-.color-palette{
-    position: fixed;
-    top: 9rem;
-    left: 1.5rem;
-    z-index: 9;
-}
-
-.no-scroll {
-  overflow: hidden !important;
-}
-
-/* Overlay para que esté por arriba de todo */
-.sort-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 200vh; /* cubre bien el área visible */
-  background: transparent;
-  z-index: 998;
-}
-
-/* POPUP flotante que ocupa 100% del ancho */
-.sort-popup {
-  position: absolute;
-  top: 1.3rem;         /* debajo del icono */
-  left: 0;
-  width: 100%;
-
-  background: #333;
-  backdrop-filter: blur(6px);
-
-  padding: 0.2rem;
-  border-radius: 5px;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 1);
-
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-
-  z-index: 999; /* por encima de todo */
-  animation: slideDown 0.18s ease-out;
-}
-
-/* Título */
-.sort-title{
-  font-size: 0.7rem;
-  font-weight: 600;
-  padding: 0.3rem 0 ;
-  color: #ffffff;
-  text-align: center;
-}
-
-/* Select responsivo y moderno */
-.sort-select {
-  width: 100%;
-  padding: 0.25rem;
-  font-size: 0.9rem;
-  background: #333;
-  border: 1px solid #d5d5d5;
-  border-radius: 3px;
-  outline: none;
-
-  &:focus {
-    border-color: var(--ion-color-primary);
-  }
-}
-
-.sidebar-empty{
-  text-align: center;
-}
-
-/* Animación suave */
 @keyframes slideDown {
   from { opacity: 0; transform: translateY(-8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-
-// MEDIA QUERIES
+/* ======================================================
+   ================== MEDIA QUERIES =====================
+   ====================================================== */
 
 @media (min-width: 430px) {
-.sidebar{
-  width: 7.5rem;
-}
-}
-
-
-.delete-x{
-  top: 1px;
-  right: 2px;
+  .sidebar { width: 7.5rem; }
 }
 
 @media (min-width: 600px) {
-.sidebar{
-  width: 9rem;
-}
+  .sidebar { width: 9rem; }
 
-.sidebar-item{
-  padding: 1rem 0.4rem;
-}
-.sidebar-btn{
-  justify-content: center;
-  gap: 1rem;
-}
+  .sidebar-item {
+    padding: 1rem 0.4rem;
+  }
 
-.sidebar-title {
+  .sidebar-btn {
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .sidebar-title {
     font-size: 0.8rem;
-}
+  }
 }
 
 @media (min-width: 800px) {
-.sidebar{
-  width: 11rem;
-}
+  .sidebar { width: 11rem; }
 
-.sb-btn{
-  width: 3.5rem;
-}
-
+  .sb-btn {
+    width: 3.5rem;
+  }
 }

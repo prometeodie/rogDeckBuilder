@@ -1,27 +1,62 @@
+/* =========================================================
+   ===================== BASE SHARED ========================
+   ========================================================= */
+
+/* Width 100% */
+:host,
+.main-deck-label,
+.side-deck-label,
+.list-wrapper,
+ion-list,
+.empty-message {
+  width: 100%;
+}
+
+/* Font size 0.9rem */
+.card-name,
+.card-amount {
+  font-size: 0.9rem;
+}
+
+/* Text center */
+.main-deck-label,
+.side-deck-label,
+.empty-message {
+  text-align: center;
+}
+
+/* =========================================================
+   ====================== CARD ROW ==========================
+   ========================================================= */
+
 .card-row {
   display: flex;
   align-items: center;
-
   cursor: pointer;
+  transition: all 0.5s ease;
 
   &:hover {
-  color:  rgba(120, 80, 255, 0.7);
+    color: rgba(120, 80, 255, 0.7);
   }
-
-  transition: all 0.5s ease;
 }
 
+/* =========================================================
+   ===================== CARD CONTENT =======================
+   ========================================================= */
+
 .card-name {
-  font-size: 0.9rem;
   font-weight: 600;
 }
 
 .card-amount {
   margin-right: 0.5rem;
-  font-size: 0.9rem;
   font-weight: bold;
   color: #fff;
 }
+
+/* =========================================================
+   ====================== ACTIONS ===========================
+   ========================================================= */
 
 .delete-btn {
   --padding-start: 0;
@@ -30,46 +65,46 @@
   margin: 0;
 }
 
+/* =========================================================
+   ====================== LABELS ============================
+   ========================================================= */
+
 .main-deck-label,
 .side-deck-label {
-  width: 100%;
   display: block;
-  text-align: center;
-  background: #7045ffb5;
   padding: 0.5rem 0;
+  background: #7045ffb5;
 }
 
 .side-deck-label {
   background: lab(40.79% 61.92 18.8 / 0.781);
 }
 
-:host {
-  display: block;
-  width: 100%;
-}
+/* =========================================================
+   ====================== LIST WRAPPER ======================
+   ========================================================= */
 
-.list-wrapper {
-  width: 100%;
+.list-wrapper,
+ion-list {
   height: auto;        /* DEJAR crecer libremente */
   overflow: visible;   /* NO scroll */
 }
 
-ion-list {
-  width: 100%;
-  overflow: visible;
-}
+/* =========================================================
+   ===================== EMPTY STATE ========================
+   ========================================================= */
 
 .empty-message {
   color: #ccc;
   font-style: italic;
-  text-align: center;
-  width: 100%;
 }
 
-// MEDIA QUERIES
+/* =========================================================
+   ===================== MEDIA QUERIES ======================
+   ========================================================= */
 
 @media (min-width: 800px) {
-  .list{
+  .list {
     margin: 1rem 0;
   }
 }

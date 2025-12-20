@@ -1,12 +1,39 @@
-.color-selector {
+/* =========================================================
+   ===================== SHARED RULES =======================
+   ========================================================= */
+
+/* Position relative / absolute */
+.color-selector,
+.color-item {
   position: relative;
+}
+
+.color-item {
+  position: absolute;
+}
+
+/* Circular shape */
+.color-selector,
+.color-item {
+  border-radius: 50%;
+}
+
+/* Cursor */
+.color-item {
+  cursor: pointer;
+}
+
+/* =========================================================
+   =================== COLOR SELECTOR =======================
+   ========================================================= */
+
+.color-selector {
   width: 9rem;
   height: 9rem;
-  border-radius: 50%;
   display: block;
 }
 
-/* fondo glass */
+/* Fondo glass */
 .color-selector.glass {
   background: rgba(0, 0, 0, 0.63);
   backdrop-filter: blur(10px);
@@ -14,21 +41,14 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
 }
 
-/* cada color */
+/* =========================================================
+   ====================== COLOR ITEM ========================
+   ========================================================= */
+
 .color-item {
-  position: absolute;
   width: 1.6rem;
   height: 1.6rem;
-  border-radius: 50%;
   border: 2px solid transparent;
-  cursor: pointer;
-  transition: transform 0.15s ease, border-color 0.15s ease;
-}
 
-.color-item:hover {
-  transform: scale(1.15);
-}
-
-.color-item.selected {
-  border-color: #ffffff;
+  transition: transform 0.15s ease, border-colo
 }

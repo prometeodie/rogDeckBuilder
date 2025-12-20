@@ -1,8 +1,9 @@
-<ion-backdrop
-  *ngIf="isOpen"
-  (click)="closeFab()"
-  class="fab-backdrop">
-</ion-backdrop>
+@if(isOpen){
+  <ion-backdrop
+    (click)="closeFab()"
+    class="fab-backdrop">
+  </ion-backdrop>
+}
 
 <ion-fab vertical="bottom" horizontal="end" slot="fixed">
   <ion-fab-button

@@ -1,42 +1,53 @@
-.content-container,
-.card-list{
-  width: 100%;
-}
-
+/* Width 100% */
 .content-container,
 .card-list {
   width: 100%;
 }
 
-.header {
-  --background: #3f51b5;
-  --color: #e2e2e2; /* si necesitás cambiar color del texto */
+/* Cursor pointer */
+.back-icon {
+  cursor: pointer;
 }
 
+/* Text center */
+.title {
+  text-align: center;
+}
+
+/* =========================================================
+   ======================= HEADER ===========================
+   ========================================================= */
+
+.header {
+  --background: #3f51b5;
+  --color: #e2e2e2;
+}
+
+/* =========================================================
+   ===================== MAIN LAYOUT ========================
+   ========================================================= */
 
 .content-container {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  overflow: hidden; /* importante */
+  overflow: hidden;
 }
 
-
 .card-list {
-  width: 100%;
   max-width: 52rem;
   height: auto;
   overflow: visible;
 }
-.title {
-  text-align: center;
-}
+
+/* =========================================================
+   ======================= ICON =============================
+   ========================================================= */
 
 .back-icon {
   position: absolute;
   font-size: larger;
   padding-left: 0.5rem;
-  cursor: pointer;
   z-index: 10;
 
   &:hover {

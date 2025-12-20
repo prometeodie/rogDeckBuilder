@@ -8,6 +8,7 @@ export interface Card {
   cost: number;
   banned: boolean;
   isSeal: boolean;
+  tags: String[];
   isToken?: boolean;
   isQuickSpell?:boolean;
   isSlowSpell?:boolean;

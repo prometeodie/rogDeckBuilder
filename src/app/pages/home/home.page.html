@@ -8,16 +8,16 @@
   </ion-title>
 
   <ion-icon
-    slot="end"
-    name="create-outline"
-    class="edit-icon"
-    (click)="editIdentity()">
-  </ion-icon>
+  slot="end"
+  name="create-outline"
+  class="edit-icon"
+  (click)="editIdentity()">
+</ion-icon>
 </ion-toolbar>
 
 
 </ion-header>
- @if (showUserModal) {
+@if (showUserModal) {
   <div class="overlay">
     <user-identity (closed)="onIdentitySaved()"></user-identity>
   </div>
@@ -33,5 +33,9 @@
     <decks [decks]="decks" (deckDeleted)="loadDecks()"/>
   }
 
-<new-upload-deck-btn (newDeck)="createNewDeck()" (uploadDeck)="uploadDeck()"/>
+  <new-upload-deck-btn class="add-deck" (newDeck)="createNewDeck()" (uploadDeck)="uploadDeck()"/>
 </ion-content>
+
+@if (showSplash) {
+  <animation/>
+}

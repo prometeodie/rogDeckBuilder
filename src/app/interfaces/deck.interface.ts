@@ -7,6 +7,9 @@ export interface Deck {
   cards: DeckCard[];
   sideDeck: SideDeck;
   color?:string;
+  creator?:string;
+  colaborators?:string[];
+  baseDeckCards?:DeckCard[];
+  originalName?:string;
 }
-
 

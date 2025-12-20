@@ -12,6 +12,7 @@
 }
 
 /* ---- UTILITIES ---- */
+
 %flex-center-between {
   display: flex;
   justify-content: space-between;
@@ -37,39 +38,71 @@
   background: var(--bg-dark-2);
 }
 
-/* Aplicar reset global */
 * { @extend %reset; }
 
 /* =========================================================
    ======================= HEADER ===========================
    ========================================================= */
 
-.title-centered { text-align: center; width: 100%; cursor: pointer; }
+/* Width 100% */
+.title-centered,
+.sticky-nav,
+.main-container,
+.content-area,
+.cards-wrapper,
+.sort-select {
+  width: 100%;
+}
+
+/* Cursor pointer */
+.title-centered,
+.icon,
+.nav-items,
+.nav-item,
+.edit-icon,
+.delete-x {
+  cursor: pointer;
+}
+
+/* Text align center */
+.title-centered,
+.no-results,
+.faction-selected,
+.sidebar-title,
+.sidebar-empty,
+.card-counter {
+  text-align: center;
+}
+
+.title-centered {
+  cursor: pointer;
+}
 
 .icon {
   font-size: 1.6rem;
   margin-right: 0.7rem;
-  cursor: pointer;
 }
-.icon-l { margin-left: 0.7rem; }
+
+.icon-l {
+  margin-left: 0.7rem;
+}
 
 /* =========================================================
    ======================= NAVBAR ===========================
    ========================================================= */
 
 .sticky-nav {
-  width: 100%;
   background: var(--bg-dark-1);
   padding: 0.5rem 0;
+  z-index: 10;
+
   @extend %flex-center-between;
   justify-content: center;
-  z-index: 10;
 }
 
 .nav-items {
   display: flex;
-  gap: 0.40rem;
-  cursor: pointer;
+  gap: 0.4rem;
   transition: 0.2s;
 }
 
@@ -78,7 +111,6 @@
   border: none;
   width: 2.1rem;
   height: 2.1rem;
-  cursor: pointer;
   transition: 0.25s ease;
 
   &:active { transform: scale(0.9); }
@@ -88,23 +120,24 @@
 /* =========================================================
    ====================== SEARCH BAR ========================
    ========================================================= */
-.searchbar-container{
+
+/* Flex center */
+.searchbar-container,
+.cards-container,
+.sidebar-btn {
   display: flex;
   justify-content: center;
 }
 
 .searchbar {
-  --background:#333;
+  --background: #333;
   --color: white;
   --placeholder-color: #aaa;
+
   position: relative;
   z-index: 99;
   margin: 0;
   max-width: 30rem;
-}
-
-.no-results{
-  text-align: center;
 }
 
 /* =========================================================
@@ -112,38 +145,37 @@
    ========================================================= */
 
 .main-container {
-  display: block;
-  width: 100%;
   position: relative;
 }
 
 .content-area {
-  width: 100%;
   padding-left: 6.5rem;
   box-sizing: border-box;
 }
 
 .cards-wrapper {
-  width: 100%;
   min-height: calc(100vh - 104px);
 }
 
 .cards-container {
-  display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  justify-content: center;
   margin-bottom: 3rem;
 }
 
-.faction-selected{
-  text-align: center;
+.faction-selected {
   padding: 0.5rem 0;
 }
 
 /* =========================================================
    ======================== SIDEBAR =========================
    ========================================================= */
+
+/* Fixed position */
+.sidebar,
+.banned-stamp {
+  position: absolute;
+}
 
 .sidebar {
   position: fixed;
@@ -162,7 +194,6 @@
 /* ---- Botones ---- */
 
 .sidebar-btn {
-  display: flex;
   padding: 0.3rem;
   justify-content: space-around;
 }
@@ -198,19 +229,15 @@ ion-button.sb-btn.ion-color-primary::part(native) {
   transform: translateY(-1px);
 }
 
-/* ---- Título ---- */
+/* ---- Sidebar text ---- */
 
 .sidebar-title {
   background: var(--bg-dark-4);
   font-size: 12px;
-  padding: 0.5rem 0.5rem 0 0.5rem;
-  text-align: center;
+  padding: 0.5rem 0.5rem 0;
 }
 
-/* ---- Lista vacía ---- */
-
 .sidebar-empty {
-  text-align: center;
   font-size: smaller;
   padding: 4px 0;
 }
@@ -227,7 +254,12 @@ ion-button.sb-btn.ion-color-primary::part(native) {
     position: relative;
 
     .item-name { @extend %text-small; }
-    .item-amount { font-weight: bold; font-size: medium; margin-left: 0.3rem; }
+
+    .item-amount {
+      font-weight: bold;
+      font-size: medium;
+      margin-left: 0.3rem;
+    }
 
     .delete-x {
       position: absolute;
@@ -237,7 +269,6 @@ ion-button.sb-btn.ion-color-primary::part(native) {
       background: none;
       border: none;
       color: white;
-      cursor: pointer;
       padding: 0;
       opacity: 0.6;
 
@@ -251,7 +282,6 @@ ion-button.sb-btn.ion-color-primary::part(native) {
    ========================================================= */
 
 .banned-stamp {
-  position: absolute;
   top: 26px;
   left: 50%;
   transform: translateX(-50%) rotate(-20deg);
@@ -277,9 +307,10 @@ ion-button.sb-btn.ion-color-primary::part(native) {
   color: #fff;
   background: var(--bg-dark-4);
   padding: 4px 8px;
-  text-align: center;
 
-  &.animate { animation: softPulse 0.35s ease-out; }
+  &.animate {
+    animation: softPulse 0.35s ease-out;
+  }
 }
 
 @keyframes softPulse {
@@ -301,7 +332,6 @@ ion-button.sb-btn.ion-color-primary::part(native) {
 }
 
 .sort-select {
-  width: 100%;
   padding: 6px 10px;
   border-radius: 6px;
   background: #1b1b1b;
@@ -315,34 +345,31 @@ ion-button.sb-btn.ion-color-primary::part(native) {
   }
 }
 
-.rog-logo-container:hover .rog-logo {
-  transform: scale(1.03);
-}
+/* =========================================================
+   ================== LOGO =================================
+   ========================================================= */
 
 .rog-logo {
   transition: transform 0.2s ease;
 }
 
-// MEDIA QUERIES
+.rog-logo-container:hover .rog-logo {
+  transform: scale(1.03);
+}
+
+/* =========================================================
+   ================== MEDIA QUERIES ========================
+   ========================================================= */
 
 @media (min-width: 430px) {
-  .content-area {
-    padding-left: 7.5rem;
-  }
+  .content-area { padding-left: 7.5rem; }
 }
 
 @media (min-width: 600px) {
-  .content-area {
-    padding-left: 9rem;
-  }
+  .content-area { padding-left: 9rem; }
 }
 
 @media (min-width: 800px) {
-  .content-area {
-    padding-left: 11rem;
-  }
-
-  .cards-container {
-   padding: 1rem;
-  }
+  .content-area { padding-left: 11rem; }
+  .cards-container { padding: 1rem; }
 }

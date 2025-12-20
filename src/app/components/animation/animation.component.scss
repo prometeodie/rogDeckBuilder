@@ -1,0 +1,125 @@
+/* =========================================================
+   ===================== BASE SHARED ========================
+   ========================================================= */
+
+/* Flex center */
+.splash-backdrop,
+.animation-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Pointer / selection */
+.title {
+  pointer-events: none;
+  user-select: none;
+}
+
+/* =========================================================
+   ================= BACKDROP GLASS =========================
+   ========================================================= */
+
+.splash-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  animation: splashFadeOut 4s forwards;
+}
+
+/* =========================================================
+   ===================== CONTENEDOR =========================
+   ========================================================= */
+
+.animation-container {
+  position: relative;
+  width: 70vw;
+  max-width: 20rem;
+
+  animation: logoAppear 1.4s ease-out forwards;
+}
+
+/* =========================================================
+   ======================== LOGO ============================
+   ========================================================= */
+
+.logo {
+  width: 100%;
+  opacity: 0;
+  transform: scale(0.85);
+
+  animation: logoFadeScale 1.4s ease-out forwards;
+}
+
+/* =========================================================
+   ======================== TÍTULO ==========================
+   ========================================================= */
+
+.title {
+  position: absolute;
+  right: 0.2rem;
+  bottom: 0;
+
+  transform: translateY(-200px) rotate(-7deg);
+  opacity: 0;
+
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  font-family: "Shadows Into Light", cursive;
+  color: #ffffff;
+
+  text-shadow:
+    -1px -1px 0 rgba(0, 0, 0, 0.95),
+     1px -1px 0 rgba(0, 0, 0, 0.95),
+    -1px  1px 0 rgba(0, 0, 0, 0.95),
+     1px  1px 0 rgba(0, 0, 0, 0.95),
+     0 0 6px rgba(0, 0, 0, 0.8);
+
+  animation: titleDrop 1s cubic-bezier(0.25, 1.3, 0.4, 1) forwards;
+  animation-delay: 0.8s;
+}
+
+/* =========================================================
+   ====================== ANIMACIONES =======================
+   ========================================================= */
+
+@keyframes logoFadeScale {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes titleDrop {
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(-7deg);
+  }
+}
+
+@keyframes splashFadeOut {
+  0%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+/* =========================================================
+   ===================== MEDIA QUERIES ======================
+   ========================================================= */
+
+@media (min-width: 320px) {
+  .title {
+    font-size: clamp(2rem, 5vw, 2.5rem);
+  }
+}

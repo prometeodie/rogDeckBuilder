@@ -1,15 +1,58 @@
-.cards-wrapper {
+/* =========================================================
+   ===================== SHARED RULES =======================
+   ========================================================= */
+
+/* width: 100% */
+.cards-wrapper,
+.section-header,
+.actions,
+.cards-grid {
   width: 100%;
+}
+
+/* Flex center */
+.section-header,
+.cards-grid {
+  display: flex;
+  align-items: center;
+}
+
+/* Absolute positioning */
+.actions,
+.icon,
+.sort-select,
+.card-amount {
+  position: absolute;
+}
+
+/* Cursor pointer */
+.icon,
+.card-item {
+  cursor: pointer;
+}
+
+/* Box sizing */
+.cards-wrapper,
+.card-item {
   box-sizing: border-box;
 }
 
+/* =========================================================
+   ====================== WRAPPER ===========================
+   ========================================================= */
+
+.cards-wrapper {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   =================== SECTION HEADER =======================
+   ========================================================= */
+
 .section-header {
-  width: 100%;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  position: relative;
   margin: 1rem 0 0.5rem 0;
+  position: relative;
 }
 
 .section-title {
@@ -17,12 +60,15 @@
   font-size: 1.6rem;
   font-weight: 700;
   color: #e2e2e2;
-  text-shadow: 0 0 8px rgba(0,0,0,0.7);
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
   text-align: center;
 }
 
+/* =========================================================
+   ======================= ACTIONS ==========================
+   ========================================================= */
+
 .actions {
-  position: absolute;
   right: 0.5rem;
   display: flex;
   align-items: center;
@@ -30,27 +76,33 @@
 }
 
 .icon {
-  position:absolute;
   right: 0.4rem;
   font-size: 1.4rem;
-  cursor: pointer;
 }
 
+/* =========================================================
+   ===================== SORT SELECT ========================
+   ========================================================= */
+
 .sort-select {
-  position: absolute;
   right: 2rem;
   bottom: -1.87rem;
+
   background: rgb(34, 31, 31);
   color: white;
-  border: 1px solid rgba(255,255,255,0.3);
+
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 2px;
+
   padding: 0.2rem 0.4rem;
   font-size: 0.9rem;
 }
 
+/* =========================================================
+   ===================== CARDS GRID =========================
+   ========================================================= */
 
 .cards-grid {
-  display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.2rem;
@@ -59,9 +111,11 @@
 .card-item {
   padding: 0.5rem;
   position: relative;
-  box-sizing: border-box;
-  cursor: pointer;
 }
+
+/* =========================================================
+   ======================= CARD IMG =========================
+   ========================================================= */
 
 .card-img {
   width: 5rem;
@@ -73,8 +127,11 @@
   }
 }
 
+/* =========================================================
+   ====================== CARD AMOUNT =======================
+   ========================================================= */
+
 .card-amount {
-  position: absolute;
   bottom: 0.6rem;
   right: 0.6rem;
   z-index: 10;
@@ -84,20 +141,25 @@
   font-weight: 900;
   color: #fff;
 
+  letter-spacing: 1px;
+
   text-shadow:
     0 0 4px rgba(0, 0, 0, 0.95),
     0 0 8px rgba(0, 0, 0, 0.9),
     0 3px 6px rgba(0, 0, 0, 0.95),
     0 0 14px rgba(255, 255, 255, 0.25),
     0 0 22px rgba(0, 0, 0, 1);
-
-  letter-spacing: 1px;
 }
+
+/* =========================================================
+   ======================== DIVIDER =========================
+   ========================================================= */
 
 .divider {
   width: 60%;
   height: 3px;
   margin: 1.2rem auto;
+
   background: linear-gradient(
     to right,
     transparent 0%,
@@ -105,16 +167,21 @@
     rgba(255, 255, 255, 0.4) 80%,
     transparent 100%
   );
+
   border-radius: 3px;
 }
 
+/* =========================================================
+   ====================== EMPTY MSG =========================
+   ========================================================= */
 
-.empty-msg{
+.empty-msg {
   text-align: center;
 }
 
-
-// MEDIA QUERIES
+/* =========================================================
+   ===================== MEDIA QUERIES ======================
+   ========================================================= */
 
 @media (min-width: 800px) {
   .card-img {
@@ -127,5 +194,3 @@
     width: 8rem;
   }
 }
-
-

@@ -1,23 +1,46 @@
-.floating-btn {
+/* ===============================
+   PROPIEDADES COMPARTIDAS
+================================ */
+
+/* Posicionamiento fijo */
+.floating-btn,
+.add-deck {
   position: fixed;
+}
+
+/* Flex centrado */
+ion-toolbar,
+.edit-icon {
+  display: flex;
+  align-items: center;
+}
+
+/* ===============================
+   BOTÓN FLOTANTE
+================================ */
+
+.floating-btn {
   bottom: 1.5rem;
   right: 1.5rem;
   z-index: 100;
-  color: aliceblue;
 
-  opacity: 0.8;
-  backdrop-filter: blur(0.4rem);
-
-  border-radius: 50%;
   width: 3.5rem;
   height: 3.5rem;
+
+  color: aliceblue;
   font-size: 1.8rem;
+
+  border-radius: 50%;
+  opacity: 0.8;
+  backdrop-filter: blur(0.4rem);
 }
+
+/* ===============================
+   TOOLBAR / TITLE
+================================ */
 
 ion-toolbar {
   position: relative;
-  display: flex;
-  align-items: center;
 }
 
 ion-title.home-title {
@@ -28,23 +51,35 @@ ion-title.home-title {
   margin: 0;
 }
 
+/* ===============================
+   ICONOS
+================================ */
+
 .edit-icon {
   font-size: 1.6rem;
   padding: 0.4rem;
-  display: flex;
-  align-items: center;
   cursor: pointer;
 }
 
+/* ===============================
+   BOTÓN AGREGAR MAZO
+================================ */
 
-// MEDIA QUERIES
+.add-deck {
+  right: 0;
+  bottom: 0.1rem;
+}
+
+/* ===============================
+   MEDIA QUERIES
+================================ */
 
 @media (min-width: 450px) {
   .rog-logo {
     width: 5rem;
   }
+
   .rog-logo-title {
     font-size: 0.75rem;
   }
-
 }

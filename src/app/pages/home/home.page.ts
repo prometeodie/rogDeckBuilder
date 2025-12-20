@@ -16,6 +16,7 @@ import { addIcons } from 'ionicons';
 import { addOutline, cloudUploadOutline, createOutline } from 'ionicons/icons';
 import { RogLogoComponent } from "src/app/components/rog-logo/rog-logo.component";
 import { NewUploadDeckBtnComponent } from "src/app/components/new-upload-deck-btn/new-upload-deck-btn.component";
+import { AnimationComponent } from 'src/app/components/animation/animation.component';
 
 @Component({
   selector: 'home',
@@ -34,7 +35,8 @@ import { NewUploadDeckBtnComponent } from "src/app/components/new-upload-deck-bt
     UserIdentityComponent,
     DecksComponent,
     RogLogoComponent,
-    NewUploadDeckBtnComponent
+    NewUploadDeckBtnComponent,
+    AnimationComponent
 ]
 })
 export class HomePage implements OnInit {
@@ -46,6 +48,7 @@ export class HomePage implements OnInit {
   public showUserModal: boolean = false;
   public identity: UserIdentityData | null = null;
   public decks: Deck[] = [];
+  public showSplash: boolean = false;
 
   constructor() {
       addIcons({
@@ -56,6 +59,7 @@ export class HomePage implements OnInit {
     }
 
   async ngOnInit() {
+    this.showSplash = true;
     this.identity = await this.userService.getUserIdentity();
 
     if (!this.identity) {
@@ -64,6 +68,12 @@ export class HomePage implements OnInit {
 
     await this.loadDecks();
   }
+
+  ngAfterViewInit() {
+  setTimeout(() => {
+    this.showSplash = false;
+  }, 4000);
+}
 
   async ionViewWillEnter() {
     await this.loadDecks();
@@ -93,8 +103,35 @@ export class HomePage implements OnInit {
 }
 
 async uploadDeck() {
-  console.log('Cargar mazo');
-  // lógica para importar mazo
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'application/json';
+
+  input.onchange = async () => {
+    const file = input.files?.[0];
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const parsed = JSON.parse(text);
+
+      // Validación mínima
+      if (!parsed || !parsed.id || !parsed.cards) {
+        throw new Error('Archivo de mazo inválido');
+      }
+
+      // Guardar en storage
+      await this.decksService.saveImportedDeck(parsed);
+
+      console.log('Mazo importado correctamente');
+      this.loadDecks()
+    } catch (error) {
+      console.error('Error al importar el mazo', error);
+    }
+  };
+
+  input.click();
 }
+
 
 }

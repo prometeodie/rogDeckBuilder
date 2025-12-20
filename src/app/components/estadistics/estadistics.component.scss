@@ -1,54 +1,66 @@
+/* =========================================================
+   ====================== HEADER ===========================
+   ========================================================= */
+
 .charts-header {
   display: flex;
   justify-content: center;
   gap: 0.5rem;
   margin: 1rem 0;
   flex-wrap: wrap;
+
+  button {
+    padding: 0.4rem 0.8rem;
+    background: #444;
+    color: #ddd;
+    border: 1px solid #666;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+
+    &.active {
+      background: #7a5cff;
+      color: white;
+      border-color: #a18aff;
+    }
+  }
 }
 
-.title{
-  text-align: center ;
+.title {
+  text-align: center;
 }
 
-.charts-header button {
-  padding: 0.4rem 0.8rem;
-  background: #444;
-  color: #ddd;
-  border: 1px solid #666;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-}
+/* =========================================================
+   ===================== CONTAINER =========================
+   ========================================================= */
 
-.charts-header button.active {
-  background: #7a5cff;
-  color: white;
-  border-color: #a18aff;
+.charts-container,
+.chart-box {
+  width: 100%;
 }
 
 .charts-container {
-  width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;     /* ← centra verticalmente */
+  align-items: center;
   padding: 0 1rem;
-  min-height: 81vh;       /* ← usa el alto de la pantalla */
+  min-height: 81vh;
 }
 
+/* =========================================================
+   ====================== CHART ============================
+   ========================================================= */
 
-/* ===== DEFAULT (mobile-first) ===== */
 .chart-box {
-  width: 100%;
-  // max-width: 100%;
   height: 30rem;
   margin: 0 auto;
   position: relative;
 }
 
+/* =========================================================
+   ==================== RESPONSIVE =========================
+   ========================================================= */
 
-/* ===== A PARTIR DE 400px ===== */
-
-/* ===== TABLET / DESKTOP ===== */
 @media (min-width: 768px) {
   .chart-box {
     max-width: 70rem;

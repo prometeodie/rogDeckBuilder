@@ -25,7 +25,7 @@ export class UserIdentityComponent implements OnInit {
   private userService = inject(User);
   form: FormGroup;
 
-  public hasUser: boolean = false; // 👈 NUEVO
+  public hasUser: boolean = false;
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
@@ -36,9 +36,19 @@ export class UserIdentityComponent implements OnInit {
   }
 
   async ngOnInit() {
-    const data = await this.userService.getUserData();
-    this.hasUser = !!data; // true si hay usuario guardado
+  const data = await this.userService.getUserData();
+
+  if (data) {
+    this.hasUser = true;
+
+    this.form.patchValue({
+      name: data.name,
+      lastname: data.lastname,
+      nickname: data.nickname,
+    });
   }
+}
+
 
   async save() {
     if (this.form.invalid) return;

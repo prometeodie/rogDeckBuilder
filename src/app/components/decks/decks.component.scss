@@ -1,13 +1,17 @@
+/* =========================================================
+   ======================= ACTIONS =========================
+   ========================================================= */
+
 .actions {
   display: flex;
-  gap: 0.8rem;
   align-items: center;
+  gap: 0.8rem;
 
   ion-icon {
     font-size: 1.2rem;
     opacity: 0.8;
     cursor: pointer;
-    transition: 0.2s;
+    transition: transform 0.2s, opacity 0.2s;
 
     &:hover {
       opacity: 1;
@@ -15,27 +19,38 @@
     }
   }
 }
-.last-item {
-  margin-bottom: 4rem;
-}
 
-.deck-title{
-  font-size: smaller;
-  font-weight: bolder;
-}
+/* =========================================================
+   ====================== DECK LIST ========================
+   ========================================================= */
 
 .decks {
   width: 100%;
   max-width: 66rem;
   margin: 0 auto;
+
   display: flex;
   flex-direction: column;
 }
+
+.deck-title {
+  font-size: smaller;
+  font-weight: bolder;
+}
+
+.last-item {
+  margin-bottom: 4rem;
+}
+
+/* =========================================================
+   =================== EXPORT OFFSCREEN ====================
+   ========================================================= */
 
 .export-offscreen {
   position: fixed;
   top: -10000px;
   left: 0;
+
   width: 1100px;
   pointer-events: none;
 }

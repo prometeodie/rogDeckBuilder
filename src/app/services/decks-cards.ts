@@ -1,10 +1,11 @@
 import { IONIC_DEFAULT_GRAY } from './../constant/decks.colors';
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
 import { Deck } from '../interfaces/deck.interface';
 import { DeckCard } from '../interfaces/deck-card.interface';
 import { Card } from '../interfaces/card.interface';
 import { SortableCard } from '../interfaces/sortable.card.interface';
+import { AlertController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,7 @@ export class DecksCardsService {
 // =============================
 private _deckColor = signal<string | ''>( IONIC_DEFAULT_GRAY);
 deckColor = this._deckColor.asReadonly();
+private alertCtrl = inject(AlertController);
 
 
   /** =============================
@@ -350,6 +352,75 @@ async getDeckColor(deckId: string): Promise<string> {
   return color;
 }
 
+
+async saveImportedDeck(deck: Deck): Promise<void> {
+  const decks = await this.getDecks();
+  const normalizedDeck = this.normalize(deck);
+
+  const idExists = decks.some(d => d.id === normalizedDeck.id);
+  const nameExists = decks.some(d => d.name === normalizedDeck.name);
+
+  // ---------------------------
+  // Resolver ID duplicada
+  // ---------------------------
+  if (idExists) {
+    normalizedDeck.id = crypto.randomUUID();
+  }
+
+  // ---------------------------
+  // Resolver nombre duplicado
+  // ---------------------------
+  if (nameExists) {
+    normalizedDeck.name = this.generateCopyName(
+      normalizedDeck.name,
+      decks.map(d => d.name)
+    );
+  }
+
+  decks.push(normalizedDeck);
+  await this.showDeckInfo(normalizedDeck);
+  await this.saveDecks(decks);
+}
+
+private generateCopyName(
+  baseName: string,
+  existingNames: string[]
+): string {
+  let copyIndex = 1;
+  let newName = `${baseName} (copia)`;
+
+  while (existingNames.includes(newName)) {
+    copyIndex++;
+    newName = `${baseName} (copia ${copyIndex})`;
+  }
+
+  return newName;
+}
+
+async showDeckInfo(deck: Deck) {
+  const creator = deck.creator ?? 'desconocido';
+
+  const hasCollaborators =
+    deck.colaborators && deck.colaborators.length > 0;
+
+  const collaboratorsText = hasCollaborators
+    ? ` y modificado por ${deck.colaborators!.join(', ')}`
+    : '';
+
+  const message = `
+    Este mazo fue creado por ${creator}
+    ${collaboratorsText}.
+  `;
+
+  const alert = await this.alertCtrl.create({
+    header: 'Información del mazo',
+    message,
+    buttons: ['OK'],
+    backdropDismiss: false,
+  });
+
+  await alert.present();
+}
 
 
 }

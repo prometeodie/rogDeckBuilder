@@ -1,3 +1,4 @@
+import { DeckExportService } from './../../services/deck-export-service';
 import { ChangeDetectorRef, Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -27,6 +28,8 @@ import { testCards } from 'src/app/cards-testing';
 import { NavController } from '@ionic/angular';
 import { DeckExportComponentComponent } from '../deck-export-component/deck-export-component.component';
 import { ExportCard } from 'src/app/interfaces/export.card.interface';
+import { User } from 'src/app/services/user';
+import { UserIdentityData } from 'src/app/interfaces/user.interface';
 
 @Component({
   selector: 'decks',
@@ -50,12 +53,15 @@ export class DecksComponent {
 
   private deckService = inject(DecksCardsService);
   private exportDeckImage = inject(ExportDeckImageService);
+  private deckExportService = inject(DeckExportService);
+  private userService = inject(User);
   private nav:NavController  = inject(NavController);
   private cdr = inject(ChangeDetectorRef);
 
   public mainDeck!:ExportCard[];
   public sideDeck!:ExportCard[];
   public showExport:boolean = false;
+  public user!:UserIdentityData | null;
 
   constructor() {
     addIcons({
@@ -76,8 +82,12 @@ goToDeck(deckId: string) {
   public allCards: Card[] = [];
   public deckColor = this.deckService.deckColor;
 
-ngOnInit() {
+async ngOnInit() {
   this.allCards = testCards;
+}
+
+async getUser(): Promise<UserIdentityData | null> {
+  return this.userService.getUserData();
 }
 
 async deleteDeck(id: string) {
@@ -124,7 +134,7 @@ async downloadDeckImage(deckId: string) {
   this.cdr.detectChanges();
 
   requestAnimationFrame(() => {
-  this.exportDeckImage.exportRenderedDeck().then(() => {
+  this.exportDeckImage.exportRenderedDeck(deck.name).then(() => {
     this.showExport = false;
     this.cdr.detectChanges();
   });
@@ -137,5 +147,19 @@ getDeckBackground(deck: Deck): string {
     ? `linear-gradient(135deg, #1f1f1f 0%, ${deck.color} 100%)`
     : '#1f1f1f';
 }
+
+async downloadDeck(id: string) {
+  this.user = await this.getUser();
+  const deck = await this.deckService.getDeckById(id);
+
+  if (!deck) {
+    // manejo defensivo
+    console.error('Deck no encontrado');
+    return;
+  }
+
+  this.deckExportService.downloadDeck(deck, this.user?.nickname!);
+}
+
 
 }
