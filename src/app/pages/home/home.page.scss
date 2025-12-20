@@ -27,12 +27,14 @@ ion-toolbar,
   width: 3.5rem;
   height: 3.5rem;
 
-  color: aliceblue;
+  color: var(--app-text); // ← cambiado
+  background: var(--app-surface-2); // ← agregado
   font-size: 1.8rem;
 
   border-radius: 50%;
-  opacity: 0.8;
+  opacity: 0.9;
   backdrop-filter: blur(0.4rem);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6); // ← agregado
 }
 
 /* ===============================
@@ -41,6 +43,8 @@ ion-toolbar,
 
 ion-toolbar {
   position: relative;
+  background: var(--app-surface); // ← agregado
+  color: var(--app-text); // ← agregado
 }
 
 ion-title.home-title {
@@ -49,6 +53,7 @@ ion-title.home-title {
   top: 50%;
   transform: translate(-50%, -50%);
   margin: 0;
+  color: var(--app-text); // ← agregado
 }
 
 /* ===============================
@@ -59,6 +64,7 @@ ion-title.home-title {
   font-size: 1.6rem;
   padding: 0.4rem;
   cursor: pointer;
+  color: var(--app-text); // ← agregado
 }
 
 /* ===============================
@@ -76,14 +82,14 @@ ion-title.home-title {
 
 .ionic-swal {
   border-radius: 12px;
-  background: #1e1e1e;
-  color: #fff;
+  background: var(--app-surface); // ← cambiado
+  color: var(--app-text); // ← cambiado
+  border: 1px solid var(--app-border); // ← agregado
 }
 
 .swal2-container {
   z-index: 99999 !important;
 }
-
 
 /* ===============================
    MEDIA QUERIES
@@ -96,5 +102,6 @@ ion-title.home-title {
 
   .rog-logo-title {
     font-size: 0.75rem;
+    color: var(--app-text-muted); // ← agregado
   }
 }

@@ -1,17 +1,8 @@
 /* =========================================================
-   =============== VARIABLES & UTILITIES ====================
+   =============== UTILITIES & SHARED ======================
    ========================================================= */
 
-:root {
-  --bg-dark-1: #111;
-  --bg-dark-2: #1a1a1a;
-  --bg-dark-3: #252222;
-  --bg-dark-4: #333;
-  --text-light: #f5f5f5;
-  --border-soft: rgba(255,255,255,0.12);
-}
-
-/* ---- UTILITIES ---- */
+/* ---- Utilities ---- */
 
 %flex-center-between {
   display: flex;
@@ -28,23 +19,24 @@
 %text-small {
   font-size: 0.7rem;
   font-weight: 600;
-  color: var(--text-light);
+  color: var(--app-text);
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
 }
 
 %sidebar-section {
   padding: 0.7rem;
-  border-bottom: 1px solid #444;
-  background: var(--bg-dark-2);
+  border-bottom: 1px solid var(--app-border);
+  background: var(--app-surface);
 }
 
-* { @extend %reset; }
+* {
+  @extend %reset;
+}
 
 /* =========================================================
-   ======================= HEADER ===========================
+   ======================= HEADER ==========================
    ========================================================= */
 
-/* Width 100% */
 .title-centered,
 .sticky-nav,
 .main-container,
@@ -54,7 +46,6 @@
   width: 100%;
 }
 
-/* Cursor pointer */
 .title-centered,
 .icon,
 .nav-items,
@@ -64,7 +55,6 @@
   cursor: pointer;
 }
 
-/* Text align center */
 .title-centered,
 .no-results,
 .faction-selected,
@@ -72,10 +62,6 @@
 .sidebar-empty,
 .card-counter {
   text-align: center;
-}
-
-.title-centered {
-  cursor: pointer;
 }
 
 .icon {
@@ -88,11 +74,11 @@
 }
 
 /* =========================================================
-   ======================= NAVBAR ===========================
+   ======================= NAVBAR ==========================
    ========================================================= */
 
 .sticky-nav {
-  background: var(--bg-dark-1);
+  background: var(--app-bg);
   padding: 0.5rem 0;
   z-index: 10;
 
@@ -113,15 +99,19 @@
   height: 2.1rem;
   transition: 0.25s ease;
 
-  &:active { transform: scale(0.9); }
-  &.selected { filter: grayscale(60%) brightness(0.7); }
+  &:active {
+    transform: scale(0.9);
+  }
+
+  &.selected {
+    filter: grayscale(60%) brightness(0.7);
+  }
 }
 
 /* =========================================================
-   ====================== SEARCH BAR ========================
+   ====================== SEARCH BAR =======================
    ========================================================= */
 
-/* Flex center */
 .searchbar-container,
 .cards-container,
 .sidebar-btn {
@@ -130,9 +120,9 @@
 }
 
 .searchbar {
-  --background: #333;
-  --color: white;
-  --placeholder-color: #aaa;
+  --background: var(--app-surface-2);
+  --color: var(--app-text);
+  --placeholder-color: var(--app-text-muted);
 
   position: relative;
   z-index: 99;
@@ -141,7 +131,7 @@
 }
 
 /* =========================================================
-   ===================== MAIN LAYOUT ========================
+   ===================== MAIN LAYOUT =======================
    ========================================================= */
 
 .main-container {
@@ -151,10 +141,12 @@
 .content-area {
   padding-left: 6.5rem;
   box-sizing: border-box;
+  background: var(--app-bg);
 }
 
 .cards-wrapper {
   min-height: calc(100vh - 104px);
+  background: var(--app-bg);
 }
 
 .cards-container {
@@ -165,17 +157,12 @@
 
 .faction-selected {
   padding: 0.5rem 0;
+  color: var(--app-text);
 }
 
 /* =========================================================
-   ======================== SIDEBAR =========================
+   ======================== SIDEBAR ========================
    ========================================================= */
-
-/* Fixed position */
-.sidebar,
-.banned-stamp {
-  position: absolute;
-}
 
 .sidebar {
   position: fixed;
@@ -184,14 +171,16 @@
   height: calc(100vh - 113px);
   width: 6.5rem;
   min-width: 6rem;
+
   overflow-y: auto;
-  background: var(--bg-dark-4);
+  background: var(--app-surface-3);
+
   display: flex;
   flex-direction: column;
   z-index: 999;
 }
 
-/* ---- Botones ---- */
+/* ---- Buttons ---- */
 
 .sidebar-btn {
   padding: 0.3rem;
@@ -213,7 +202,7 @@ ion-button.sb-btn::part(native) {
   font-family: 'Inter', sans-serif !important;
   font-weight: 450 !important;
   letter-spacing: 0.3px;
-  color: #e9e9e9 !important;
+  color: var(--app-text) !important;
   transition: 0.18s ease-in-out;
 }
 
@@ -222,24 +211,26 @@ ion-button.sb-btn:hover::part(native) {
 }
 
 ion-button.sb-btn.ion-color-primary::part(native) {
-  background: rgba(255,255,255,0.28) !important;
-  color: white !important;
+  background: rgba(255, 255, 255, 0.28) !important;
+  color: var(--app-text) !important;
   font-weight: 500 !important;
-  box-shadow: 0 0 4px rgba(255,255,255,0.20);
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.2);
   transform: translateY(-1px);
 }
 
 /* ---- Sidebar text ---- */
 
 .sidebar-title {
-  background: var(--bg-dark-4);
+  background: var(--app-surface-3);
   font-size: 12px;
   padding: 0.5rem 0.5rem 0;
+  color: var(--app-text);
 }
 
 .sidebar-empty {
   font-size: smaller;
   padding: 4px 0;
+  color: var(--app-text-muted);
 }
 
 /* ---- Items ---- */
@@ -253,12 +244,15 @@ ion-button.sb-btn.ion-color-primary::part(native) {
 
     position: relative;
 
-    .item-name { @extend %text-small; }
+    .item-name {
+      @extend %text-small;
+    }
 
     .item-amount {
       font-weight: bold;
       font-size: medium;
       margin-left: 0.3rem;
+      color: var(--app-text);
     }
 
     .delete-x {
@@ -268,11 +262,13 @@ ion-button.sb-btn.ion-color-primary::part(native) {
       font-size: 14px;
       background: none;
       border: none;
-      color: white;
+      color: var(--app-text);
       padding: 0;
       opacity: 0.6;
 
-      &:hover { opacity: 1; }
+      &:hover {
+        opacity: 1;
+      }
     }
   }
 }
@@ -282,13 +278,16 @@ ion-button.sb-btn.ion-color-primary::part(native) {
    ========================================================= */
 
 .banned-stamp {
+  position: absolute;
   top: 26px;
   left: 50%;
   transform: translateX(-50%) rotate(-20deg);
+
   padding: 2px 10px;
   font-size: 0.5rem;
   font-weight: 900;
   letter-spacing: 1px;
+
   color: #ff1a1a;
   border: 2px solid #ff1a1a;
   border-radius: 4px;
@@ -298,14 +297,14 @@ ion-button.sb-btn.ion-color-primary::part(native) {
 }
 
 /* =========================================================
-   ================== COUNTER / ETC ========================
+   ================== COUNTER ==============================
    ========================================================= */
 
 .card-counter {
   font-size: 17px;
   font-weight: 600;
-  color: #fff;
-  background: var(--bg-dark-4);
+  color: var(--app-text);
+  background: var(--app-surface-3);
   padding: 4px 8px;
 
   &.animate {
@@ -320,7 +319,7 @@ ion-button.sb-btn.ion-color-primary::part(native) {
 }
 
 /* =========================================================
-   ==================== SORTING =============================
+   ==================== SORTING ============================
    ========================================================= */
 
 .sort-container {
@@ -334,9 +333,9 @@ ion-button.sb-btn.ion-color-primary::part(native) {
 .sort-select {
   padding: 6px 10px;
   border-radius: 6px;
-  background: #1b1b1b;
-  color: white;
-  border: 1px solid #3a3a3a;
+  background: var(--app-surface);
+  color: var(--app-text);
+  border: 1px solid var(--app-border);
   font-weight: 500;
 
   &:focus {
@@ -346,7 +345,7 @@ ion-button.sb-btn.ion-color-primary::part(native) {
 }
 
 /* =========================================================
-   ================== LOGO =================================
+   ================== LOGO ================================
    ========================================================= */
 
 .rog-logo {
@@ -362,14 +361,23 @@ ion-button.sb-btn.ion-color-primary::part(native) {
    ========================================================= */
 
 @media (min-width: 430px) {
-  .content-area { padding-left: 7.5rem; }
+  .content-area {
+    padding-left: 7.5rem;
+  }
 }
 
 @media (min-width: 600px) {
-  .content-area { padding-left: 9rem; }
+  .content-area {
+    padding-left: 9rem;
+  }
 }
 
 @media (min-width: 800px) {
-  .content-area { padding-left: 11rem; }
-  .cards-container { padding: 1rem; }
+  .content-area {
+    padding-left: 11rem;
+  }
+
+  .cards-container {
+    padding: 1rem;
+  }
 }

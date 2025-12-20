@@ -1,2 +1,38 @@
-// For information on how to create your own theme, please refer to:
-// https://ionicframework.com/docs/theming/
+:root {
+  --app-bg: #121212;
+  --app-surface: #1e1e1e;
+  --app-surface-2: #2a2a2a;
+
+  --app-text: #ffffff;
+  --app-text-muted: #b3b3b3;
+
+  --app-border: #3a3a3a;
+
+  --app-accent: var(--ion-color-primary);
+
+  /* ===============================
+     MAPEO A IONIC (CLAVE)
+     =============================== */
+
+  --ion-background-color: var(--app-bg);
+  --ion-text-color: var(--app-text);
+
+  --ion-item-background: var(--app-surface);
+  --ion-card-background: var(--app-surface-2);
+
+  --ion-border-color: var(--app-border);
+
+  --ion-toolbar-background: var(--app-bg);
+  --ion-toolbar-color: var(--app-text);
+
+  --ion-tab-bar-background: var(--app-bg);
+  --ion-tab-bar-color: var(--app-text-muted);
+  --ion-tab-bar-color-selected: var(--ion-color-primary);
+}
+
+/* ⚠️ IMPORTANTE: ignorar preferencias del sistema */
+html.dark,
+html.light {
+  --ion-background-color: var(--app-bg);
+  --ion-text-color: var(--app-text);
+}

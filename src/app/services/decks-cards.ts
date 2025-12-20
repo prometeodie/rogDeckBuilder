@@ -202,6 +202,10 @@ async saveImportedDeck(deck: Deck): Promise<Deck> {
 
   const normalizedDeck = this.normalize(deck);
 
+  // 🔹 SIEMPRE generar un nuevo ID al importar
+  normalizedDeck.id = crypto.randomUUID();
+
+  // 🔹 evitar nombres duplicados
   if (existingNames.includes(normalizedDeck.name)) {
     normalizedDeck.name = this.generateCopyName(
       normalizedDeck.name,

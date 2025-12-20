@@ -6,7 +6,8 @@
   position: fixed;
   left: 0;
   top: 113px;
-  height: calc(100vh - 113px);
+
+  height: calc(100dvh - 113px);
   width: 6.5rem;
   min-width: 6rem;
 
@@ -14,10 +15,14 @@
   flex-direction: column;
 
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
   background: #333;
   z-index: 999;
-  padding-bottom: 1rem;
+
+  padding-bottom: 2rem;
 }
+
 
 /* ======================================================
    ================== BOTONES ===========================

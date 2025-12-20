@@ -1,3 +1,7 @@
+/* =========================================================
+   ======================= BASE =============================
+   ========================================================= */
+
 /* Width 100% */
 .content-container,
 .card-list {
@@ -12,25 +16,36 @@
 /* Text center */
 .title {
   text-align: center;
+  color: var(--app-text);
 }
 
 /* =========================================================
-   ======================= HEADER ===========================
+   ======================= HEADER ==========================
    ========================================================= */
 
 .header {
-  --background: #3f51b5;
-  --color: #e2e2e2;
+  --background: var(--app-surface-3);
+  --color: var(--app-text);
+
+  border-bottom: 1px solid var(--app-border);
+}
+
+/* Si usás ion-toolbar dentro */
+.header ion-toolbar {
+  --background: var(--app-surface-3);
+  --color: var(--app-text);
 }
 
 /* =========================================================
-   ===================== MAIN LAYOUT ========================
+   ===================== MAIN LAYOUT =======================
    ========================================================= */
 
 .content-container {
   display: flex;
   justify-content: center;
   align-items: flex-start;
+
+  background: var(--app-bg);
   overflow: hidden;
 }
 
@@ -38,6 +53,8 @@
   max-width: 52rem;
   height: auto;
   overflow: visible;
+
+  background: transparent;
 }
 
 /* =========================================================
@@ -50,7 +67,12 @@
   padding-left: 0.5rem;
   z-index: 10;
 
+  color: var(--app-text);
+  opacity: 0.85;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+
   &:hover {
     transform: scale(1.1);
+    opacity: 1;
   }
 }
