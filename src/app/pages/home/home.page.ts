@@ -103,6 +103,8 @@ export class HomePage implements OnInit {
 }
 
 async uploadDeck(): Promise<void> {
+  console.log('[UPLOAD] click recibido');
+
   const input = document.createElement('input');
   input.type = 'file';
   input.accept = '.json';
@@ -111,9 +113,13 @@ async uploadDeck(): Promise<void> {
   document.body.appendChild(input);
 
   input.onchange = async () => {
+    console.log('[UPLOAD] onchange disparado');
+
     const file = input.files?.[0];
+    console.log('[UPLOAD] archivo:', file);
 
     if (!file) {
+      console.warn('[UPLOAD] no hay archivo');
       document.body.removeChild(input);
       return;
     }
@@ -121,51 +127,40 @@ async uploadDeck(): Promise<void> {
     const reader = new FileReader();
 
     reader.onload = async () => {
-      try {
-        const text = (reader.result as string)?.trim();
+      console.log('[UPLOAD] reader.onload');
 
-        if (!text) {
-          throw new Error('El archivo está vacío');
-        }
+      try {
+        const text = reader.result as string;
+        console.log('[UPLOAD] texto length:', text?.length);
 
         const parsed = JSON.parse(text);
+        console.log('[UPLOAD] JSON parseado OK', parsed);
 
-        // validación mínima real
-        if (
-          !parsed ||
-          typeof parsed !== 'object' ||
-          !parsed.id ||
-          !Array.isArray(parsed.cards)
-        ) {
-          throw new Error('Archivo de mazo inválido');
-        }
-
+        console.log('[UPLOAD] llamando saveImportedDeck...');
         await this.decksService.saveImportedDeck(parsed);
-        await this.loadDecks();
+        console.log('[UPLOAD] saveImportedDeck FINALIZÓ');
 
-        console.log('Mazo importado correctamente');
+        await this.loadDecks();
+        console.log('[UPLOAD] loadDecks OK');
+
       } catch (err) {
-        console.error('Error al importar el mazo:', err);
+        console.error('[UPLOAD] ERROR:', err);
       } finally {
         document.body.removeChild(input);
       }
     };
 
     reader.onerror = () => {
-      console.error('Error leyendo el archivo');
+      console.error('[UPLOAD] error leyendo archivo');
       document.body.removeChild(input);
     };
 
     reader.readAsText(file);
   };
 
-  /**
-   * ⚠️ Importante:
-   * Forzamos el click en el próximo tick para evitar
-   * problemas en producción con eventos bloqueados
-   */
-  setTimeout(() => input.click(), 0);
-  }
+  input.click();
+}
+
 
   async onDeckFileSelected(event: Event) {
   const input = event.target as HTMLInputElement;

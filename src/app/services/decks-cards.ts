@@ -6,7 +6,6 @@ import { DeckCard } from '../interfaces/deck-card.interface';
 import { Card } from '../interfaces/card.interface';
 import { SortableCard } from '../interfaces/sortable.card.interface';
 import { AlertController } from '@ionic/angular';
-import { Capacitor } from '@capacitor/core';
 
 @Injectable({
   providedIn: 'root'
@@ -76,43 +75,36 @@ async addDeck(): Promise<Deck> {
   return newDeck;
 }
 
-private isNative(): boolean {
-  return Capacitor.isNativePlatform();
-}
-private async saveDecks(decks: Deck[]): Promise<void> {
+  private async saveDecks(decks: Deck[]): Promise<void> {
+  console.log('[STORAGE] saveDecks llamado', decks.length);
+
   const value = JSON.stringify(decks);
 
-  if (this.isNative()) {
-    await Preferences.set({
-      key: this.STORAGE_KEY,
-      value
-    });
-  } else {
+  try {
     localStorage.setItem(this.STORAGE_KEY, value);
+    console.log('[STORAGE] localStorage.setItem OK');
+  } catch (e) {
+    console.error('[STORAGE] ERROR guardando', e);
   }
 }
 
 
   async getDecks(): Promise<Deck[]> {
-  let value: string | null = null;
-
-  if (this.isNative()) {
     const result = await Preferences.get({ key: this.STORAGE_KEY });
-    value = result.value;
-  } else {
-    value = localStorage.getItem(this.STORAGE_KEY);
+
+    if (!result.value) return [];
+
+    let decks: Deck[] = [];
+
+    try {
+      decks = JSON.parse(result.value);
+    } catch {
+      return [];
+    }
+
+    // Normalizar todos
+    return decks.map(d => this.normalize(d));
   }
-
-  if (!value) return [];
-
-  try {
-    const decks = JSON.parse(value);
-    return decks.map((d: Deck) => this.normalize(d));
-  } catch {
-    return [];
-  }
-}
-
 
   async getDeckById(id: string): Promise<Deck | undefined> {
     const decks = await this.getDecks();
@@ -369,31 +361,26 @@ async getDeckColor(deckId: string): Promise<string> {
 
 
 async saveImportedDeck(deck: Deck): Promise<void> {
+  console.log('[SERVICE] saveImportedDeck ENTRÓ', deck);
+
   try {
     const decks = await this.getDecks();
+    console.log('[SERVICE] decks existentes:', decks.length);
+
     const normalizedDeck = this.normalize(deck);
 
-    const idExists = decks.some(d => d.id === normalizedDeck.id);
-    const nameExists = decks.some(d => d.name === normalizedDeck.name);
-
-    if (idExists) {
-      normalizedDeck.id = crypto.randomUUID();
-    }
-
-    if (nameExists) {
-      normalizedDeck.name = this.generateCopyName(
-        normalizedDeck.name,
-        decks.map(d => d.name)
-      );
-    }
-
     decks.push(normalizedDeck);
-    await this.showDeckInfo(normalizedDeck);
+
+    console.log('[SERVICE] guardando decks...');
     await this.saveDecks(decks);
 
+    console.log('[SERVICE] decks guardados OK');
+
   } catch (error) {
-    console.error('[saveImportedDeck] Error:', error);
+    console.error('[SERVICE] ERROR:', error);
   }
+
+  console.log('[SERVICE] saveImportedDeck TERMINÓ');
 }
 
 
