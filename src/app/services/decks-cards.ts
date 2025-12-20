@@ -6,6 +6,7 @@ import { DeckCard } from '../interfaces/deck-card.interface';
 import { Card } from '../interfaces/card.interface';
 import { SortableCard } from '../interfaces/sortable.card.interface';
 import { AlertController } from '@ionic/angular';
+import { Capacitor } from '@capacitor/core';
 
 @Injectable({
   providedIn: 'root'
@@ -75,29 +76,43 @@ async addDeck(): Promise<Deck> {
   return newDeck;
 }
 
-  private async saveDecks(decks: Deck[]): Promise<void> {
+private isNative(): boolean {
+  return Capacitor.isNativePlatform();
+}
+private async saveDecks(decks: Deck[]): Promise<void> {
+  const value = JSON.stringify(decks);
+
+  if (this.isNative()) {
     await Preferences.set({
       key: this.STORAGE_KEY,
-      value: JSON.stringify(decks)
+      value
     });
+  } else {
+    localStorage.setItem(this.STORAGE_KEY, value);
   }
+}
+
 
   async getDecks(): Promise<Deck[]> {
+  let value: string | null = null;
+
+  if (this.isNative()) {
     const result = await Preferences.get({ key: this.STORAGE_KEY });
-
-    if (!result.value) return [];
-
-    let decks: Deck[] = [];
-
-    try {
-      decks = JSON.parse(result.value);
-    } catch {
-      return [];
-    }
-
-    // Normalizar todos
-    return decks.map(d => this.normalize(d));
+    value = result.value;
+  } else {
+    value = localStorage.getItem(this.STORAGE_KEY);
   }
+
+  if (!value) return [];
+
+  try {
+    const decks = JSON.parse(value);
+    return decks.map((d: Deck) => this.normalize(d));
+  } catch {
+    return [];
+  }
+}
+
 
   async getDeckById(id: string): Promise<Deck | undefined> {
     const decks = await this.getDecks();

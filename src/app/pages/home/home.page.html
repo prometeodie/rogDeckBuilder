@@ -1,22 +1,22 @@
 <ion-header>
-  <ion-toolbar>
+<ion-toolbar>
 
-    <rog-logo [hasExtraLogoClasses]="false"/>
+  <rog-logo [hasExtraLogoClasses]="false"/>
 
-    <ion-title class="home-title ion-text-center">
-      {{ identity?.name }} - {{ identity?.nickname }}
-    </ion-title>
+  <ion-title class="home-title ion-text-center">
+    {{ identity?.name }} - {{ identity?.nickname }}
+  </ion-title>
 
-    <ion-icon
-      slot="end"
-      name="create-outline"
-      class="edit-icon"
-      (click)="editIdentity()">
-    </ion-icon>
+  <ion-icon
+  slot="end"
+  name="create-outline"
+  class="edit-icon"
+  (click)="editIdentity()">
+</ion-icon>
+</ion-toolbar>
 
-  </ion-toolbar>
+
 </ion-header>
-
 @if (showUserModal) {
   <div class="overlay">
     <user-identity (closed)="onIdentitySaved()"></user-identity>
@@ -33,21 +33,7 @@
     <decks [decks]="decks" (deckDeleted)="loadDecks()"/>
   }
 
-  <new-upload-deck-btn
-    class="add-deck"
-    (newDeck)="createNewDeck()"
-    (uploadDeck)="openDeckFilePicker()">
-  </new-upload-deck-btn>
-
-  <!-- INPUT REAL, SIEMPRE EN DOM -->
-  <input
-    #deckFileInput
-    type="file"
-    accept=".json"
-    hidden
-    (change)="onDeckFileSelected($event)"
-  />
-
+  <new-upload-deck-btn class="add-deck" (newDeck)="createNewDeck()" (uploadDeck)="uploadDeck()"/>
 </ion-content>
 
 @if (showSplash) {
