@@ -97,6 +97,7 @@ export class DecksCardsService {
     if (index !== -1) {
       decks[index] = this.normalize(updatedDeck);
       await this.saveDecks(decks);
+
     }
   }
 
@@ -197,16 +198,30 @@ export class DecksCardsService {
     return color;
   }
 
-  async saveImportedDeck(deck: Deck): Promise<void> {
-    try {
-      const decks = await this.getDecks();
-      const normalizedDeck = this.normalize(deck);
-      decks.push(normalizedDeck);
-      await this.saveDecks(decks);
-    } catch (error) {
-      console.error('[SERVICE] ERROR:', error);
+async saveImportedDeck(deck: Deck): Promise<void> {
+  try {
+    const decks = await this.getDecks();
+    const existingNames = decks.map(d => d.name);
+
+    const normalizedDeck = this.normalize(deck);
+
+    if (existingNames.includes(normalizedDeck.name)) {
+      normalizedDeck.name = this.generateCopyName(
+        normalizedDeck.name,
+        existingNames
+      );
     }
+
+    decks.push(normalizedDeck);
+    await this.saveDecks(decks);
+
+    await this.showDeckInfo(normalizedDeck);
+
+  } catch (error) {
+    console.error('[SERVICE] ERROR:', error);
   }
+}
+
 
   // =============================
   // UTILS / FILTERS
