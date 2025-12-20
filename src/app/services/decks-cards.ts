@@ -216,8 +216,9 @@ async saveImportedDeck(deck: Deck): Promise<void> {
     decks.push(normalizedDeck);
     await this.saveDecks(decks);
 
-    // mostrar info apenas se importa
+    console.log('antes de la info')
     await this.showDeckInfo(normalizedDeck);
+    console.log('desp de la info')
 
   } catch (error) {
     console.error('[SERVICE] ERROR:', error);
@@ -294,6 +295,7 @@ async saveImportedDeck(deck: Deck): Promise<void> {
   }
 
   async showDeckInfo(deck: Deck) {
+    console.log('entro a la info', deck)
     const creator = deck.creator ?? 'desconocido';
     const hasCollaborators = deck.colaborators && deck.colaborators.length > 0;
     const collaboratorsText = hasCollaborators ? ` y modificado por ${deck.colaborators!.join(', ')}` : '';

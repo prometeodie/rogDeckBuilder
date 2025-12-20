@@ -104,8 +104,6 @@ export class HomePage implements OnInit {
   this.router.navigate(['/deckbuilder', newDeck.id]);
 }
 
-private zone = inject(NgZone);
-
 async uploadDeck() {
   const input = document.createElement('input');
   input.type = 'file';
@@ -126,7 +124,7 @@ async uploadDeck() {
       await this.decksService.saveImportedDeck(parsed);
 
       // 🔴 clave: volver a asignar referencia
-      this.decks = [...await this.decksService.getDecks()];
+      this.decks = await this.loadDecks().then();
 
       // 🔴 forzar actualización visual
       this.cdr.detectChanges();
