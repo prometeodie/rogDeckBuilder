@@ -102,19 +102,68 @@ export class HomePage implements OnInit {
   this.router.navigate(['/deckbuilder', newDeck.id]);
 }
 
-async uploadDeck() {
-  alert('UPLOAD CLICK');
-
+async uploadDeck(): Promise<void> {
   const input = document.createElement('input');
-  alert('INPUT CREATED');
-
   input.type = 'file';
   input.accept = '.json';
+  input.style.display = 'none';
 
-  input.onchange = () => {
-    alert('ONCHANGE');
+  document.body.appendChild(input);
 
-}
-}
+  input.onchange = async () => {
+    const file = input.files?.[0];
 
+    if (!file) {
+      document.body.removeChild(input);
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = async () => {
+      try {
+        const text = (reader.result as string)?.trim();
+
+        if (!text) {
+          throw new Error('El archivo está vacío');
+        }
+
+        const parsed = JSON.parse(text);
+
+        // validación mínima real
+        if (
+          !parsed ||
+          typeof parsed !== 'object' ||
+          !parsed.id ||
+          !Array.isArray(parsed.cards)
+        ) {
+          throw new Error('Archivo de mazo inválido');
+        }
+
+        await this.decksService.saveImportedDeck(parsed);
+        await this.loadDecks();
+
+        console.log('Mazo importado correctamente');
+      } catch (err) {
+        console.error('Error al importar el mazo:', err);
+      } finally {
+        document.body.removeChild(input);
+      }
+    };
+
+    reader.onerror = () => {
+      console.error('Error leyendo el archivo');
+      document.body.removeChild(input);
+    };
+
+    reader.readAsText(file);
+  };
+
+  /**
+   * ⚠️ Importante:
+   * Forzamos el click en el próximo tick para evitar
+   * problemas en producción con eventos bloqueados
+   */
+  setTimeout(() => input.click(), 0);
+  }
 }
