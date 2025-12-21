@@ -61,6 +61,8 @@
     border-color 0.15s ease,
     box-shadow 0.15s ease;
 
+    border: 1px solid #655d5d80;
+
   &:hover {
     transform: scale(1.15);
     border-color: var(--app-text);
@@ -68,7 +70,6 @@
   }
 
   &.selected {
-    border-color: var(--ion-color-primary);
     box-shadow:
       0 0 0 2px rgba(0, 0, 0, 0.6),
       0 0 6px var(--ion-color-primary);
