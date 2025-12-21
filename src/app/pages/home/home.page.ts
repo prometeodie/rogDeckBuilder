@@ -145,14 +145,13 @@ async showDeckInfo(deck: Deck) {
     icon: 'info',
     title: 'Información del mazo',
     html: `
-      <p style="margin:0">
+      <p style="margin:0; color:#545454">
         Este mazo fue creado por <b>${creator}</b>${collaboratorsText}.
       </p>
     `,
     confirmButtonText: 'OK',
     confirmButtonColor: '#3085d6',
 
-    /* 🔑 fixes Ionic */
     heightAuto: false,
     backdrop: true,
     allowOutsideClick: false,
@@ -162,7 +161,5 @@ async showDeckInfo(deck: Deck) {
       popup: 'ionic-swal'
     }
   });
-}
-
-
+  }
 }
