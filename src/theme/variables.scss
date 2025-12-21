@@ -1,7 +1,15 @@
 :root {
+  /* ======================================================
+     =============== APP CORE COLORS ======================
+     ====================================================== */
+
   --app-bg: #121212;
   --app-surface: #1e1e1e;
   --app-surface-2: #2a2a2a;
+  --app-surface-3: #333333;
+  --app-surface-glass: rgba(30, 30, 30, 0.78);
+  --app-surface-glass-strong: rgba(30, 30, 30, 0.9);
+
 
   --app-text: #ffffff;
   --app-text-muted: #b3b3b3;
@@ -9,30 +17,104 @@
   --app-border: #3a3a3a;
 
   --app-accent: var(--ion-color-primary);
+  --app-accent-soft: rgba(255, 255, 255, 0.08);
 
-  /* ===============================
-     MAPEO A IONIC (CLAVE)
-     =============================== */
+  /* ======================================================
+     =============== IONIC CORE MAPPING ===================
+     ====================================================== */
 
+  /* Fondo global */
   --ion-background-color: var(--app-bg);
-  --ion-text-color: var(--app-text);
+  --ion-background-color-rgb: 18, 18, 18;
 
+  /* Texto */
+  --ion-text-color: var(--app-text);
+  --ion-text-color-rgb: 255, 255, 255;
+
+  /* Superficies */
   --ion-item-background: var(--app-surface);
   --ion-card-background: var(--app-surface-2);
+  --ion-modal-background: var(--app-surface);
+  --ion-popover-background: var(--app-surface-2);
 
+  /* Bordes */
   --ion-border-color: var(--app-border);
 
+  /* Toolbar */
   --ion-toolbar-background: var(--app-bg);
   --ion-toolbar-color: var(--app-text);
 
+  /* Tabs */
   --ion-tab-bar-background: var(--app-bg);
   --ion-tab-bar-color: var(--app-text-muted);
   --ion-tab-bar-color-selected: var(--ion-color-primary);
+
+  /* Inputs / search / select */
+  --ion-item-color: var(--app-text);
+  --ion-placeholder-color: var(--app-text-muted);
+  --ion-input-background: var(--app-surface-2);
+
+  /* Lists */
+  --ion-list-background: var(--app-bg);
+
+  /* Backdrop / overlays */
+  --ion-backdrop-color: rgba(0, 0, 0, 0.7);
+
+  /* Ripple / pressed */
+  --ion-ripple-color: rgba(255, 255, 255, 0.12);
 }
 
-/* ⚠️ IMPORTANTE: ignorar preferencias del sistema */
+/* ======================================================
+   ========== FORZAR DARK (IGNORAR SISTEMA) ==============
+   ====================================================== */
+
+html,
 html.dark,
 html.light {
   --ion-background-color: var(--app-bg);
   --ion-text-color: var(--app-text);
+
+  background: var(--app-bg);
+  color: var(--app-text);
+}
+
+/* ======================================================
+   =============== IONIC HARD OVERRIDES ==================
+   ====================================================== */
+
+/* Evita fondos blancos en listas */
+ion-list,
+ion-item {
+  --background: var(--app-surface);
+  --color: var(--app-text);
+}
+
+/* Cards */
+ion-card {
+  background: var(--app-surface-2);
+  color: var(--app-text);
+}
+
+/* Alerts / modals / popovers */
+ion-alert,
+ion-modal,
+ion-popover {
+  --background: var(--app-surface);
+  --color: var(--app-text);
+}
+
+/* Inputs */
+ion-input,
+ion-searchbar,
+ion-select,
+ion-textarea {
+  --background: var(--app-surface-2);
+  --color: var(--app-text);
+  --placeholder-color: var(--app-text-muted);
+}
+
+/* Toast (Ionic) */
+ion-toast {
+  --background: var(--app-surface-3);
+  --color: var(--app-text);
 }

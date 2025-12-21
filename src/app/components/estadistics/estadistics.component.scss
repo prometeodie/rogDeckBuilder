@@ -11,23 +11,35 @@
 
   button {
     padding: 0.4rem 0.8rem;
-    background: #444;
-    color: #ddd;
-    border: 1px solid #666;
+
+    background: var(--app-surface);
+    color: var(--app-text-muted);
+
+    border: 1px solid var(--app-border);
     border-radius: 6px;
+
     cursor: pointer;
     font-weight: 600;
 
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+
+    &:hover {
+      background: var(--app-surface-2);
+      color: var(--app-text);
+    }
+
     &.active {
-      background: #7a5cff;
-      color: white;
-      border-color: #a18aff;
+      background: var(--ion-color-primary);
+      color: #ffffff;
+      border-color: var(--ion-color-primary);
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.45);
     }
   }
 }
 
 .title {
   text-align: center;
+  color: var(--app-text);
 }
 
 /* =========================================================
@@ -43,8 +55,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
   padding: 0 1rem;
   min-height: 81vh;
+
+  background: var(--app-bg);
 }
 
 /* =========================================================
@@ -55,6 +70,12 @@
   height: 30rem;
   margin: 0 auto;
   position: relative;
+
+  background: var(--app-surface);
+  border-radius: 10px;
+  border: 1px solid var(--app-border);
+
+  padding: 0.5rem;
 }
 
 /* =========================================================

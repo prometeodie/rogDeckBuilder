@@ -17,12 +17,14 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 
-  background: #333;
+  background: var(--app-surface);
+  color: var(--app-text);
+
   z-index: 999;
-
   padding-bottom: 2rem;
-}
 
+  scrollbar-width: none;
+}
 
 /* ======================================================
    ================== BOTONES ===========================
@@ -40,9 +42,10 @@
   min-width: 0;
 
   font-size: 0.6rem;
-  --color: #fff;
+  --color: var(--app-text);
 
-  box-shadow: #727a7d 0px 2px 6px -1px;
+  background: var(--app-surface-2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
   border-radius: 6px;
 }
 
@@ -52,8 +55,8 @@
 
 .sidebar-title,
 .card-counter {
-  background: #333;
-  color: #fff;
+  background: var(--app-surface);
+  color: var(--app-text);
   text-align: center;
 }
 
@@ -87,11 +90,11 @@
   justify-content: space-between;
   align-items: center;
 
-  background: #1a1a1a;
-  color: #fff;
+  background: var(--app-surface-2);
+  color: var(--app-text);
 
   padding: 0.6rem;
-  border-bottom: 1px solid #444;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .item-name {
@@ -118,7 +121,7 @@
   font-size: 14px;
   background: none;
   border: none;
-  color: #fff;
+  color: var(--app-text);
 
   cursor: pointer;
   padding: 0;
@@ -143,12 +146,13 @@
   font-size: 0.6rem;
   font-weight: 900;
 
-  color: #ff1a1a;
+  color: #ff2b2b;
   text-transform: uppercase;
 
-  border: 1px solid #ff1a1a;
+  border: 1px solid #ff2b2b;
   border-radius: 4px;
 
+  background: rgba(0, 0, 0, 0.55);
   pointer-events: none;
 }
 
@@ -167,7 +171,7 @@
 
 .sort-icon {
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: transform 0.2s ease;
 
   &:hover {
     transform: scale(1.1);
@@ -194,12 +198,11 @@
   flex-direction: column;
   gap: 0.7rem;
 
-  padding: 0.2rem;
-  background: #333;
-  backdrop-filter: blur(6px);
+  padding: 0.3rem;
+  background: var(--app-surface-glass);
 
-  border-radius: 5px;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 1);
+  border-radius: 6px;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.9);
 
   z-index: 999;
   animation: slideDown 0.18s ease-out;
@@ -209,7 +212,7 @@
   font-size: 0.7rem;
   font-weight: 600;
   padding: 0.3rem 0;
-  color: #fff;
+  color: var(--app-text);
   text-align: center;
 }
 
@@ -220,11 +223,11 @@
   font-size: 0.9rem;
   font-weight: 500;
 
-  background: #333;
-  color: white;
+  background: var(--app-surface-2);
+  color: var(--app-text);
 
-  border: 1px solid #3a3a3a;
-  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
   outline: none;
 
   &:focus {
@@ -258,6 +261,7 @@
 
 .sidebar-empty {
   text-align: center;
+  color: var(--app-text-muted);
 }
 
 /* ======================================================
@@ -278,20 +282,10 @@ $faction-colors: (
     background: linear-gradient(
       to right,
       rgba($color, 0.85),
-      rgba(0, 0, 0, 0.4)
+      rgba(0, 0, 0, 0.55)
     ) !important;
   }
 }
-
-/* ======================================================
-   ================== SCROLLBAR SIDEBAR =================
-   ====================================================== */
-
-/* Firefox */
-.sidebar {
-  scrollbar-width:none;              // thin ≈ 8–10px
-}
-
 
 /* ======================================================
    ================== ANIMACIONES =======================
