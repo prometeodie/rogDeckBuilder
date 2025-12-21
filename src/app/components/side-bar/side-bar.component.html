@@ -1,20 +1,21 @@
 <div class="sidebar"  [class.no-scroll]="ColorPalette">
 
   <div class="sidebar-btn sidebar-item">
-    <ion-button expand="block"
-                class="sb-btn"
-                fill="solid"
-                color="dark"
-                [color]="deckMode === 'main' ? 'primary' : 'grey'"
-                (click)="onSetMode('main')">
+    <ion-button
+      expand="block"
+      class="sb-btn"
+      fill="solid"
+      [class.active]="deckMode === 'main'"
+      (click)="onSetMode('main')">
       Mazo
     </ion-button>
 
-    <ion-button expand="block"
-                class="sb-btn"
-                fill="solid"
-                [color]="deckMode === 'side' ? 'primary' : 'grey'"
-                (click)="onSetMode('side')">
+    <ion-button
+      expand="block"
+      class="sb-btn"
+      fill="solid"
+      [class.active]="deckMode === 'side'"
+      (click)="onSetMode('side')">
       SD
     </ion-button>
   </div>

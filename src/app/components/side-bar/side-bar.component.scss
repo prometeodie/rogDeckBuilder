@@ -30,6 +30,27 @@
    ================== BOTONES ===========================
    ====================================================== */
 
+   .sb-btn {
+  width: 2.5rem;
+  height: 40px;
+  min-width: 0;
+
+  font-size: 0.6rem;
+
+  --color: #000;
+  --background: var(--ion-color-step-700);
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  border-radius: 6px;
+}
+
+/* ACTIVO */
+.sb-btn.active {
+  --background: #4d8dff;
+  --color: #000;
+}
+
+
 .sidebar-btn {
   display: flex;
   padding: 0.3rem;

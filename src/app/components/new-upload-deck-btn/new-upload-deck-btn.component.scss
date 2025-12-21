@@ -30,3 +30,48 @@
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
 }
+/* =========================================================
+   ==================== FAB BUTTON =========================
+   ========================================================= */
+
+.square-fab {
+  --border-radius: 2px;
+  --width: 56px;
+  --height: 56px;
+
+  /* Azul custom */
+  --background: #4d8dff;
+}
+
+.square-fab ion-icon {
+  font-size: 28px;
+  color: #000;
+}
+
+/* =========================================================
+   ===================== FAB LIST ===========================
+   ========================================================= */
+
+ion-fab-list ion-fab-button {
+  --background: rgb(73, 72, 72);
+  --color: #000;
+}
+
+ion-fab-list ion-fab-button ion-icon {
+  color: #000;
+}
+
+
+/* =========================================================
+   ===================== BACKDROP ==========================
+   ========================================================= */
+
+.fab-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+
+  background: rgba(var(--ion-color-primary-rgb), 0.25);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
