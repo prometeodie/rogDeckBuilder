@@ -4,64 +4,1117 @@ const img1 = 'https://riseofgods.store/wp-content/uploads/2024/06/Sello-Jupiter.
 const img2 = 'https://riseofgods.store/wp-content/uploads/2024/06/ESTRUCTURA-4-Canon-de-Zagh-733x1024.png';
 const img3 = 'https://riseofgods.store/wp-content/uploads/2025/09/Marte-44-Juez-del-volcan-733x1024.png';
 
-export const testCards: Card[] = [
-  { id: '1', name: 'León de Marte', faction: 'marte', rarity: 'common', img: img1, factionCost: 1, cost: 2, banned: false, isSeal: true, isQuickSpell: false, isSlowSpell: false, isArtifact: false, isToken: false, tags: ['Asalto', 'Al atacar'] },
-
-  { id: '2', name: 'Hechicera Solar', faction: 'jupiter', rarity: 'rare', img: img2, factionCost: 2, cost: 3, banned: false, isSeal: false, isQuickSpell: false, isSlowSpell: false, isArtifact: false, isToken: true, tags: ['Token', 'Vínculo'] },
-
-  { id: '3', name: 'Gólem Terrestre', faction: 'tierra', rarity: 'common', img: img3, factionCost: 1, cost: 4, banned: false, isSeal: false, isQuickSpell: false, isSlowSpell: false, isArtifact: false, isToken: false, tags: ['Provocar', 'Regeneración'] },
-
-  { id: '4', name: 'Sello de Marte', faction: 'marte', rarity: 'unlimited', img: img1, factionCost: 1, cost: 1, banned: false, isSeal: true, isQuickSpell: false, isSlowSpell: false, isArtifact: false, isToken: false, tags: ['Inicio del turno'] },
-
-  { id: '5', name: 'Explosión de Plasma', faction: 'jupiter', rarity: 'rare', img: img2, factionCost: 2, cost: 2, banned: true, isSeal: false, isQuickSpell: true, isSlowSpell: false, isArtifact: false, isToken: false, tags: ['Ataque rápido', 'Aniquilar'] },
-
-  { id: '6', name: 'Arpón de Neptuno', faction: 'neptuno', rarity: 'epic', img: img3, factionCost: 2, cost: 5, banned: false, isSeal: false, isQuickSpell: false, isSlowSpell: true, isArtifact: false, isToken: false, tags: ['Atrapo', 'Al golpear'] },
-
-  { id: '7', name: 'Titan del Vacío', faction: 'pluton', rarity: 'legendary', img: img1, factionCost: 3, cost: 7, banned: false, isSeal: false, isQuickSpell: false, isSlowSpell: false, isArtifact: false, isToken: false, tags: ['Aniquilar', 'Venganza'] },
-
-  { id: '8', name: 'Sello de Júpiter', faction: 'jupiter', rarity: 'common', img: img2, factionCost: 1, cost: 1, banned: false, isSeal: true, isQuickSpell: false, isSlowSpell: false, isArtifact: false, isToken: false, tags: ['Amanecer'] },
-
-  { id: '9', name: 'Bestia del Océano', faction: 'neptuno', rarity: 'unlimited', img: img3, factionCost: 1, cost: 6, banned: false, isSeal: false, isQuickSpell: false, isSlowSpell: false, isArtifact: false, isToken: false, tags: ['Cargar', 'Ataque 360'] },
-
-  { id: '10', name: 'Constructo Sagrado', faction: 'saturno', rarity: 'epic', img: img1, factionCost: 2, cost: 3, banned: false, isSeal: false, isQuickSpell: false, isSlowSpell: false, isArtifact: true, isToken: false, tags: ['Escudo mágico'] },
-
-  { id: '11', name: 'Llama Carmesí', faction: 'marte', rarity: 'common', img: img2, factionCost: 1, cost: 2, banned: false, isSeal: false, isQuickSpell: true, isSlowSpell: false, isArtifact: false, isToken: false, tags: ['Ataque rápido', 'Drenar'] },
-
-  { id: '12', name: 'Monje del Aire Dorado', faction: 'jupiter', rarity: 'rare', img: img3, factionCost: 2, cost: 3, banned: false, isSeal: false, isQuickSpell: false, isSlowSpell: true, isArtifact: false, isToken: false, tags: ['Silencio', 'Vínculo'] },
-
-  { id: '13', name: 'Centinela de Saturno', faction: 'saturno', rarity: 'epic', img: img1, factionCost: 2, cost: 5, banned: false, isSeal: false, isQuickSpell: false, isSlowSpell: false, isArtifact: true, isToken: false, tags: ['Provocar', 'Escudo mágico'] },
-
-  { id: '14', name: 'Destructor de Plutón', faction: 'pluton', rarity: 'rare', img: img2, factionCost: 2, cost: 4, banned: false, isSeal: false, isQuickSpell: false, isSlowSpell: false, isArtifact: false, isToken: false, tags: ['Puñalada', 'Al golpear'] },
-
-  { id: '15', name: 'Tiburón del Hielo', faction: 'neptuno', rarity: 'common', img: img3, factionCost: 1, cost: 3, banned: true, isSeal: false, isQuickSpell: false, isSlowSpell: false, isArtifact: false, isToken: false, tags: ['Atrapo', 'Enfermedad X'] },
-
-  { id: '16', name: 'Luciérnaga Solar', faction: 'jupiter', rarity: 'unlimited', img: img1, factionCost: 1, cost: 1, banned: false, isSeal: false, isQuickSpell: true, isSlowSpell: false, isArtifact: false, isToken: true, tags: ['Token', 'Amanecer'] },
-
-  { id: '17', name: 'Guardián Rocoso', faction: 'tierra', rarity: 'unlimited', img: img2, factionCost: 1, cost: 4, banned: false, isSeal: false, isQuickSpell: false, isSlowSpell: false, isArtifact: false, isToken: false, tags: ['Provocar', 'Regeneración'] },
-
-  { id: '18', name: 'Maldición Carmesí', faction: 'marte', rarity: 'rare', img: img3, factionCost: 2, cost: 2, banned: false, isSeal: false, isQuickSpell: false, isSlowSpell: true, isArtifact: false, isToken: false, tags: ['Ofrenda tenebrosa X', 'Enfermedad X'] },
-
-  { id: '19', name: 'Ecos del Vacío', faction: 'pluton', rarity: 'epic', img: img1, factionCost: 2, cost: 6, banned: false, isSeal: false, isQuickSpell: false, isSlowSpell: false, isArtifact: false, isToken: false, tags: ['Último suspiro', 'Venganza'] },
-
-  { id: '20', name: 'Sello de Saturno', faction: 'saturno', rarity: 'common', img: img2, factionCost: 1, cost: 1, banned: false, isSeal: true, isQuickSpell: false, isSlowSpell: false, isArtifact: false, isToken: false, tags: ['Inicio del turno'] },
-
-  { id: '31', name: 'Invocador del Núcleo Ígneo', faction: 'marte', rarity: 'epic', img: img3, factionCost: 2, cost: 6, banned: false, isSeal: false, isQuickSpell: false, isSlowSpell: true, isArtifact: false, isToken: false, tags: ['Sobrecarga', 'Al atacar'] },
-
-  { id: '32', name: 'Sello del Juicio Celeste', faction: 'jupiter', rarity: 'legendary', img: img1, factionCost: 3, cost: 3, banned: false, isSeal: true, isQuickSpell: false, isSlowSpell: false, isArtifact: false, isToken: false, tags: ['Adivinar X'] },
-
-  { id: '33', name: 'Bestia de Raíces Eternas', faction: 'tierra', rarity: 'rare', img: img2, factionCost: 2, cost: 4, banned: false, isSeal: false, isQuickSpell: false, isSlowSpell: false, isArtifact: false, isToken: false, tags: ['Regeneración', 'Provocar'] },
-
-  { id: '34', name: 'Oráculo del Abismo', faction: 'pluton', rarity: 'epic', img: img3, factionCost: 2, cost: 5, banned: false, isSeal: false, isQuickSpell: false, isSlowSpell: false, isArtifact: false, isToken: false, tags: ['Adivinar X', 'Silencio'] },
-
-  { id: '35', name: 'Reliquia del Tiempo Marchito', faction: 'saturno', rarity: 'legendary', img: img1, factionCost: 3, cost: 2, banned: false, isSeal: false, isQuickSpell: false, isSlowSpell: false, isArtifact: true, isToken: false, tags: ['Comerciable', 'Inicio del turno'] },
-
-  { id: '36', name: 'Vigía del Oleaje Profundo', faction: 'neptuno', rarity: 'rare', img: img2, factionCost: 2, cost: 4, banned: false, isSeal: false, isQuickSpell: false, isSlowSpell: false, isArtifact: false, isToken: false, tags: ['Al golpear', 'Drenar'] },
-
-  { id: '37', name: 'Chispa del Primer Sol', faction: 'jupiter', rarity: 'common', img: img3, factionCost: 1, cost: 2, banned: false, isSeal: false, isQuickSpell: true, isSlowSpell: false, isArtifact: false, isToken: false, tags: ['Ataque rápido', 'Amanecer'] },
-
-  { id: '38', name: 'Coloso del Cráter Carmesí', faction: 'marte', rarity: 'legendary', img: img1, factionCost: 3, cost: 8, banned: false, isSeal: false, isQuickSpell: false, isSlowSpell: false, isArtifact: false, isToken: false, tags: ['Aniquilar', 'Ataque 360'] },
-
-  { id: '39', name: 'Espiral del Vacío Silente', faction: 'pluton', rarity: 'unlimited', img: img2, factionCost: 1, cost: 5, banned: false, isSeal: false, isQuickSpell: false, isSlowSpell: false, isArtifact: false, isToken: true, tags: ['Token', 'Último suspiro'] },
-
-  { id: '40', name: 'Ancla de las Mareas Antiguas', faction: 'neptuno', rarity: 'epic', img: img3, factionCost: 2, cost: 6, banned: false, isSeal: false, isQuickSpell: false, isSlowSpell: false, isArtifact: true, isToken: false, tags: ['Atrapo', 'Provocar'] },
-];
+export const Cards: Card[] =[
+    {
+        "id": "1766422502879",
+        "name": "sello",
+        "faction": "jupiter",
+        "rarity": "unlimited",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422337/jupiter-rog/Sello-Jupiter_woyltf.webp",
+        "factionCost": 0,
+        "cost": 0,
+        "banned": false,
+        "isSeal": true,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": []
+    },
+    {
+        "id": "1766422766677",
+        "name": "Colita de Algodón",
+        "faction": "jupiter",
+        "rarity": "rare",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422322/jupiter-rog/CRIATURA-1-Colita-de-Algodon_ttgnkc.webp",
+        "factionCost": 1,
+        "cost": 0,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Creo",
+            "Primera vez"
+        ]
+    },
+    {
+        "id": "1766423009043",
+        "name": "Danny, El Quokka",
+        "faction": "jupiter",
+        "rarity": "rare",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422322/jupiter-rog/CRIATURA-1-Danny-El-Quokka_qkq8qu.webp",
+        "factionCost": 1,
+        "cost": 0,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "invocar"
+        ]
+    },
+    {
+        "id": "1766423215181",
+        "name": "Monaguillo Hurón",
+        "faction": "jupiter",
+        "rarity": "common",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422323/jupiter-rog/CRIATURA-1-Monaguillo-Huron_ff9a4z.webp",
+        "factionCost": 1,
+        "cost": 0,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Asalto",
+            "invocar"
+        ]
+    },
+    {
+        "id": "1766423345525",
+        "name": "Maestra Gasü",
+        "faction": "jupiter",
+        "rarity": "rare",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422324/jupiter-rog/CRIATURA-2-Maestro-Gasu_nocagt.webp",
+        "factionCost": 2,
+        "cost": 0,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Inicio del turno",
+            "otorgo",
+            "Vínculo"
+        ]
+    },
+    {
+        "id": "1766423647731",
+        "name": "Ricky El Topo",
+        "faction": "jupiter",
+        "rarity": "rare",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766423529/jupiter-rog/Marca-de-agua-Ricky-733x1024_wpgusg.webp",
+        "factionCost": 2,
+        "cost": 0,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Asalto",
+            "Revelar",
+            "Reducir"
+        ]
+    },
+    {
+        "id": "1766423694589",
+        "name": "Maestro Otem",
+        "faction": "jupiter",
+        "rarity": "epic",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422325/jupiter-rog/CRIATURA-3-Maestro-Otem_kkekt1.webp",
+        "factionCost": 1,
+        "cost": 2,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Ataque rápido"
+        ]
+    },
+    {
+        "id": "1766423799937",
+        "name": "Comerciante de Bambú",
+        "faction": "jupiter",
+        "rarity": "epic",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422325/jupiter-rog/CRIATURA-3-Comerciante-de-Bambu_eekquj.webp",
+        "factionCost": 2,
+        "cost": 1,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Asalto",
+            "Comerciable",
+            "mejora",
+            "Silencio"
+        ]
+    },
+    {
+        "id": "1766423967389",
+        "name": "Pietr, Maestro Rhino",
+        "faction": "jupiter",
+        "rarity": "rare",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422327/jupiter-rog/CRIATURA-4-Pietr-Maestro-Rhino_k7l0wk.webp",
+        "factionCost": 3,
+        "cost": 1,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Asalto",
+            "curar",
+            "Creo"
+        ]
+    },
+    {
+        "id": "1766424080565",
+        "name": "Maestro Orx",
+        "faction": "jupiter",
+        "rarity": "epic",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422326/jupiter-rog/CRIATURA-4-Maestro-Orx_wg0lcn.webp",
+        "factionCost": 2,
+        "cost": 2,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "no puedo",
+            "objetivo"
+        ]
+    },
+    {
+        "id": "1766424316959",
+        "name": "Monje Banjü",
+        "faction": "jupiter",
+        "rarity": "common",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422326/jupiter-rog/CRIATURA-4-Monje-Banju_pxek8w.webp",
+        "factionCost": 2,
+        "cost": 2,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Aturdir"
+        ]
+    },
+    {
+        "id": "1766424412988",
+        "name": "Pérez, El perezoso",
+        "faction": "jupiter",
+        "rarity": "rare",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422327/jupiter-rog/CRIATURA-4-Perez-El-Perezoso_kc0lfg.webp",
+        "factionCost": 2,
+        "cost": 2,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Asalto",
+            "Aturdir",
+            "Vínculo"
+        ]
+    },
+    {
+        "id": "1766424456765",
+        "name": "Padre real",
+        "faction": "jupiter",
+        "rarity": "common",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422328/jupiter-rog/CRIATURA-5-Padre-Real_dabmxl.webp",
+        "factionCost": 3,
+        "cost": 2,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "otorgo",
+            "Regeneración"
+        ]
+    },
+    {
+        "id": "1766424578998",
+        "name": "Dako, Sumo PontÍfice ",
+        "faction": "jupiter",
+        "rarity": "epic",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422329/jupiter-rog/CRIATURA-6-Dako-Sumo-Pontifice_ibeb8v.webp",
+        "factionCost": 3,
+        "cost": 3,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Asalto",
+            "inflinjo"
+        ]
+    },
+    {
+        "id": "1766424660258",
+        "name": "Elegido de Júpiter",
+        "faction": "jupiter",
+        "rarity": "legendary",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422330/jupiter-rog/CRIATURA-7-Elegido-de-Jupiter_t5kpxq.webp",
+        "factionCost": 4,
+        "cost": 3,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Revivo"
+        ]
+    },
+    {
+        "id": "1766424806914",
+        "name": "Gorlan",
+        "faction": "jupiter",
+        "rarity": "legendary",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422330/jupiter-rog/CRIATURA-8-Gorlan_dzg1nc.webp",
+        "factionCost": 5,
+        "cost": 3,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Asalto",
+            "invocar",
+            "otorgo"
+        ]
+    },
+    {
+        "id": "1766424861954",
+        "name": "Querubín",
+        "faction": "jupiter",
+        "rarity": "unlimited",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422337/jupiter-rog/TOKEN-1-Querubin_w0zllb.webp",
+        "factionCost": 1,
+        "cost": 0,
+        "banned": false,
+        "isSeal": false,
+        "isToken": true,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Sacrificar"
+        ]
+    },
+    {
+        "id": "1766424991388",
+        "name": "Veganismo y oración",
+        "faction": "jupiter",
+        "rarity": "epic",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422336/jupiter-rog/MAGIA-LENTA-4-Veganismo-y-Oracion_y6lzae.webp",
+        "factionCost": 2,
+        "cost": 2,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": true,
+        "isArtifact": false,
+        "tags": [
+            "curar",
+            "Robar"
+        ]
+    },
+    {
+        "id": "1766425082694",
+        "name": "Oda a Dios",
+        "faction": "jupiter",
+        "rarity": "epic",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422336/jupiter-rog/MAGIA-LENTA-6-Oda-a-Dios_zkt8hr.webp",
+        "factionCost": 3,
+        "cost": 3,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": true,
+        "isArtifact": false,
+        "tags": [
+            "otorgo"
+        ]
+    },
+    {
+        "id": "1766425116714",
+        "name": "Éxtasis divino",
+        "faction": "jupiter",
+        "rarity": "common",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422336/jupiter-rog/MAGIA-RAPIDA-2-Extasis-Divino_atrl25.webp",
+        "factionCost": 1,
+        "cost": 1,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": true,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "otorgo"
+        ]
+    },
+    {
+        "id": "1766425173241",
+        "name": "¡No eres digno!",
+        "faction": "jupiter",
+        "rarity": "epic",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422337/jupiter-rog/MAGIA-RAPIDA-3-_No-eres-digno_rf9uin.webp",
+        "factionCost": 3,
+        "cost": 0,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": []
+    },
+    {
+        "id": "1766425318550",
+        "name": "Cebolla",
+        "faction": "jupiter",
+        "rarity": "unlimited",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422338/jupiter-rog/TOKEN-2-Cebolla_l3ih3i.webp",
+        "factionCost": 1,
+        "cost": 1,
+        "banned": false,
+        "isSeal": false,
+        "isToken": true,
+        "isQuickSpell": false,
+        "isSlowSpell": true,
+        "isArtifact": false,
+        "tags": [
+            "inflinjo"
+        ]
+    },
+    {
+        "id": "1766425453186",
+        "name": "Zanahoria",
+        "faction": "jupiter",
+        "rarity": "unlimited",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422338/jupiter-rog/TOKEN-3-Zanahoria_qi2btz.webp",
+        "factionCost": 1,
+        "cost": 2,
+        "banned": false,
+        "isSeal": false,
+        "isToken": true,
+        "isQuickSpell": false,
+        "isSlowSpell": true,
+        "isArtifact": false,
+        "tags": [
+            "curar",
+            "Robar"
+        ]
+    },
+    {
+        "id": "1766425562060",
+        "name": "Jirairama",
+        "faction": "jupiter",
+        "rarity": "legendary",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422326/jupiter-rog/CRIATURA-4-Jirairama-733x1024_sr8aj4.webp",
+        "factionCost": 3,
+        "cost": 1,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "curar",
+            "inflinjo",
+            "Provocar",
+            "Último suspiro"
+        ]
+    },
+    {
+        "id": "1766425609872",
+        "name": "Malayka",
+        "faction": "jupiter",
+        "rarity": "rare",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422322/jupiter-rog/CRIATURA-1-Malakya-733x1024_gjlbkd.webp",
+        "factionCost": 2,
+        "cost": 0,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Asalto",
+            "Escudo mágico",
+            "otorgo"
+        ]
+    },
+    {
+        "id": "1766425703638",
+        "name": "Otemisa",
+        "faction": "jupiter",
+        "rarity": "common",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422324/jupiter-rog/CRIATURA-2-Otemisa-733x1024_p39lv9.webp",
+        "factionCost": 1,
+        "cost": 1,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Asalto",
+            "Busco"
+        ]
+    },
+    {
+        "id": "1766425842122",
+        "name": "Clerigo del Nido",
+        "faction": "jupiter",
+        "rarity": "common",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422334/jupiter-rog/JUPITER-CRIATURA-2-Clerigo-del-Nido-733x1024_lgjpu1.webp",
+        "factionCost": 1,
+        "cost": 1,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Asalto",
+            "curar"
+        ]
+    },
+    {
+        "id": "1766425895344",
+        "name": "Manoli",
+        "faction": "jupiter",
+        "rarity": "epic",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422335/jupiter-rog/JUPITER-CRIATURA-3-Manoli-733x1024_mtcejc.webp",
+        "factionCost": 1,
+        "cost": 2,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Asalto",
+            "Mover",
+            "Robar"
+        ]
+    },
+    {
+        "id": "1766425940354",
+        "name": "Santificar",
+        "faction": "jupiter",
+        "rarity": "epic",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422336/jupiter-rog/MAGIA-LENTA-4-Santificar-733x1024_s7jlfs.webp",
+        "factionCost": 2,
+        "cost": 2,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": true,
+        "isArtifact": false,
+        "tags": [
+            "curar",
+            "Sello"
+        ]
+    },
+    {
+        "id": "1766426113734",
+        "name": "¡Amigos por siempre!",
+        "faction": "jupiter",
+        "rarity": "common",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422335/jupiter-rog/MAGIA-LENTA-4-Amigos-por-siempre-733x1024_p8y0y9.webp",
+        "factionCost": 2,
+        "cost": 2,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": true,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Inmune",
+            "Selecciona"
+        ]
+    },
+    {
+        "id": "1766426324694",
+        "name": "Ziro, Cazarecompensas",
+        "faction": "jupiter",
+        "rarity": "rare",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422329/jupiter-rog/CRIATURA-5-Ziro-Cazarecompensas-1-733x1024_kur60j.webp",
+        "factionCost": 2,
+        "cost": 3,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Asalto",
+            "Daño",
+            "inflinjo"
+        ]
+    },
+    {
+        "id": "1766426381792",
+        "name": "Guardia Mayor",
+        "faction": "jupiter",
+        "rarity": "common",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422328/jupiter-rog/CRIATURA-5-Guardia-Mayor-733x1024_uxbk71.webp",
+        "factionCost": 2,
+        "cost": 3,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Daño"
+        ]
+    },
+    {
+        "id": "1766426440962",
+        "name": "Protector del Valle",
+        "faction": "jupiter",
+        "rarity": "legendary",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422329/jupiter-rog/CRIATURA-6-Protector-del-Valle-733x1024_r4lyzf.webp",
+        "factionCost": 3,
+        "cost": 3,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Provocar"
+        ]
+    },
+    {
+        "id": "1766426500738",
+        "name": "Monje ciego Dampos",
+        "faction": "jupiter",
+        "rarity": "legendary",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422330/jupiter-rog/CRIATURA-7-Ciego-Dampos-733x1024_lbv9cw.webp",
+        "factionCost": 5,
+        "cost": 2,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Asalto",
+            "Aturdir",
+            "Robar"
+        ]
+    },
+    {
+        "id": "1766426569838",
+        "name": "Kaio, Fuerza del Bosque",
+        "faction": "jupiter",
+        "rarity": "rare",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422323/jupiter-rog/CRIATURA-2-Kaio-733x1024_ik7dpf.webp",
+        "factionCost": 1,
+        "cost": 1,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "curar",
+            "Daño"
+        ]
+    },
+    {
+        "id": "1766426648212",
+        "name": "Lawe, Madre Abundante",
+        "faction": "jupiter",
+        "rarity": "legendary",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422329/jupiter-rog/CRIATURA-6-Lawe-Madre-abundante-733x1024_bnbcss.webp",
+        "factionCost": 4,
+        "cost": 2,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "curar",
+            "Escudo mágico",
+            "Robar"
+        ]
+    },
+    {
+        "id": "1766426732234",
+        "name": "Bendición Bisku",
+        "faction": "jupiter",
+        "rarity": "common",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422335/jupiter-rog/MAGIA-LENTA-2-Bendicion-Biksu-733x1024_vcfun9.webp",
+        "factionCost": 2,
+        "cost": 0,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": true,
+        "isArtifact": false,
+        "tags": [
+            "otorgo",
+            "Sobrecarga"
+        ]
+    },
+    {
+        "id": "1766426777700",
+        "name": "Chefcito Renato",
+        "faction": "jupiter",
+        "rarity": "epic",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422323/jupiter-rog/CRIATURA-2-Chefcito-733x1024_y73az4.webp",
+        "factionCost": 2,
+        "cost": 0,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Asalto",
+            "Creo",
+            "Vínculo"
+        ]
+    },
+    {
+        "id": "1766426826289",
+        "name": "Grisly CieloDigno",
+        "faction": "jupiter",
+        "rarity": "rare",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422328/jupiter-rog/CRIATURA-5-Grisly-733x1024_o9kcay.webp",
+        "factionCost": 3,
+        "cost": 2,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Al golpear",
+            "curar"
+        ]
+    },
+    {
+        "id": "1766426876499",
+        "name": "Lluvia de Cebollas",
+        "faction": "jupiter",
+        "rarity": "epic",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422335/jupiter-rog/MAGIA-LENTA-3-Lluvia-de-Cebollas-733x1024_o109he.webp",
+        "factionCost": 1,
+        "cost": 2,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": true,
+        "isArtifact": false,
+        "tags": [
+            "Daño",
+            "Selecciona"
+        ]
+    },
+    {
+        "id": "1766426946022",
+        "name": "Bardo del Valle",
+        "faction": "jupiter",
+        "rarity": "rare",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422323/jupiter-rog/CRIATURA-2-Bardo-del-Valle-733x1024_c7jl7j.webp",
+        "factionCost": 2,
+        "cost": 0,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Asalto",
+            "otorgo",
+            "Robar"
+        ]
+    },
+    {
+        "id": "1766426987231",
+        "name": "Goliath, Lomo de Luz",
+        "faction": "jupiter",
+        "rarity": "rare",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422328/jupiter-rog/CRIATURA-5-Goliath-733x1024_gfrc83.webp",
+        "factionCost": 2,
+        "cost": 3,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Asalto",
+            "Creo"
+        ]
+    },
+    {
+        "id": "1766427066356",
+        "name": "Capitán Bara",
+        "faction": "jupiter",
+        "rarity": "common",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422322/jupiter-rog/CRIATURA-1-Capitan-Bara-733x1024_hmjqww.webp",
+        "factionCost": 1,
+        "cost": 0,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Escudo mágico"
+        ]
+    },
+    {
+        "id": "1766427101696",
+        "name": "Banana",
+        "faction": "jupiter",
+        "rarity": "unlimited",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422337/jupiter-rog/TOKEN-1-Banana-733x1024_kgkpcw.webp",
+        "factionCost": 1,
+        "cost": 0,
+        "banned": false,
+        "isSeal": false,
+        "isToken": true,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "otorgo"
+        ]
+    },
+    {
+        "id": "1766427266338",
+        "name": "William Corazón de Espina",
+        "faction": "jupiter",
+        "rarity": "rare",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422326/jupiter-rog/CRIATURA-3-William-733x1024_hnp7fi.webp",
+        "factionCost": 2,
+        "cost": 1,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Contraatacar",
+            "Daño",
+            "inflinjo"
+        ]
+    },
+    {
+        "id": "1766427482778",
+        "name": "Maestro Yang Mul",
+        "faction": "jupiter",
+        "rarity": "common",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422331/jupiter-rog/Jupiter-46-Maestro-Yang-Mul-733x1024_nwqrba.webp",
+        "factionCost": 1,
+        "cost": 0,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Amanecer",
+            "Finalizar",
+            "Gano",
+            "otorgo"
+        ]
+    },
+    {
+        "id": "1766427613766",
+        "name": "Estatua de Piedravida",
+        "faction": "jupiter",
+        "rarity": "common",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422331/jupiter-rog/Jupiter-47-Estatua-de-Piedravida-733x1024_jarzi8.webp",
+        "factionCost": 1,
+        "cost": 2,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "curar",
+            "Provocar",
+            "Último suspiro"
+        ]
+    },
+    {
+        "id": "1766427724420",
+        "name": "Guardiana Del Alba",
+        "faction": "jupiter",
+        "rarity": "epic",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422332/jupiter-rog/Jupiter-48-Guardiana-del-Alba-733x1024_hlukjk.webp",
+        "factionCost": 2,
+        "cost": 0,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Amanecer",
+            "Escudo mágico",
+            "otorgo"
+        ]
+    },
+    {
+        "id": "1766427772516",
+        "name": "Omar. Redentor del Desierto",
+        "faction": "jupiter",
+        "rarity": "rare",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422331/jupiter-rog/Jupiter-49-Omar-redentor-del-desierto-733x1024_ilhpvo.webp",
+        "factionCost": 2,
+        "cost": 1,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Amanecer",
+            "Gano"
+        ]
+    },
+    {
+        "id": "1766427814236",
+        "name": "Bao-Zen, Redentor",
+        "faction": "jupiter",
+        "rarity": "legendary",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422332/jupiter-rog/Jupiter-50-Bao-Zen-Redentor-733x1024_qk5hgb.webp",
+        "factionCost": 3,
+        "cost": 1,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Asalto"
+        ]
+    },
+    {
+        "id": "1766427892890",
+        "name": "Campana de Biarä",
+        "faction": "jupiter",
+        "rarity": "epic",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422332/jupiter-rog/Jupiter-51-Campana-de-Biara-733x1024_r1g0lc.webp",
+        "factionCost": 2,
+        "cost": 2,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Amanecer",
+            "Asalto",
+            "Aturdir",
+            "curar"
+        ]
+    },
+    {
+        "id": "1766427947156",
+        "name": "Boggar Cuernodorado",
+        "faction": "jupiter",
+        "rarity": "legendary",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422332/jupiter-rog/Jupiter-52-Roggar-Cuernodorado-733x1024_etogmi.webp",
+        "factionCost": 3,
+        "cost": 2,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Asalto",
+            "Aturdir",
+            "Gano"
+        ]
+    },
+    {
+        "id": "1766428001202",
+        "name": "Lagios, Escudo del Cielo",
+        "faction": "jupiter",
+        "rarity": "legendary",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422333/jupiter-rog/Jupiter-53-Lagios-733x1024_vecdtu.webp",
+        "factionCost": 4,
+        "cost": 4,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Caída libre",
+            "Robar",
+            "Último suspiro"
+        ]
+    },
+    {
+        "id": "1766428049278",
+        "name": "Bendición de Kiki",
+        "faction": "jupiter",
+        "rarity": "common",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422333/jupiter-rog/Jupiter-54-Bendicion-de-Kiki-733x1024_fk3jqm.webp",
+        "factionCost": 1,
+        "cost": 0,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": true,
+        "isArtifact": false,
+        "tags": [
+            "Amanecer",
+            "invocar"
+        ]
+    },
+    {
+        "id": "1766428091584",
+        "name": "Pastel Casero",
+        "faction": "jupiter",
+        "rarity": "rare",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422333/jupiter-rog/Jupiter-55-Pastel-Casero-733x1024_dflyyn.webp",
+        "factionCost": 2,
+        "cost": 0,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": true,
+        "isArtifact": false,
+        "tags": [
+            "Escudo mágico",
+            "otorgo"
+        ]
+    },
+    {
+        "id": "1766428138234",
+        "name": "Milagro de Crecimiento",
+        "faction": "jupiter",
+        "rarity": "rare",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422333/jupiter-rog/Jupiter-56-Milagro-de-Crecimiento-733x1024_qkzdnt.webp",
+        "factionCost": 2,
+        "cost": 0,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": true,
+        "isArtifact": false,
+        "tags": [
+            "Amanecer",
+            "otorgo",
+            "Reducir",
+            "Robar"
+        ]
+    },
+    {
+        "id": "1766428188594",
+        "name": "Petrificación",
+        "faction": "jupiter",
+        "rarity": "rare",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422334/jupiter-rog/Jupiter-57-Petrificacion-733x1024_az682d.webp",
+        "factionCost": 2,
+        "cost": 0,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": false,
+        "isSlowSpell": true,
+        "isArtifact": false,
+        "tags": [
+            "Contraatacar",
+            "Finalizar",
+            "Silencio"
+        ]
+    },
+    {
+        "id": "1766428236190",
+        "name": "Milagro de Protección",
+        "faction": "jupiter",
+        "rarity": "rare",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422334/jupiter-rog/Jupiter-58-Milagro-de-Proteccion-733x1024_pqxzn7.webp",
+        "factionCost": 2,
+        "cost": 1,
+        "banned": false,
+        "isSeal": false,
+        "isToken": false,
+        "isQuickSpell": true,
+        "isSlowSpell": false,
+        "isArtifact": false,
+        "tags": [
+            "Finalizar",
+            "otorgo",
+            "Sobrecarga"
+        ]
+    }
+]

@@ -124,6 +124,7 @@ export class EstadisticsComponent implements AfterViewInit, OnChanges {
         c.isToken ? 'Token' :
         c.isQuickSpell ? 'Hechizo Rápido' :
         c.isSlowSpell ? 'Hechizo Lento' :
+        c.isStructure ? 'Estructura' :
         c.isArtifact ? 'Artefacto' :
         'Criatura';
 

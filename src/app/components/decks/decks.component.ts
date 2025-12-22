@@ -24,7 +24,7 @@ import { RouterModule } from '@angular/router';
 import { DecksCardsService } from 'src/app/services/decks-cards';
 import { ExportDeckImageService } from 'src/app/services/export-deck-image-service';
 import { Card } from 'src/app/interfaces/card.interface';
-import { testCards } from 'src/app/cards-testing';
+import { Cards } from 'src/app/cards-testing';
 import { NavController } from '@ionic/angular';
 import { DeckExportComponentComponent } from '../deck-export-component/deck-export-component.component';
 import { ExportCard } from 'src/app/interfaces/export.card.interface';
@@ -83,7 +83,7 @@ goToDeck(deckId: string) {
   public deckColor = this.deckService.deckColor;
 
 async ngOnInit() {
-  this.allCards = testCards;
+  this.allCards = Cards;
 }
 
 async getUser(): Promise<UserIdentityData | null> {

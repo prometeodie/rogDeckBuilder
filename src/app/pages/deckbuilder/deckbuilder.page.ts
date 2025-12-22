@@ -23,7 +23,7 @@ import { ImageViewerComponent } from 'src/app/components/image-viewer/image-view
 import { Deck } from 'src/app/interfaces/deck.interface';
 import { DecksCardsService } from 'src/app/services/decks-cards';
 import { Card } from 'src/app/interfaces/card.interface';
-import { testCards } from 'src/app/cards-testing';
+import { Cards } from 'src/app/cards-testing';
 import { SideBarComponent } from 'src/app/components/side-bar/side-bar.component';
 import { SortableCard } from 'src/app/interfaces/sortable.card.interface';
 import { AlertController } from '@ionic/angular';
@@ -47,8 +47,8 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
 
   @ViewChild(IonContent) ionContent!: IonContent;
 
-  public allCards: Card[] = testCards;
-  public currentCards: Card[] = testCards;
+  public allCards: Card[] = Cards;
+  public currentCards: Card[] = Cards;
 
 
   public sellos = [

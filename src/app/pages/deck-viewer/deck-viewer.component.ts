@@ -4,7 +4,7 @@ import { Component, inject, signal, computed } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Deck } from '../../interfaces/deck.interface';
 import { DecksCardsService } from 'src/app/services/decks-cards';
-import { testCards } from 'src/app/cards-testing';
+import { Cards } from 'src/app/cards-testing';
 import { arrowBackOutline, barChartOutline, listOutline, tabletPortraitOutline } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { CardListComponent } from 'src/app/components/card-list/card-list.component';
@@ -30,7 +30,7 @@ export class DeckViewerComponent implements ViewWillEnter {
 
   public deck = signal<Deck | null>(null);
   public loading = signal(true);
-  private cards = testCards;
+  private cards = Cards;
 
   public currentView = signal<'view1' | 'view2' | 'view3'>('view1');
   public selectedCards:Card[] =[];
