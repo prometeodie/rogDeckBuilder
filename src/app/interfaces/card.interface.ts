@@ -13,5 +13,5 @@ export interface Card {
   isQuickSpell?:boolean;
   isSlowSpell?:boolean;
   isArtifact?:boolean;
-  isStructure?:boolean;
+  isEstructure?:boolean;
 }
