@@ -17,7 +17,7 @@
            @if (card.banned) {
       <h4 class="banned-stamp">baneada</h4>
     }
-    <img src="https://res.cloudinary.com/dzkxl45xy/image/upload/v1766344854/pluton-rog/TOKEN-Senor-de-las-Tinieblas-733x1024_fn60ek.webp" crossorigin="anonymous">
+    <img [src]="card.img" [name]="card.title">
     <span class="qty">x{{ card.qty }}</span>
         </div>
       }
@@ -30,7 +30,7 @@
   <div class="cards-grid side-deck">
     @for (card of sideDeck; track $index) {
       <div class="card">
-        <img src="../../../assets/SELLOS/SELLO-MARTE.png" crossorigin="anonymous">
+        <img [src]="card.img" [name]="card.title">
         <span class="qty">x{{ card.qty }}</span>
       </div>
     }
