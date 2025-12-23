@@ -51,15 +51,14 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
   public currentCards: Card[] = Cards;
 
 
-  public sellos = [
-    {img:'SELLO-ALL.png', faction: 'all'},
-    {img:'SELLO-JUPITER.png',faction:'jupiter'},
-    {img:'SELLO-MARTE.png', faction:'marte'},
-    {img:'SELLO-PLUTON.png',faction:'pluton'},
-    {img:'SELLO-SATURNO.png',faction:'saturno'},
-    {img:'SELLO-TIERRA.png',faction:'tierra'},
-    {img:'SELLO-NEPTUNO.png',faction:'neptuno'}
-  ];
+public sellos = [
+  { img:'SELLO-JUPITER.png', faction:'jupiter' },
+  { img:'SELLO-MARTE.png',   faction:'marte' },
+  { img:'SELLO-PLUTON.png',  faction:'pluton' },
+  { img:'SELLO-SATURNO.png', faction:'saturno' },
+  { img:'SELLO-TIERRA.png',  faction:'tierra' },
+  { img:'SELLO-NEPTUNO.png', faction:'neptuno' }
+];
 
   private route = inject(ActivatedRoute);
   private deckService = inject(DecksCardsService);
@@ -72,8 +71,8 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
   public imgSelected = '';
   public counterAnimation = signal(false);
   public deckMode = signal<'main' | 'side'>('main');
-  public selectedFaction: string = 'all';
-  public selectedFactionTitle: string = 'all';
+  public selectedFaction: string = 'jupiter';
+  public selectedFactionTitle: string = 'jupiter';
   public searchTerm: string = '';
   public sortBy!: SortBy;
 
@@ -96,18 +95,23 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
     }
   }
 
-  ionViewDidEnter() {
-    this.selectedFaction = 'all';
-    this.selectedFactionTitle = this.selectedFaction;
-    this.currentCards = [...this.allCards];
+ionViewDidEnter() {
+  this.selectedFaction = 'jupiter';
+  this.selectedFactionTitle = 'jupiter';
 
-    this.searchTerm = '';
-    this.searchOpen = false;
+  this.currentCards = this.deckService.filteredCards(
+    this.allCards,
+    'jupiter'
+  );
 
-    requestAnimationFrame(() => {
-      this.ionContent?.scrollToTop(300);
-    });
-  }
+  this.searchTerm = '';
+  this.searchOpen = false;
+
+  requestAnimationFrame(() => {
+    this.ionContent?.scrollToTop(300);
+  });
+}
+
 
   async ngOnInit(): Promise<void> {
   const id = this.deckId();
@@ -320,20 +324,30 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
   }
 
   filterCardsByFaction(faction: string) {
-    this.currentCards = this.deckService.filteredCards(this.allCards, faction);
-    this.selectedFaction = faction;
-    this.selectedFactionTitle = faction;
-    this.scrollToTop();
-  }
+  if (faction === 'all') return;
+
+  this.currentCards = this.deckService.filteredCards(
+    this.allCards,
+    faction
+  );
+
+  this.selectedFaction = faction;
+  this.selectedFactionTitle = faction;
+  this.scrollToTop();
+}
+
 
  filterCards(searchTerm: string) {
   this.searchTerm = searchTerm.trim().toLowerCase();
 
-  if (!this.searchTerm) {
-    this.currentCards = [...this.allCards];
-    this.selectedFactionTitle = this.selectedFaction;
-    return;
-  }
+ if (!this.searchTerm) {
+  this.currentCards = this.deckService.filteredCards(
+    this.allCards,
+    this.selectedFaction
+  );
+  this.selectedFactionTitle = this.selectedFaction;
+  return;
+}
 
   const filtered = this.deckService.filterItems(
     this.allCards,
