@@ -97,7 +97,7 @@ export const Cards: Card[] =[
         "name": "Ricky El Topo",
         "faction": "jupiter",
         "rarity": "rare",
-        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766423529/jupiter-rog/Marca-de-agua-Ricky-733x1024_wpgusg.webp",
+        "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/c_pad,w_400,h_400/v1766423529/jupiter-rog/Marca-de-agua-Ricky-733x1024_wpgusg.webp",
         "factionCost": 2,
         "cost": 0,
         "banned": false,
