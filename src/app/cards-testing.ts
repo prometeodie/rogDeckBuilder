@@ -1,9 +1,4 @@
 import { Card } from "./interfaces/card.interface";
-
-const img1 = 'https://riseofgods.store/wp-content/uploads/2024/06/Sello-Jupiter.png';
-const img2 = 'https://riseofgods.store/wp-content/uploads/2024/06/ESTRUCTURA-4-Canon-de-Zagh-733x1024.png';
-const img3 = 'https://riseofgods.store/wp-content/uploads/2025/09/Marte-44-Juez-del-volcan-733x1024.png';
-
 export const Cards: Card[] =[
     {
         "id": "1766422502879",
@@ -1116,5 +1111,909 @@ export const Cards: Card[] =[
             "otorgo",
             "Sobrecarga"
         ]
-    }
+    },
+  {
+    "id": "1766430020798",
+    "name": "Sello",
+    "faction": "marte",
+    "rarity": "unlimited",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422296/marte-rog/sello-marte_gf1loo.png",
+    "factionCost": 0,
+    "cost": 0,
+    "banned": false,
+    "isSeal": true,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": []
+  },
+  {
+    "id": "1766430064108",
+    "name": "Tomi, El Valiente",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422290/marte-rog/Criatura-1-Tomi-733x1024_u7pnrr.webp",
+    "factionCost": 1,
+    "cost": 0,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Inicio del turno",
+      "otorgo",
+      "Vínculo"
+    ]
+  },
+  {
+    "id": "1766430099444",
+    "name": "Infanteria Soturi",
+    "faction": "marte",
+    "rarity": "common",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422290/marte-rog/Criatura-1-Infanteria-Soturi-733x1024_mnkixa.webp",
+    "factionCost": 1,
+    "cost": 0,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "otorgo",
+      "Último suspiro"
+    ]
+  },
+  {
+    "id": "1766430148017",
+    "name": "Macaco Volcánico",
+    "faction": "marte",
+    "rarity": "common",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422290/marte-rog/Criatura-1-Macaco-Volcanico-733x1024_lrpmwu.webp",
+    "factionCost": 1,
+    "cost": 0,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "curar",
+      "Último suspiro"
+    ]
+  },
+  {
+    "id": "1766430359572",
+    "name": "Guantes Soturi",
+    "faction": "marte",
+    "rarity": "common",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422289/marte-rog/ARTEFACTO-2-Guantes-Soturi-1-733x1024_kjrwdc.webp",
+    "factionCost": 1,
+    "cost": 1,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": true,
+    "tags": [
+      "Atacar 2 veces",
+      "Equipado"
+    ]
+  },
+  {
+    "id": "1766430389660",
+    "name": "Entrenador",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422290/marte-rog/CRIATURA-2-Entrenador-733x1024_vej2zd.webp",
+    "factionCost": 1,
+    "cost": 1,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Asalto",
+      "Robar"
+    ]
+  },
+  {
+    "id": "1766430493867",
+    "name": "Bojevnica",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422291/marte-rog/CRIATURA-2-Bojevnika-733x1024_fvicac.webp",
+    "factionCost": 1,
+    "cost": 1,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Al golpear",
+      "Ataque rápido",
+      "Destruyo",
+      "Robar"
+    ]
+  },
+  {
+    "id": "1766430578587",
+    "name": "Centinela Moai",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422290/marte-rog/CRIATURA-2-Centinela-Moai-733x1024_a9szoe.webp",
+    "factionCost": 2,
+    "cost": 0,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": []
+  },
+  {
+    "id": "1766430644607",
+    "name": "Ragnarok",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422290/marte-rog/ARTEFACTO-3-Ragnarok-733x1024_wpcawa.webp",
+    "factionCost": 2,
+    "cost": 1,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": true,
+    "tags": [
+      "Daño",
+      "Destruyo",
+      "Equipado",
+      "inflinjo"
+    ]
+  },
+  {
+    "id": "1766430675232",
+    "name": "Crocokill",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422291/marte-rog/CRIATURA-3-Crocokill-733x1024_iyrqjm.webp",
+    "factionCost": 1,
+    "cost": 2,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Contraatacar"
+    ]
+  },
+  {
+    "id": "1766430724261",
+    "name": "Gigante Tonto",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422291/marte-rog/Criatura-3-Gigante-Tonto-733x1024_pvqu0s.webp",
+    "factionCost": 2,
+    "cost": 1,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Robar",
+      "Último suspiro"
+    ]
+  },
+  {
+    "id": "1766430762653",
+    "name": "Yerba Mata",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422292/marte-rog/CRIATURA-3-Yerba-Mata-733x1024_nfbfyb.webp",
+    "factionCost": 2,
+    "cost": 1,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Al atacar",
+      "Robar"
+    ]
+  },
+  {
+    "id": "1766430788779",
+    "name": "Huelna",
+    "faction": "marte",
+    "rarity": "legendary",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422291/marte-rog/Criatura-3-Huelna-1-733x1024_ygrfka.webp",
+    "factionCost": 3,
+    "cost": 0,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Cargar"
+    ]
+  },
+  {
+    "id": "1766430842038",
+    "name": "Cazador Primigenio",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422292/marte-rog/Criatura-4-Cazador-Primigenio-733x1024_ditkz6.webp",
+    "factionCost": 2,
+    "cost": 2,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Anulo",
+      "Daño"
+    ]
+  },
+  {
+    "id": "1766431028271",
+    "name": "K.O.T.S",
+    "faction": "marte",
+    "rarity": "epic",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422292/marte-rog/CRIATURA-4-K.O.T.S-733x1024_fjxnc7.webp",
+    "factionCost": 2,
+    "cost": 2,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Activar magia",
+      "no puede"
+    ]
+  },
+  {
+    "id": "1766431178221",
+    "name": "Señora Korova",
+    "faction": "marte",
+    "rarity": "epic",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422293/marte-rog/CRIATURA-5-Senora-Korova-733x1024_xyo5cs.webp",
+    "factionCost": 2,
+    "cost": 3,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Daño",
+      "inflinjo",
+      "Regeneración"
+    ]
+  },
+  {
+    "id": "1766431257179",
+    "name": "Destructor Intimidante",
+    "faction": "marte",
+    "rarity": "common",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422293/marte-rog/CRIATURA-5-Destructor-Intimidante-1-733x1024_un4vyh.webp",
+    "factionCost": 3,
+    "cost": 2,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": []
+  },
+  {
+    "id": "1766431317629",
+    "name": "Maestro Wu Akin",
+    "faction": "marte",
+    "rarity": "legendary",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422293/marte-rog/CRIATURA-5-Maestro-Wu-Akin-733x1024_ybevdz.webp",
+    "factionCost": 3,
+    "cost": 2,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Aniquilar",
+      "Empujo"
+    ]
+  },
+  {
+    "id": "1766431373363",
+    "name": "Alfa - Boom",
+    "faction": "marte",
+    "rarity": "common",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422293/marte-rog/CRIATURA-5-Alfa-Boom-733x1024_nxswap.webp",
+    "factionCost": 3,
+    "cost": 2,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Asalto",
+      "Entro"
+    ]
+  },
+  {
+    "id": "1766431506325",
+    "name": "Bestia de la Mazmorra",
+    "faction": "marte",
+    "rarity": "epic",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422293/marte-rog/Criatura-6-Bestia-de-la-Mazmorra-733x1024_apsbcp.webp",
+    "factionCost": 4,
+    "cost": 2,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Asalto",
+      "Cargar",
+      "Daño",
+      "inflinjo"
+    ]
+  },
+  {
+    "id": "1766431571760",
+    "name": "Elegido de Marte",
+    "faction": "marte",
+    "rarity": "legendary",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422294/marte-rog/Criatura-7-Elegido-de-Marte-FULL-ART-733x1024_wbhdlz.webp",
+    "factionCost": 4,
+    "cost": 3,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Ataque 360",
+      "Cargar"
+    ]
+  },
+  {
+    "id": "1766431656846",
+    "name": "Grunto",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422292/marte-rog/CRIATURA-4-Grunto-733x1024_n6m5gq.webp",
+    "factionCost": 2,
+    "cost": 2,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Estoy en el campo",
+      "Ganan"
+    ]
+  },
+  {
+    "id": "1766431714685",
+    "name": "Bjölnar",
+    "faction": "marte",
+    "rarity": "epic",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422293/marte-rog/CRIATURA-6-Bjolnar-733x1024_cizvil.webp",
+    "factionCost": 2,
+    "cost": 4,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Asalto",
+      "Robar"
+    ]
+  },
+  {
+    "id": "1766431792381",
+    "name": "Norraf, Coloso Sangriento",
+    "faction": "marte",
+    "rarity": "common",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422294/marte-rog/Criatura-7-Norraf-733x1024_f8ro8k.webp",
+    "factionCost": 2,
+    "cost": 5,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Ataque 360",
+      "Provocar"
+    ]
+  },
+  {
+    "id": "1766431862451",
+    "name": "Saltador de Cráteres",
+    "faction": "marte",
+    "rarity": "common",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422291/marte-rog/Criatura-1-Saltador-de-crateres-733x1024_riaiuo.webp",
+    "factionCost": 1,
+    "cost": 0,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Asalto",
+      "Cargar",
+      "Cementerio",
+      "Daño",
+      "Gano"
+    ]
+  },
+  {
+    "id": "1766431967259",
+    "name": "Macaco de Asedio",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422290/marte-rog/CRIATURA-2-Macaco-de-Asedio-733x1024_hwlvol.webp",
+    "factionCost": 2,
+    "cost": 0,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Asalto",
+      "Destruyo",
+      "estructura"
+    ]
+  },
+  {
+    "id": "1766503079669",
+    "name": "Caballo de Guerra",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422290/marte-rog/Criatura-2-Caballo-de-Guerra-733x1024_hv3u33.webp",
+    "factionCost": 1,
+    "cost": 1,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Mover"
+    ]
+  },
+  {
+    "id": "1766503155071",
+    "name": "Verdugo Soturi",
+    "faction": "marte",
+    "rarity": "common",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422292/marte-rog/CRIATURA-3-Verdugo-Soturi-733x1024_jfo08z.webp",
+    "factionCost": 2,
+    "cost": 1,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Asalto",
+      "Ataque rápido",
+      "Daño",
+      "inflinjo"
+    ]
+  },
+  {
+    "id": "1766503258432",
+    "name": "Gladiador Soturi",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422291/marte-rog/CRIATURA-3-Gladiador-733x1024_tx1yu0.webp",
+    "factionCost": 1,
+    "cost": 2,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "morir",
+      "Primera vez"
+    ]
+  },
+  {
+    "id": "1766503351722",
+    "name": "Ejecutontos",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422292/marte-rog/CRIATURA-4-Ejecutontos-733x1024_uxu6yc.webp",
+    "factionCost": 3,
+    "cost": 1,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "aliada",
+      "Sacrificar"
+    ]
+  },
+  {
+    "id": "1766503554624",
+    "name": "Maestro Ignis Lao",
+    "faction": "marte",
+    "rarity": "legendary",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422293/marte-rog/CRIATURA-4-Maestro-Ignis-Lao-733x1024_l3sm3h.webp",
+    "factionCost": 3,
+    "cost": 1,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Asalto",
+      "Mezclo"
+    ]
+  },
+  {
+    "id": "1766503686389",
+    "name": "Reclutante Soturi",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422291/marte-rog/CRIATURA-2-Reclutante-Soturi-733x1024_fwwfxy.webp",
+    "factionCost": 1,
+    "cost": 1,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Asalto",
+      "Criatura",
+      "Coste",
+      "Reducir"
+    ]
+  },
+  {
+    "id": "1766503750490",
+    "name": "Látigo del Maestro Wu",
+    "faction": "marte",
+    "rarity": "epic",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422290/marte-rog/ARTEFACTO-2-latigo-del-maestro-wu-733x1024_gqppny.webp",
+    "factionCost": 1,
+    "cost": 1,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": true,
+    "tags": [
+      "Criatura",
+      "Mover",
+      "Selecciona"
+    ]
+  },
+  {
+    "id": "1766503985975",
+    "name": "Invocador del Cráter",
+    "faction": "marte",
+    "rarity": "epic",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422294/marte-rog/Marte-34-Invocador-del-crater-733x1024_cnfy6g.webp",
+    "factionCost": 1,
+    "cost": 0,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Asalto",
+      "Criatura",
+      "Mezclo",
+      "Pagar",
+      "Revelar",
+      "Vida"
+    ]
+  },
+  {
+    "id": "1766504076716",
+    "name": "Tomi Siniestro",
+    "faction": "marte",
+    "rarity": "common",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422294/marte-rog/Marte-35-Tomi-Siniestro-733x1024_fksge7.webp",
+    "factionCost": 1,
+    "cost": 0,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Al atacar",
+      "Daño",
+      "inflinjo"
+    ]
+  },
+  {
+    "id": "1766504211523",
+    "name": "Sicario del Desierto Rojo",
+    "faction": "marte",
+    "rarity": "epic",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422294/marte-rog/Marte-36-Sicario-del-Desierto-733x1024_thx0d9.webp",
+    "factionCost": 2,
+    "cost": 0,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Carta",
+      "Gano",
+      "Robar",
+      "Venganza"
+    ]
+  },
+  {
+    "id": "1766504284021",
+    "name": "Bestia Derribamuros",
+    "faction": "marte",
+    "rarity": "common",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422294/marte-rog/Marte-37-Bestia-derribamuros-733x1024_ohkwzh.webp",
+    "factionCost": 2,
+    "cost": 1,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Gano",
+      "Provocar",
+      "Venganza"
+    ]
+  },
+  {
+    "id": "1766504346201",
+    "name": "Arquero Corrupto Soturi",
+    "faction": "marte",
+    "rarity": "epic",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422294/marte-rog/Marte-39-Arquero-Corrupto-Soturi-733x1024_npqix8.webp",
+    "factionCost": 2,
+    "cost": 1,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Criatura",
+      "Daño",
+      "Enemiga",
+      "inflinjo",
+      "Venganza"
+    ]
+  },
+  {
+    "id": "1766504425791",
+    "name": "La Muerte Andante",
+    "faction": "marte",
+    "rarity": "legendary",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422294/marte-rog/Marte-40-La-muerte-andante-733x1024_wkjz4c.webp",
+    "factionCost": 3,
+    "cost": 0,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Daño",
+      "inflinjo",
+      "Último suspiro",
+      "Venganza"
+    ]
+  },
+  {
+    "id": "1766504506683",
+    "name": "Rey Caido Soturi",
+    "faction": "marte",
+    "rarity": "legendary",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422295/marte-rog/Marte-41-Rey-caido-soturi-FA-733x1024_bwkztk.webp",
+    "factionCost": 3,
+    "cost": 0,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Asalto",
+      "Cementerio",
+      "Obtengo"
+    ]
+  },
+  {
+    "id": "1766504624461",
+    "name": "Desgarramundos",
+    "faction": "marte",
+    "rarity": "legendary",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422295/marte-rog/Marte-42-Desgarramundos-733x1024_k2er8w.webp",
+    "factionCost": 4,
+    "cost": 0,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Cargar",
+      "Carta",
+      "Gano",
+      "Robar"
+    ]
+  },
+  {
+    "id": "1766504732589",
+    "name": "Devorador Corrupto",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422295/marte-rog/Marte-43-Devorador-Corrupto-733x1024_wzc7xo.webp",
+    "factionCost": 2,
+    "cost": 2,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "curar",
+      "Mientras estoy",
+      "no puede"
+    ]
+  },
+  {
+    "id": "1766504793384",
+    "name": "Juez del Volcán",
+    "faction": "marte",
+    "rarity": "common",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422295/marte-rog/Marte-44-Juez-del-volcan-733x1024_bnduws.webp",
+    "factionCost": 2,
+    "cost": 2,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Daño",
+      "Gano",
+      "Regeneración"
+    ]
+  },
+  {
+    "id": "1766504834167",
+    "name": "Recuerdos de Guerra",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422295/marte-rog/Marte-45-Recuerdos-de-Guerra-733x1024_asp308.webp",
+    "factionCost": 2,
+    "cost": 2,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "aliada",
+      "Asalto",
+      "Criatura",
+      "Gano"
+    ]
+  },
+  {
+    "id": "1766504991430",
+    "name": "Troll Arrojavacas",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422295/marte-rog/Marte-46-Troll-Arrojavacas-733x1024_z1oarv.webp",
+    "factionCost": 3,
+    "cost": 2,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Asalto",
+      "Criatura",
+      "Devuelvo",
+      "Mano"
+    ]
+  },
+  {
+    "id": "1766505046026",
+    "name": "Marte, Dios de la Guerra",
+    "faction": "marte",
+    "rarity": "legendary",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422295/marte-rog/Marte-47-Marte-dios-de-la-guerra-733x1024_eqydsh.webp",
+    "factionCost": 5,
+    "cost": 5,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "tags": [
+      "Al atacar",
+      "Ataque rápido",
+      "Escudo mágico",
+      "Gano"
+    ]
+  }
+
 ]
