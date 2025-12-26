@@ -30,6 +30,7 @@ import { DeckExportComponentComponent } from '../deck-export-component/deck-expo
 import { ExportCard } from 'src/app/interfaces/export.card.interface';
 import { User } from 'src/app/services/user';
 import { UserIdentityData } from 'src/app/interfaces/user.interface';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'decks',
@@ -100,47 +101,57 @@ async deleteDeck(id: string) {
 }
 
 async downloadDeckImage(deckId: string) {
-  this.showExport = true;
-  const deck = await this.deckService.getDeckById(deckId);
-  if (!deck) return;
+  this.showDownloadingToast('Generando imagen del mazo...');
 
-  const allCards: Card[] = this.allCards;
+  try {
+    this.showExport = true;
 
-  this.mainDeck = deck.cards.map(c => {
-    const card = allCards.find(x => x.id === c.id);
-    return {
-      id: c.id,
-      title: card?.name ?? '???',
-      img: card?.img ?? '',
-      faction: card?.faction ?? '',
-      qty: c.amount,
-      banned: card?.banned
-    };
-  });
+    const deck = await this.deckService.getDeckById(deckId);
+    if (!deck) return;
 
-  this.sideDeck = deck.sideDeck.cards.map(c => {
-    const card = allCards.find(x => x.id === c.id);
-    return {
-      id: c.id,
-      title: card?.name ?? '???',
-      img: card?.img ?? '',
-      faction: card?.faction ?? '',
-      qty: c.amount,
-      banned: card?.banned
-    };
-  });
+    const allCards: Card[] = this.allCards;
 
+    this.mainDeck = deck.cards.map(c => {
+      const card = allCards.find(x => x.id === c.id);
+      return {
+        id: c.id,
+        title: card?.name ?? '???',
+        img: card?.img ?? '',
+        faction: card?.faction ?? '',
+        qty: c.amount,
+        banned: card?.banned
+      };
+    });
 
-  this.cdr.detectChanges();
+    this.sideDeck = deck.sideDeck.cards.map(c => {
+      const card = allCards.find(x => x.id === c.id);
+      return {
+        id: c.id,
+        title: card?.name ?? '???',
+        img: card?.img ?? '',
+        faction: card?.faction ?? '',
+        qty: c.amount,
+        banned: card?.banned
+      };
+    });
 
-  requestAnimationFrame(() => {
-  this.exportDeckImage.exportRenderedDeck(deck.name).then(() => {
+    this.cdr.detectChanges();
+
+    await new Promise<void>(resolve => {
+      requestAnimationFrame(() => {
+        this.exportDeckImage.exportRenderedDeck(deck.name).then(() => {
+          resolve();
+        });
+      });
+    });
+
+  } finally {
     this.showExport = false;
     this.cdr.detectChanges();
-  });
-});
-
+    this.closeToast();
+  }
 }
+
 
 getDeckBackground(deck: Deck): string {
   return deck.color
@@ -149,16 +160,43 @@ getDeckBackground(deck: Deck): string {
 }
 
 async downloadDeck(id: string) {
-  this.user = await this.getUser();
-  const deck = await this.deckService.getDeckById(id);
+  this.showDownloadingToast('Descargando mazo...');
 
-  if (!deck) {
-    // manejo defensivo
-    console.error('Deck no encontrado');
-    return;
+  try {
+    this.user = await this.getUser();
+    const deck = await this.deckService.getDeckById(id);
+
+    if (!deck) {
+      console.error('Deck no encontrado');
+      return;
+    }
+
+    await this.deckExportService.downloadDeck(deck, this.user?.nickname!);
+
+  } finally {
+    this.closeToast();
   }
+}
 
-  this.deckExportService.downloadDeck(deck, this.user?.nickname!);
+
+
+private showDownloadingToast(message: string = 'Descargando...'): void {
+  Swal.fire({
+    toast: true,
+    position: 'bottom',
+    icon: 'info',
+    title: message,
+    showConfirmButton: false,
+    background: '#2980b9',
+    color: '#fff',
+    didOpen: () => {
+      Swal.showLoading();
+    }
+  });
+}
+
+private closeToast(): void {
+  Swal.close();
 }
 
 
