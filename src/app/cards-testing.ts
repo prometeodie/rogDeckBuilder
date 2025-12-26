@@ -2,7 +2,7 @@ import { Card } from "./interfaces/card.interface";
 export const Cards: Card[] =[
     {
         "id": "1766422502879",
-        "name": "sello",
+        "name": "sello Jupiter",
         "faction": "jupiter",
         "rarity": "unlimited",
         "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422337/jupiter-rog/Sello-Jupiter_woyltf.webp",
@@ -1114,7 +1114,7 @@ export const Cards: Card[] =[
     },
   {
     "id": "1766430020798",
-    "name": "Sello",
+    "name": "Sello Marte",
     "faction": "marte",
     "rarity": "unlimited",
     "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766511563/marte-rog/marte_ubutpk.jpg",
@@ -2017,7 +2017,7 @@ export const Cards: Card[] =[
   },
  {
     "id": "1766512385849",
-    "name": "Sello",
+    "name": "Sello Tierra",
     "faction": "tierra",
     "rarity": "unlimited",
     "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422415/tierra-rog/sello_snxdfi.png",
