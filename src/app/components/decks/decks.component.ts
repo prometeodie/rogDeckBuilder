@@ -160,24 +160,16 @@ getDeckBackground(deck: Deck): string {
 }
 
 async downloadDeck(id: string) {
-  this.showDownloadingToast('Descargando mazo...');
+  this.user = await this.getUser();
+  const deck = await this.deckService.getDeckById(id);
 
-  try {
-    this.user = await this.getUser();
-    const deck = await this.deckService.getDeckById(id);
-
-    if (!deck) {
-      console.error('Deck no encontrado');
-      return;
-    }
-
-    await this.deckExportService.downloadDeck(deck, this.user?.nickname!);
-
-  } finally {
-    this.closeToast();
+  if (!deck) {
+    console.error('Deck no encontrado');
+    return;
   }
-}
 
+  this.deckExportService.downloadDeck(deck, this.user?.nickname!);
+}
 
 
 private showDownloadingToast(message: string = 'Descargando...'): void {
