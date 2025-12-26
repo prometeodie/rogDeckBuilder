@@ -1,9 +1,29 @@
 <ion-card class="card-component">
-  <ion-img [src]="cardData.img" (click)="showImg()" [ngClass]="{'banned':cardData.banned}"></ion-img>
+<ion-card class="card-component">
+
+  <div class="img-wrapper">
+    <!-- Skeleton -->
+    @if (!imgLoaded) {
+      <div class="img-skeleton shimmer"></div>
+    }
+
+    <!-- Imagen real -->
+    <ion-img
+      [src]="cardData.img"
+      (ionImgDidLoad)="onImgLoad()"
+      (click)="showImg()"
+      [class.loaded]="imgLoaded"
+      [ngClass]="{ banned: cardData.banned }"
+    ></ion-img>
+  </div>
 
   @if (cardData.banned) {
     <h4 class="banned-stamp">baneada</h4>
   }
+
+  <!-- resto del contenido -->
+</ion-card>
+
 
   <ion-card-content class="card-content">
     <div class="cost-bar">

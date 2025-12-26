@@ -43,6 +43,7 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
   }>();
 
   public count = 0;
+  public imgLoaded = false;
   private saveSubject = new Subject<number>();
   private sub?: Subscription;
 
@@ -204,6 +205,11 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
   showImg(): void {
     this.ImgView.emit(this.cardData.img);
   }
+
+  onImgLoad(): void {
+  this.imgLoaded = true;
+  }
+
 
   private showToast(
     message: string,
