@@ -14,4 +14,5 @@ export interface Card {
   isSlowSpell?:boolean;
   isArtifact?:boolean;
   isEstructure?:boolean;
+  isTerreno?:boolean;
 }
