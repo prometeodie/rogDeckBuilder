@@ -24,13 +24,14 @@ import { RouterModule } from '@angular/router';
 import { DecksCardsService } from 'src/app/services/decks-cards';
 import { ExportDeckImageService } from 'src/app/services/export-deck-image-service';
 import { Card } from 'src/app/interfaces/card.interface';
-import { Cards } from 'src/app/cards-testing';
+// import { Cards } from 'src/app/cards-testing';
 import { NavController } from '@ionic/angular';
 import { DeckExportComponentComponent } from '../deck-export-component/deck-export-component.component';
 import { ExportCard } from 'src/app/interfaces/export.card.interface';
 import { User } from 'src/app/services/user';
 import { UserIdentityData } from 'src/app/interfaces/user.interface';
 import Swal from 'sweetalert2';
+import { CardsLoaderService } from 'src/app/services/cards-loader-service';
 
 @Component({
   selector: 'decks',
@@ -58,6 +59,7 @@ export class DecksComponent {
   private userService = inject(User);
   private nav:NavController  = inject(NavController);
   private cdr = inject(ChangeDetectorRef);
+  private cardsLoader = inject(CardsLoaderService);
 
   public mainDeck!:ExportCard[];
   public sideDeck!:ExportCard[];
@@ -84,7 +86,8 @@ goToDeck(deckId: string) {
   public deckColor = this.deckService.deckColor;
 
 async ngOnInit() {
-  this.allCards = Cards;
+  await this.cardsLoader.allCards();
+  this.allCards = this.cardsLoader.allCards();
 }
 
 async getUser(): Promise<UserIdentityData | null> {

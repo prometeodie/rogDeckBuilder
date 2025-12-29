@@ -15,7 +15,7 @@ import {
   IonInput
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, colorPaletteOutline, searchOutline } from 'ionicons/icons';
+import { arrowBackOutline, searchOutline } from 'ionicons/icons';
 
 import { CardsComponent } from "src/app/components/cards/cards.component";
 import { ImageViewerComponent } from 'src/app/components/image-viewer/image-viewer.component';
@@ -23,10 +23,11 @@ import { ImageViewerComponent } from 'src/app/components/image-viewer/image-view
 import { Deck } from 'src/app/interfaces/deck.interface';
 import { DecksCardsService } from 'src/app/services/decks-cards';
 import { Card } from 'src/app/interfaces/card.interface';
-import { Cards } from 'src/app/cards-testing';
+// import { Cards } from 'src/app/cards-testing';
 import { SideBarComponent } from 'src/app/components/side-bar/side-bar.component';
 import { SortableCard } from 'src/app/interfaces/sortable.card.interface';
 import { AlertController } from '@ionic/angular';
+import { CardsLoaderService, Faction } from 'src/app/services/cards-loader-service';
 
 addIcons({ searchOutline, arrowBackOutline });
 
@@ -47,19 +48,26 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
 
   @ViewChild(IonContent) ionContent!: IonContent;
 
-  public allCards: Card[] = Cards;
-  public currentCards: Card[] = Cards;
+
+  public allCards: Card[] = [];
+  public currentCards: Card[] = [];
 
 
-public sellos = [
-  { img:'SELLO-JUPITER.png', faction:'jupiter' },
-  { img:'SELLO-MARTE.png',   faction:'marte' },
-  { img:'SELLO-PLUTON.png',  faction:'pluton' },
-  { img:'SELLO-SATURNO.png', faction:'saturno' },
-  { img:'SELLO-TIERRA.png',  faction:'tierra' },
-  { img:'SELLO-NEPTUNO.png', faction:'neptuno' }
+
+  public sellos: ReadonlyArray<{
+  img: string;
+  faction: Faction;
+}> = [
+  { img: 'SELLO-JUPITER.png', faction: 'jupiter' },
+  { img: 'SELLO-MARTE.png',   faction: 'marte' },
+  { img: 'SELLO-PLUTON.png',  faction: 'pluton' },
+  { img: 'SELLO-SATURNO.png', faction: 'saturno' },
+  { img: 'SELLO-TIERRA.png',  faction: 'tierra' },
+  { img: 'SELLO-NEPTUNO.png', faction: 'neptuno' }
 ];
 
+
+  private cardsLoader = inject(CardsLoaderService);
   private route = inject(ActivatedRoute);
   private deckService = inject(DecksCardsService);
   private alertCtrl = inject(AlertController);
@@ -71,7 +79,7 @@ public sellos = [
   public imgSelected = '';
   public counterAnimation = signal(false);
   public deckMode = signal<'main' | 'side'>('main');
-  public selectedFaction: string = 'jupiter';
+  public selectedFaction: Faction = 'jupiter';
   public selectedFactionTitle: string = 'jupiter';
   public searchTerm: string = '';
   public sortBy!: SortBy;
@@ -95,23 +103,24 @@ public sellos = [
     }
   }
 
-ionViewDidEnter() {
-  this.selectedFaction = 'jupiter';
-  this.selectedFactionTitle = 'jupiter';
+async ionViewDidEnter() {
+  const faction: Faction = 'jupiter';
 
-  this.currentCards = this.deckService.filteredCards(
-    this.allCards,
-    'jupiter'
-  );
+  this.selectedFaction = faction;
+  this.selectedFactionTitle = faction;
+
+  const cards = await this.cardsLoader.loadFaction(faction);
+
+  this.currentCards = cards;
+  this.allCards = this.cardsLoader.allCards();
 
   this.searchTerm = '';
   this.searchOpen = false;
 
-  requestAnimationFrame(() => {
-    this.ionContent?.scrollToTop(300);
-  });
-}
+  this.updateSelectedCardsList();
 
+  this.ionContent?.scrollToTop(300);
+}
 
   async ngOnInit(): Promise<void> {
   const id = this.deckId();
@@ -323,8 +332,10 @@ ionViewDidEnter() {
     this.ionContent.scrollToTop(300);
   }
 
-  filterCardsByFaction(faction: string) {
-  if (faction === 'all') return;
+async filterCardsByFaction(faction: Faction) {
+  await this.cardsLoader.loadFaction(faction);
+
+  this.allCards = this.cardsLoader.allCards();
 
   this.currentCards = this.deckService.filteredCards(
     this.allCards,
@@ -333,9 +344,9 @@ ionViewDidEnter() {
 
   this.selectedFaction = faction;
   this.selectedFactionTitle = faction;
+
   this.scrollToTop();
 }
-
 
  filterCards(searchTerm: string) {
   this.searchTerm = searchTerm.trim().toLowerCase();
@@ -350,10 +361,11 @@ ionViewDidEnter() {
 }
 
   const filtered = this.deckService.filterItems(
-    this.allCards,
-    this.searchTerm,
-    ['name', 'faction', 'rarity', 'tags']
-  );
+  this.allCards,
+  this.searchTerm,
+  ['name', 'faction', 'rarity', 'tags']
+);
+
 
   this.currentCards = filtered;
   this.selectedFactionTitle = 'resultados de búsqueda';
