@@ -82,120 +82,125 @@ export class EstadisticsComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  get cardsOnly(): Card[] {
-    return this.maindeck
-      .filter(i => i.data)
-      .map(i => i.data!);
-  }
 
   /* ================= COSTO ================= */
-  private renderCostChart(): Chart | null {
-    const ctx = this.costChart?.nativeElement.getContext('2d');
-    if (!ctx) return null;
+ private renderCostChart(): Chart | null {
+  const ctx = this.costChart?.nativeElement.getContext('2d');
+  if (!ctx) return null;
 
-    const costMap: Record<number, number> = {};
-    for (const c of this.cardsOnly) {
-      const cost = c.cost + c.factionCost;
-      costMap[cost] = (costMap[cost] || 0) + 1;
-    }
+  const costMap: Record<number, number> = {};
 
-    return new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: Object.keys(costMap),
-        datasets: [{ label: 'Cantidad', data: Object.values(costMap) }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: true
-      }
-    });
+  for (const item of this.maindeck) {
+    if (!item.data) continue;
+
+    const cost = item.data.cost + item.data.factionCost;
+    costMap[cost] = (costMap[cost] || 0) + item.amount;
   }
+
+  return new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: Object.keys(costMap),
+      datasets: [{ label: 'Cantidad', data: Object.values(costMap) }]
+    },
+    options: { responsive: true, maintainAspectRatio: true }
+  });
+}
+
 
   /* ================= TIPO ================= */
-  private renderTypeChart(): Chart | null {
-    const ctx = this.typeChart?.nativeElement.getContext('2d');
-    if (!ctx) return null;
+ private renderTypeChart(): Chart | null {
+  const ctx = this.typeChart?.nativeElement.getContext('2d');
+  if (!ctx) return null;
 
-    const typeMap: Record<string, number> = {};
-    for (const c of this.cardsOnly) {
-      const type =
-        c.isSeal ? 'Sello' :
-        c.isToken ? 'Token' :
-        c.isQuickSpell ? 'Hechizo Rápido' :
-        c.isSlowSpell ? 'Hechizo Lento' :
-        c.isEstructure ? 'Estructura' :
-        c.isArtifact ? 'Artefacto' :
-        'Criatura';
+  const typeMap: Record<string, number> = {};
 
-      typeMap[type] = (typeMap[type] || 0) + 1;
-    }
+  for (const item of this.maindeck) {
+    if (!item.data) continue;
 
-    return new Chart(ctx, {
-      type: 'pie',
-      data: {
-        labels: Object.keys(typeMap),
-        datasets: [{ data: Object.values(typeMap) }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: true
-      }
-    });
+    const c = item.data;
+    const type =
+      c.isSeal ? 'Sello' :
+      c.isToken ? 'Token' :
+      c.isQuickSpell ? 'Hechizo Rápido' :
+      c.isSlowSpell ? 'Hechizo Lento' :
+      c.isEstructure ? 'Estructura' :
+      c.isArtifact ? 'Artefacto' :
+      'Criatura';
+
+    typeMap[type] = (typeMap[type] || 0) + item.amount;
   }
+
+  return new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: Object.keys(typeMap),
+      datasets: [{ data: Object.values(typeMap) }]
+    },
+    options: { responsive: true, maintainAspectRatio: true }
+  });
+}
+
 
   /* ================= FACCIÓN ================= */
   private renderFactionChart(): Chart | null {
-    const ctx = this.factionChart?.nativeElement.getContext('2d');
-    if (!ctx) return null;
+  const ctx = this.factionChart?.nativeElement.getContext('2d');
+  if (!ctx) return null;
 
-    const factionMap: Record<string, number> = {};
-    for (const c of this.cardsOnly) {
-      factionMap[c.faction] = (factionMap[c.faction] || 0) + 1;
-    }
+  const factionMap: Record<string, number> = {};
 
-    const labels = Object.keys(factionMap);
-    const values = Object.values(factionMap);
-    const colors = labels.map(f => this.FACTION_COLORS[f] ?? '#999');
+  for (const item of this.maindeck) {
+    if (!item.data) continue;
 
-    return new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels,
-        datasets: [{
-          label: 'Cantidad',
-          data: values,
-          backgroundColor: colors
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: true,
-        scales: { y: { beginAtZero: true } }
-      }
-    });
+    factionMap[item.data.faction] =
+      (factionMap[item.data.faction] || 0) + item.amount;
   }
+
+  const labels = Object.keys(factionMap);
+  const values = Object.values(factionMap);
+  const colors = labels.map(f => this.FACTION_COLORS[f] ?? '#999');
+
+  return new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Cantidad',
+        data: values,
+        backgroundColor: colors
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: { y: { beginAtZero: true } }
+    }
+  });
+}
+
 
   /* ================= RAREZA ================= */
   private renderRarityChart(): Chart | null {
-    const ctx = this.rarityChart?.nativeElement.getContext('2d');
-    if (!ctx) return null;
+  const ctx = this.rarityChart?.nativeElement.getContext('2d');
+  if (!ctx) return null;
 
-    const rarityMap: Record<string, number> = {};
-    for (const c of this.cardsOnly) {
-      rarityMap[c.rarity] = (rarityMap[c.rarity] || 0) + 1;
-    }
+  const rarityMap: Record<string, number> = {};
 
-    return new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: Object.keys(rarityMap),
-        datasets: [{ data: Object.values(rarityMap) }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: true
-      }
-    });
+  for (const item of this.maindeck) {
+    if (!item.data) continue;
+
+    rarityMap[item.data.rarity] =
+      (rarityMap[item.data.rarity] || 0) + item.amount;
   }
+
+  return new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: Object.keys(rarityMap),
+      datasets: [{ data: Object.values(rarityMap) }]
+    },
+    options: { responsive: true, maintainAspectRatio: true }
+  });
+}
+
 }
