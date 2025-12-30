@@ -105,12 +105,7 @@ async ionViewDidEnter() {
   this.selectedFactionTitle = faction;
 
   const cards = await this.cardsLoader.loadFaction(faction);
-
   this.currentCards = cards;
-  this.allCards = this.cardsLoader.allCards();
-
-  // 🔴 CLAVE
-  this.updateSelectedCardsList();
 
   this.searchTerm = '';
   this.searchOpen = false;
@@ -119,28 +114,28 @@ async ionViewDidEnter() {
 }
 
 
-  async ngOnInit(): Promise<void> {
+
+async ngOnInit(): Promise<void> {
+  await this.cardsLoader.loadAll();
+  this.allCards = this.cardsLoader.allCards();
+
   const id = this.deckId();
+  if (!id) return;
 
-  if (id) {
-    const deck = await this.deckService.getDeckById(id);
+  const deck = await this.deckService.getDeckById(id);
+  if (!deck) return;
 
-    if (deck) {
-      this.currentDeck = deck;
-      this.deckName = deck.name;
+  this.currentDeck = deck;
+  this.deckName = deck.name;
 
-      // 🔴 CARGA COLOR DESDE STORAGE
-      await this.deckService.getDeckColor(id);
+  await this.deckService.getDeckColor(id);
 
-      this.savedAmounts = {};
-      for (const c of deck.cards) {
-        this.savedAmounts[c.id] = c.amount ?? 0;
-      }
-
-      this.updateSelectedCardsList();
-      return;
-    }
+  this.savedAmounts = {};
+  for (const c of deck.cards) {
+    this.savedAmounts[c.id] = c.amount ?? 0;
   }
+
+  this.updateSelectedCardsList();
 }
 
 
@@ -332,8 +327,6 @@ async ionViewDidEnter() {
 async filterCardsByFaction(faction: Faction) {
   await this.cardsLoader.loadFaction(faction);
 
-  this.allCards = this.cardsLoader.allCards();
-
   this.currentCards = this.deckService.filteredCards(
     this.allCards,
     faction
@@ -344,6 +337,7 @@ async filterCardsByFaction(faction: Faction) {
 
   this.scrollToTop();
 }
+
 
  filterCards(searchTerm: string) {
   this.searchTerm = searchTerm.trim().toLowerCase();
