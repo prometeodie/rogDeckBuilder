@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ExpandedDeckCard } from 'src/app/interfaces/expanded.deck.card.interface';
 import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
 import { IonIcon } from "@ionic/angular/standalone";
@@ -17,7 +17,7 @@ type SortBy = 'name' | 'amount' | 'faction' | 'rarity';
   standalone: true,
   imports: [CommonModule, ImageViewerComponent, IonIcon, FormsModule],
 })
-export class DeckCardsComponent implements OnInit {
+export class DeckCardsComponent implements OnChanges {
 
   @Input() mainCards: ExpandedDeckCard[] = [];
   @Input() sideCards: ExpandedDeckCard[] = [];
@@ -36,18 +36,22 @@ export class DeckCardsComponent implements OnInit {
     addIcons({ 'grid-outline': gridOutline });
   }
 
-  ngOnInit() {}
+
+ngOnChanges(changes: SimpleChanges) {
+  const mainChanged = changes['mainCards'] && this.mainCards.length;
+  const sideChanged = changes['sideCards'] && this.sideCards.length;
+
+  if (mainChanged || sideChanged) {
+    this.sortBy = 'amount';
+    this.applySorting();
+  }
+}
+
 
   openCloseViewer(img: string) {
     this.showImg = !this.showImg;
     this.img = this.showImg ? img : '';
   }
-
-  /**
-   * Convierte la rareza (string) a un número para ordenar.
-   * Aumenta el número según más "rara" (legendary > epic > rare > common).
-   * Ajusta valores si tu dominio usa otra escala.
-   */
   private rarityToNumber(rarity?: string | null): number {
     if (!rarity) return 0;
     const key = String(rarity).toLowerCase().trim();
@@ -60,7 +64,7 @@ export class DeckCardsComponent implements OnInit {
       unlimited: 1
     };
 
-    return map[key] ?? 0; // fallback 0 para valores inesperados
+    return map[key] ?? 0;
   }
 
   /** =========================================
@@ -69,7 +73,6 @@ export class DeckCardsComponent implements OnInit {
   applySorting() {
     const sorter = this.deckService.sortCards.bind(this.deckService);
 
-    // Preparamos lista para el servicio: rarity ya numérica
     const mainForSort = this.mainCards.map(c => ({
       id: c.id,
       name: c.data?.name ?? '',
@@ -86,18 +89,15 @@ export class DeckCardsComponent implements OnInit {
       rarity: this.rarityToNumber(c.data?.rarity ?? null)
     }));
 
-    // Callback que el servicio usará para preguntar por rarity por id
     const getRarityValueForMain = (id: string) =>
       this.rarityToNumber(this.mainCards.find(x => x.id === id)?.data?.rarity ?? null);
 
     const getRarityValueForSide = (id: string) =>
       this.rarityToNumber(this.sideCards.find(x => x.id === id)?.data?.rarity ?? null);
 
-    // Ordenamos (service devuelve un array de SortableCard)
     const sortedMain = sorter(mainForSort, this.sortBy, getRarityValueForMain);
     const sortedSide = sorter(sideForSort, this.sortBy, getRarityValueForSide);
 
-    // Reconstruimos mainCards / sideCards manteniendo la data original y actualizando el orden
     this.mainCards = sortedMain.map(s => {
       const orig = this.mainCards.find(c => c.id === s.id)!;
       return { ...orig, amount: s.amount };
@@ -109,11 +109,9 @@ export class DeckCardsComponent implements OnInit {
     });
   }
 
-  /** Toggle y aplicar */
   onSortChangeAndClose() {
     this.sortMenuOpen = !this.sortMenuOpen;
 
-    // si cerramos el popup aplicamos el orden (puedes cambiar la lógica)
     if (!this.sortMenuOpen) {
       this.applySorting();
     }
