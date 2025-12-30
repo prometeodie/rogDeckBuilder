@@ -86,9 +86,10 @@ goToDeck(deckId: string) {
   public deckColor = this.deckService.deckColor;
 
 async ngOnInit() {
-  await this.cardsLoader.allCards();
-  this.allCards = this.cardsLoader.allCards();
+  await this.cardsLoader.loadAll();     // 👈 cargás todas las facciones
+  this.allCards = this.cardsLoader.allCards(); // 👈 leés el signal
 }
+
 
 async getUser(): Promise<UserIdentityData | null> {
   return this.userService.getUserData();
@@ -109,42 +110,45 @@ async downloadDeckImage(deckId: string) {
   try {
     this.showExport = true;
 
+    // 🔒 GARANTÍA ABSOLUTA DE DATOS
+    await this.cardsLoader.loadAll();
+    this.allCards = this.cardsLoader.allCards();
+
     const deck = await this.deckService.getDeckById(deckId);
     if (!deck) return;
 
     const allCards: Card[] = this.allCards;
 
     this.mainDeck = deck.cards.map(c => {
-      const card = allCards.find(x => x.id === c.id);
-      return {
-        id: c.id,
-        title: card?.name ?? '???',
-        img: card?.img ?? '',
-        faction: card?.faction ?? '',
-        qty: c.amount,
-        banned: card?.banned
-      };
-    });
+  const card = allCards.find(x => x.id === c.id);
+  return {
+    id: c.id,
+    title: card?.name ?? '???',
+    img: card?.img ?? '',
+    faction: card?.faction ?? '',
+    qty: c.amount,
+    banned: card?.banned ?? false
+  };
+});
 
-    this.sideDeck = deck.sideDeck.cards.map(c => {
-      const card = allCards.find(x => x.id === c.id);
-      return {
-        id: c.id,
-        title: card?.name ?? '???',
-        img: card?.img ?? '',
-        faction: card?.faction ?? '',
-        qty: c.amount,
-        banned: card?.banned
-      };
-    });
+
+   this.sideDeck = deck.sideDeck.cards.map(c => {
+  const card = allCards.find(x => x.id === c.id);
+  return {
+    id: c.id,
+    title: card?.name ?? '???',
+    img: card?.img ?? '',
+    faction: card?.faction ?? '',
+    qty: c.amount,
+    banned: card?.banned ?? false
+  };
+});
+
 
     this.cdr.detectChanges();
-
     await new Promise<void>(resolve => {
       requestAnimationFrame(() => {
-        this.exportDeckImage.exportRenderedDeck(deck.name).then(() => {
-          resolve();
-        });
+        this.exportDeckImage.exportRenderedDeck(deck.name).then(resolve);
       });
     });
 
@@ -154,6 +158,7 @@ async downloadDeckImage(deckId: string) {
     this.closeToast();
   }
 }
+
 
 
 getDeckBackground(deck: Deck): string {

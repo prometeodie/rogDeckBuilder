@@ -33,6 +33,7 @@ export class DeckExportComponentComponent implements OnInit, OnChanges {
   public sideDeckTotalCards = 0;
 
   ngOnInit(): void {
+    console.log('asdasd',this.mainDeck);
     this.userService.getUserIdentity().then(user => {
       this.user = user;
     });
