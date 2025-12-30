@@ -23,7 +23,6 @@ import { ImageViewerComponent } from 'src/app/components/image-viewer/image-view
 import { Deck } from 'src/app/interfaces/deck.interface';
 import { DecksCardsService } from 'src/app/services/decks-cards';
 import { Card } from 'src/app/interfaces/card.interface';
-// import { Cards } from 'src/app/cards-testing';
 import { SideBarComponent } from 'src/app/components/side-bar/side-bar.component';
 import { SortableCard } from 'src/app/interfaces/sortable.card.interface';
 import { AlertController } from '@ionic/angular';
@@ -51,9 +50,6 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
 
   public allCards: Card[] = [];
   public currentCards: Card[] = [];
-
-
-
   public sellos: ReadonlyArray<{
   img: string;
   faction: Faction;
@@ -102,7 +98,6 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
       document.documentElement.style.setProperty('--nav-height', nav.offsetHeight + 'px');
     }
   }
-
 async ionViewDidEnter() {
   const faction: Faction = 'jupiter';
 
@@ -114,13 +109,15 @@ async ionViewDidEnter() {
   this.currentCards = cards;
   this.allCards = this.cardsLoader.allCards();
 
+  // 🔴 CLAVE
+  this.updateSelectedCardsList();
+
   this.searchTerm = '';
   this.searchOpen = false;
 
-  this.updateSelectedCardsList();
-
   this.ionContent?.scrollToTop(300);
 }
+
 
   async ngOnInit(): Promise<void> {
   const id = this.deckId();
