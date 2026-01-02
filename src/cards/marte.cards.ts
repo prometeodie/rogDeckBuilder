@@ -3,7 +3,7 @@ import { Card } from "src/app/interfaces/card.interface";
 export const MARTE_CARDS: Card[] = [
   {
     "id": "1766430020798",
-    "name": "Sello",
+    "name": "Sello Marte",
     "faction": "marte",
     "rarity": "unlimited",
     "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766511563/marte-rog/marte_ubutpk.jpg",
