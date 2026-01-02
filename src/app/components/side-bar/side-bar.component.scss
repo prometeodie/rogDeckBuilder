@@ -108,27 +108,37 @@
   position: relative;
 
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 0.25rem;
 
   background: var(--app-surface-2);
   color: var(--app-text);
 
   padding: 0.6rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
 }
 
 .item-name {
   font-size: 0.7rem;
   line-height: 1.4;
   font-weight: 600;
+
+  flex: 1 1 auto;
+  min-width: 0;
+
+  overflow-wrap: break-word;
+  word-break: normal;
 }
+
 
 .item-amount {
   font-size: 0.9rem;
   font-weight: bold;
+  white-space: nowrap;
   margin-left: 0.25rem;
 }
+
 
 /* ======================================================
    ================== DELETE ============================
