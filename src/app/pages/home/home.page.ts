@@ -19,6 +19,7 @@ import { NewUploadDeckBtnComponent } from "src/app/components/new-upload-deck-bt
 import { AnimationComponent } from 'src/app/components/animation/animation.component';
 import { AlertController } from '@ionic/angular';
 import Swal from 'sweetalert2';
+import { NotesUpdateOverlayComponent } from 'src/app/components/update-notifier-component/update-notifier-component.component';
 
 @Component({
   selector: 'home',
@@ -38,7 +39,8 @@ import Swal from 'sweetalert2';
     DecksComponent,
     RogLogoComponent,
     NewUploadDeckBtnComponent,
-    AnimationComponent
+    AnimationComponent,
+    NotesUpdateOverlayComponent
 ]
 })
 export class HomePage implements OnInit {
@@ -46,12 +48,14 @@ export class HomePage implements OnInit {
   private userService = inject(User);
   private decksService = inject(DecksCardsService);
   private router = inject(Router);
-  private alertCtrl = inject(AlertController);
 
   public showUserModal: boolean = false;
   public identity: UserIdentityData | null = null;
   public decks: Deck[] = [];
   public showSplash: boolean = false;
+  public showNotes: boolean = false;
+  public currentNotesId: string = '8';
+  public noteImg: string = 'https://res.cloudinary.com/dzkxl45xy/image/upload/v1767813929/notes/WhatsApp_Image_2026-01-07_at_00.57.40_gzifby.jpg';
 
   constructor() {
       addIcons({
@@ -68,13 +72,13 @@ export class HomePage implements OnInit {
     if (!this.identity) {
       this.showUserModal = true;
     }
-
     await this.loadDecks();
   }
 
   ngAfterViewInit() {
-  setTimeout(() => {
-    this.showSplash = false;
+    setTimeout(() => {
+      this.showSplash = false;
+      this.checkNotesVersion();
   }, 4000);
 }
 
@@ -120,10 +124,8 @@ async uploadDeck() {
 
       const importedDeck = await this.decksService.saveImportedDeck(parsed);
 
-      // refrescar lista
       this.decks = [...await this.decksService.getDecks()];
 
-      // 🔴 MOSTRAR ALERT DESDE EL COMPONENTE
       await this.showDeckInfo(importedDeck);
 
     } catch (error) {
@@ -133,6 +135,18 @@ async uploadDeck() {
 
   input.click();
 }
+
+closeNotes(){
+  this.showNotes = false;
+}
+
+private checkNotesVersion(): void {
+  const storedNotesId = localStorage.getItem('notesId');
+
+  this.showNotes = storedNotesId !== this.currentNotesId;
+}
+
+
 async showDeckInfo(deck: Deck) {
   const creator = deck.creator ?? 'Desconocido';
 

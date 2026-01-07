@@ -15,4 +15,5 @@ export interface Card {
   isArtifact?:boolean;
   isEstructure?:boolean;
   isTerreno?:boolean;
+  copyLimit?: number;
 }

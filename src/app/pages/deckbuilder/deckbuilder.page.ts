@@ -68,7 +68,6 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
   private deckService = inject(DecksCardsService);
   private alertCtrl = inject(AlertController);
 
-
   public deckColor = this.deckService.deckColor;
   public searchOpen = false;
   public viewImg = false;
@@ -130,12 +129,30 @@ async ngOnInit(): Promise<void> {
 
   await this.deckService.getDeckColor(id);
 
+ this.rebuildSavedAmounts(this.currentDeck);
+
+  this.updateSelectedCardsList();
+
+  const result = this.deckService.checkLimitedCards(this.currentDeck);
+
+ if (result.modifiedCards.length > 0) {
+  this.currentDeck = result.deck;
+  await this.deckService.updateDeck(this.currentDeck);
+  this.updateSelectedCardsList();
+  this.rebuildSavedAmounts(this.currentDeck);
+  for (const card of result.modifiedCards) {
+    await this.deckService.showConfirmAlert(
+      `La carta "${card.cardName}" fue ajustada al máximo permitido (${card.copyLimit}).`
+    );
+  }
+}
+}
+
+private rebuildSavedAmounts(deck: Deck) {
   this.savedAmounts = {};
   for (const c of deck.cards) {
     this.savedAmounts[c.id] = c.amount ?? 0;
   }
-
-  this.updateSelectedCardsList();
 }
 
 

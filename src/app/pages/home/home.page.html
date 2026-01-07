@@ -39,3 +39,6 @@
 @if (showSplash) {
   <animation/>
 }
+@if(showNotes){
+  <update-notifier-component [imageSrc]="noteImg" [notesId]="currentNotesId" (closed)="closeNotes()"/>
+}

@@ -1,4 +1,3 @@
-// src/app/components/cards/cards.component.ts
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -94,38 +93,55 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
     return `../../../assets/SELLOS/${file}`;
   }
 
-  async increase(): Promise<void> {
-    if (!this.deckId) return;
+async increase(): Promise<void> {
+  if (!this.deckId) return;
 
-    const isUnlimited = this.cardData.isSeal || this.cardData.isToken;
+  const isUnlimited = this.cardData.isSeal || this.cardData.isToken;
+  const copyLimit = this.cardData.copyLimit ?? 0;
 
-    if (!isUnlimited) {
-      const maxRarity = this.rarityLimits[this.cardData.rarity ?? 'common'] ?? 4;
-      if (maxRarity > 0 && this.count >= maxRarity) {
-        return;
-      }
-    }
-
-    const totalNow = this.mode === 'main'
-      ? await this.deckService.getTotalCardsCountInMain(this.deckId)
-      : await this.deckService.getTotalCardsCountInSide(this.deckId);
-
-    const cap = this.mode === 'main' ? 40 : 15;
-
-    if (totalNow >= cap) {
-      this.showToast(
-        this.mode === 'main'
-          ? 'El mazo principal ya está completo.'
-          : 'El Side Deck ya está completo.',
-        'warning',
+  if (!isUnlimited) {
+    if (copyLimit > 0 && this.count >= copyLimit) {
+      const singularPlural = copyLimit === 1 ? 'copia' : 'copias';
+      this.deckService.showToast(
+        `Esta carta está limitada por reglamento a ${copyLimit} ${singularPlural}.`,
+        'info',
         'center'
       );
       return;
     }
 
-    this.count++;
-    this.saveSubject.next(this.count);
+    if (copyLimit === 0) {
+      const maxRarity =
+        this.rarityLimits[this.cardData.rarity ?? 'common'] ?? 4;
+
+      if (maxRarity > 0 && this.count >= maxRarity) {
+        return;
+      }
+    }
   }
+
+  const totalNow = this.mode === 'main'
+    ? await this.deckService.getTotalCardsCountInMain(this.deckId)
+    : await this.deckService.getTotalCardsCountInSide(this.deckId);
+
+  const cap = this.mode === 'main' ? 40 : 15;
+
+  if (totalNow >= cap) {
+    this.deckService.showToast(
+      this.mode === 'main'
+        ? 'El mazo principal ya está completo.'
+        : 'El Side Deck ya está completo.',
+      'warning',
+      'center'
+    );
+    return;
+  }
+
+  this.count++;
+  this.saveSubject.next(this.count);
+}
+
+
 
   decrease(): void {
     if (this.count > 0) {
@@ -165,7 +181,7 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
       this.count = finalAmount;
 
       if (finalAmount < amount) {
-        this.showToast(
+        this.deckService.showToast(
           this.mode === 'main'
             ? 'Se alcanzó el límite del mazo principal. Cantidad ajustada.'
             : 'Se alcanzó el límite del Side Deck. Cantidad ajustada.',
@@ -179,7 +195,7 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
 
     if (added) {
       if (this.cardData.banned) {
-        this.showToast(
+        this.deckService.showToast(
           'Atención: agregaste una carta BANEADA.',
           'error',
           'top'
@@ -187,7 +203,7 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
       }
 
       if ((this.cardData as any).isToken) {
-        this.showToast(
+        this.deckService.showToast(
           'Agregaste un TOKEN al mazo.',
           'info',
           'top'
@@ -210,32 +226,4 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
   this.imgLoaded = true;
   }
 
-
-  private showToast(
-    message: string,
-    icon: SweetAlertIcon,
-    position: SweetAlertPosition = 'top'
-  ) {
-    const backgroundByIcon: Record<SweetAlertIcon, string> = {
-      success: '#2ecc71',
-      warning: '#cfaf2eff',
-      error: '#c0392b',
-      info: '#2980b9',
-      question: '#34495e'
-    };
-
-    const textColor = icon === 'warning' ? '#000' : '#fff';
-
-    Swal.fire({
-      toast: true,
-      position,
-      icon,
-      title: message,
-      showConfirmButton: false,
-      timer: 2000,
-      timerProgressBar: true,
-      background: backgroundByIcon[icon],
-      color: textColor
-    });
-  }
 }

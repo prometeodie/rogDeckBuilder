@@ -78,7 +78,8 @@ export const NEPTUNO_CARDS: Card[] =[
       "Asalto",
       "Creo",
       "Cofre Codicia"
-    ]
+    ],
+    "copyLimit": 2
   },
   {
     "id": "1766788483837",
@@ -191,7 +192,8 @@ export const NEPTUNO_CARDS: Card[] =[
       "Asalto",
       "Campo",
       "Enfermedad"
-    ]
+    ],
+    "copyLimit": 1,
   },
   {
     "id": "1766788834186",

@@ -86,8 +86,8 @@ goToDeck(deckId: string) {
   public deckColor = this.deckService.deckColor;
 
 async ngOnInit() {
-  await this.cardsLoader.loadAll();     // 👈 cargás todas las facciones
-  this.allCards = this.cardsLoader.allCards(); // 👈 leés el signal
+  await this.cardsLoader.loadAll();
+  this.allCards = this.cardsLoader.allCards();
 }
 
 
@@ -104,60 +104,76 @@ async deleteDeck(id: string) {
   this.deckDeleted.emit();
 }
 
-async downloadDeckImage(deckId: string) {
+async downloadDeckImage(deckId: string): Promise<void> {
   this.showDownloadingToast('Generando imagen del mazo...');
 
-  try {
-    this.showExport = true;
+  let canExport = false;
 
-    // 🔒 GARANTÍA ABSOLUTA DE DATOS
+  try {
     await this.cardsLoader.loadAll();
     this.allCards = this.cardsLoader.allCards();
 
     const deck = await this.deckService.getDeckById(deckId);
     if (!deck) return;
 
+    const result = this.deckService.checkLimitedCards(deck);
+
+    if (result.modifiedCards.length > 0) {
+      for (const card of result.modifiedCards) {
+        await this.deckService.showConfirmAlert(
+          `La carta "${card.cardName}" supera el máximo permitido (${card.copyLimit} copias).\n\nEl mazo debe corregirse antes de poder generar la imagen.`
+        );
+      }
+      return;
+    }
+    canExport = true;
+    this.showExport = true;
+
     const allCards: Card[] = this.allCards;
 
     this.mainDeck = deck.cards.map(c => {
-  const card = allCards.find(x => x.id === c.id);
-  return {
-    id: c.id,
-    title: card?.name ?? '???',
-    img: card?.img ?? '',
-    faction: card?.faction ?? '',
-    qty: c.amount,
-    banned: card?.banned ?? false
-  };
-});
+      const card = allCards.find(x => x.id === c.id);
+      return {
+        id: c.id,
+        title: card?.name ?? '???',
+        img: card?.img ?? '',
+        faction: card?.faction ?? '',
+        qty: c.amount,
+        banned: card?.banned ?? false
+      };
+    });
 
-
-   this.sideDeck = deck.sideDeck.cards.map(c => {
-  const card = allCards.find(x => x.id === c.id);
-  return {
-    id: c.id,
-    title: card?.name ?? '???',
-    img: card?.img ?? '',
-    faction: card?.faction ?? '',
-    qty: c.amount,
-    banned: card?.banned ?? false
-  };
-});
-
+    this.sideDeck = deck.sideDeck.cards.map(c => {
+      const card = allCards.find(x => x.id === c.id);
+      return {
+        id: c.id,
+        title: card?.name ?? '???',
+        img: card?.img ?? '',
+        faction: card?.faction ?? '',
+        qty: c.amount,
+        banned: card?.banned ?? false
+      };
+    });
 
     this.cdr.detectChanges();
+
     await new Promise<void>(resolve => {
       requestAnimationFrame(() => {
-        this.exportDeckImage.exportRenderedDeck(deck.name).then(resolve);
+        this.exportDeckImage
+          .exportRenderedDeck(deck.name)
+          .then(resolve);
       });
     });
 
   } finally {
-    this.showExport = false;
-    this.cdr.detectChanges();
+    if (canExport) {
+      this.showExport = false;
+      this.cdr.detectChanges();
+    }
     this.closeToast();
   }
 }
+
 
 
 

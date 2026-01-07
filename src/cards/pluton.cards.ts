@@ -954,7 +954,7 @@ export const PLUTON_CARDS: Card[] =[
     "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766344819/pluton-rog/MAGIA-LENTA-3-Pacto-Tenebroso-733x1024_s6fskc.webp",
     "factionCost": 3,
     "cost": 0,
-    "banned": true,
+    "banned": false,
     "isSeal": false,
     "isToken": false,
     "isQuickSpell": false,

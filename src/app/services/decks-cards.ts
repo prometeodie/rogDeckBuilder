@@ -1,9 +1,12 @@
 import { IONIC_DEFAULT_GRAY } from './../constant/decks.colors';
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Deck } from '../interfaces/deck.interface';
 import { DeckCard } from '../interfaces/deck-card.interface';
 import { Card } from '../interfaces/card.interface';
 import { SortableCard } from '../interfaces/sortable.card.interface';
+import { limitedCards } from 'src/cards/limited.cards';
+import { AlertController } from '@ionic/angular';
+import Swal, { SweetAlertIcon, SweetAlertPosition } from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +20,7 @@ export class DecksCardsService {
   // =============================
   private _deckColor = signal<string | ''>(IONIC_DEFAULT_GRAY);
   deckColor = this._deckColor.asReadonly();
+  private alertCtrl = inject(AlertController);
 
   // =============================
   // NORMALIZADOR
@@ -95,7 +99,6 @@ export class DecksCardsService {
     if (index !== -1) {
       decks[index] = this.normalize(updatedDeck);
       await this.saveDecks(decks);
-
     }
   }
 
@@ -304,4 +307,92 @@ async saveImportedDeck(deck: Deck): Promise<Deck> {
     if (!deck?.sideDeck) return 0;
     return deck.sideDeck.cards.reduce((acc, c) => acc + (c.amount ?? 0), 0);
   }
+
+ public checkLimitedCards(deck: Deck): {
+  deck: Deck;
+  modifiedCards: {
+    id: string;
+    cardName: string;
+    copyLimit: number;
+  }[];
+} {
+  const normalizedDeck = this.normalize(structuredClone(deck));
+  const modifiedCards: {
+    id: string;
+    cardName: string;
+    copyLimit: number;
+  }[] = [];
+
+  const applyLimits = (cards: DeckCard[]) => {
+    for (const limited of limitedCards) {
+      const card = cards.find(c => c.id === limited.id);
+      if (!card) continue;
+
+      if ((card.amount ?? 0) > limited.copyLimit) {
+        modifiedCards.push({
+          id: limited.id,
+          cardName: limited.cardName,
+          copyLimit: limited.copyLimit,
+        });
+
+        card.amount = limited.copyLimit;
+      }
+    }
+  };
+
+  applyLimits(normalizedDeck.cards);
+  applyLimits(normalizedDeck.sideDeck.cards);
+
+  return {
+    deck: normalizedDeck,
+    modifiedCards
+  };
 }
+
+// ALERTS AND TOASTS
+
+ public showToast(
+    message: string,
+    icon: SweetAlertIcon,
+    position: SweetAlertPosition = 'top'
+  ) {
+    const backgroundByIcon: Record<SweetAlertIcon, string> = {
+      success: '#2ecc71',
+      warning: '#cfaf2eff',
+      error: '#c0392b',
+      info: '#2980b9',
+      question: '#34495e'
+    };
+
+    const textColor = icon === 'warning' ? '#000' : '#fff';
+
+    Swal.fire({
+      toast: true,
+      position,
+      icon,
+      title: message,
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+      background: backgroundByIcon[icon],
+      color: textColor
+    });
+  }
+
+  public async showConfirmAlert(message: string): Promise<void> {
+  const alert = await this.alertCtrl.create({
+    header: 'Aviso de reglamento',
+    message,
+    buttons: [
+      {
+        text: 'OK',
+        role: 'confirm'
+      }
+    ],
+    backdropDismiss: false
+  });
+
+  await alert.present();
+}
+}
+

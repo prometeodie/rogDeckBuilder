@@ -66,7 +66,6 @@ export class DeckViewerComponent implements OnInit, ViewWillEnter {
   public loading = signal(true);
   public currentView = signal<'view1' | 'view2' | 'view3'>('view1');
 
-  /** Fuente reactiva */
   public cards = this.cardsLoader.allCards;
 
   public expandedMain = computed(() => {
@@ -111,23 +110,51 @@ export class DeckViewerComponent implements OnInit, ViewWillEnter {
   }
 
   ngOnInit(): void {
-    // NO cargar datos acá en Ionic
+
   }
 
   async ionViewWillEnter(): Promise<void> {
-    this.loading.set(true);
+  this.loading.set(true);
 
-    // 🔴 ORDEN CORRECTO
-    await this.cardsLoader.loadAll();
+  await this.cardsLoader.loadAll();
 
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      const found = await this.decksService.getDeckById(id);
-      this.deck.set(found ?? null);
-    }
-
+  const id = this.route.snapshot.paramMap.get('id');
+  if (!id) {
     this.loading.set(false);
+    return;
   }
+
+  const found = await this.decksService.getDeckById(id);
+  if (!found) {
+    this.loading.set(false);
+    return;
+  }
+
+  // 🔒 Chequeo de límites
+  const result = this.decksService.checkLimitedCards(found);
+
+  let finalDeck = found;
+
+  if (result.modifiedCards.length > 0) {
+    finalDeck = result.deck;
+
+    // Persistís el mazo corregido
+    await this.decksService.updateDeck(finalDeck);
+
+    // Alertas (una por carta)
+    for (const card of result.modifiedCards) {
+      await this.decksService.showConfirmAlert(
+        `La carta "${card.cardName}" fue ajustada al máximo permitido (${card.copyLimit}).`
+      );
+    }
+  }
+
+  // 🔥 CLAVE: actualizar el signal con una NUEVA referencia
+  this.deck.set({ ...finalDeck });
+
+  this.loading.set(false);
+}
+
 
   onSegmentChange(ev: any): void {
     this.currentView.set(ev.detail.value);
