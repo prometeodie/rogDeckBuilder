@@ -785,7 +785,7 @@ export const NEPTUNO_CARDS: Card[] =[
   },
   {
     "id": "1766792964850",
-    "name": "Trabajadoe del Muelle",
+    "name": "Trabajador del Muelle",
     "faction": "neptuno",
     "rarity": "epic",
     "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422303/neptuno-rog/CRIATURA-1-Trabajador-del-Muelle-733x1024_fzet0i.webp",
