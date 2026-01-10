@@ -928,7 +928,7 @@ export const PLUTON_CARDS: Card[] =[
     "name": "Explosíon Necrótica",
     "faction": "pluton",
     "rarity": "epic",
-    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766344785/pluton-rog/CRIATURA-2-Lich-del-casillo-733x1024_vsnftq.webp",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766344826/pluton-rog/MAGIA-RAPIDA-2-Explosion-Necrotica-733x1024_b4jnxl.webp",
     "factionCost": 2,
     "cost": 0,
     "banned": false,
