@@ -77,7 +77,8 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
   public selectedFaction: Faction = 'jupiter';
   public selectedFactionTitle: string = 'jupiter';
   public searchTerm: string = '';
-  public sortBy!: SortBy;
+  public sortBy: SortBy = 'amount';
+
 
   public editingTitle = false;
   public deckName = '';
@@ -404,26 +405,19 @@ async filterCardsByFaction(faction: Faction) {
     if (!this.selectedCards) return;
 
     this.selectedCards = this.deckService.sortCards(
-      this.selectedCards,
-      sortBy,
-      (id) => this.getRarityValue(id)
-    );
+  this.selectedCards,
+  sortBy,
+  (id) => this.getRarityValue(id));
+
   }
 
-  private getRarityValue(cardId: string): number {
-    const card = this.currentCards.find(c => c.id === cardId);
-    const rarityOrder: Record<string, number> = {
-      legendary: 5,
-      epic:      4,
-      rare:      3,
-      common:    2,
-      unlimited: 1
-    };
-    return rarityOrder[card?.rarity ?? 'common'];
-  }
+private getRarityValue(cardId: string): string {
+  const card = this.allCards.find(c => c.id === cardId);
+  return card?.rarity ?? '';
+}
 
   getGradient(): string {
-  const color = this.deckColor() ?? '#1f1f1f'; // Usa el color del mazo si está disponible, si no, usa el color por defecto.
-  return `linear-gradient(to top, ${color}, #1f1f1f)`; // Degradado de abajo hacia arriba
+  const color = this.deckColor() ?? '#1f1f1f';
+  return `linear-gradient(to top, ${color}, #1f1f1f)`;
 }
 }

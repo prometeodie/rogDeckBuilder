@@ -175,7 +175,7 @@ export const NEPTUNO_CARDS: Card[] =[
   },
   {
     "id": "1766788753894",
-    "name": " Geizhar",
+    "name": "Geizhar",
     "faction": "neptuno",
     "rarity": "epic",
     "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1766422306/neptuno-rog/CRIATURA-4-Geizhar-733x1024_rppapm.webp",

@@ -266,19 +266,65 @@ async saveImportedDeck(deck: Deck): Promise<Deck> {
     return cards.filter(card => card.faction === selectedFaction);
   }
 
-  sortCards(cards: SortableCard[], sortBy: 'name' | 'amount' | 'faction' | 'rarity', getRarityValue?: (id: string) => number): SortableCard[] {
-    const list = [...cards];
-    return list.sort((a, b) => {
-      switch (sortBy) {
-        case 'name': return a.name.localeCompare(b.name);
-        case 'amount': return b.amount - a.amount;
-        case 'faction': return a.faction.localeCompare(b.faction);
-        case 'rarity':
-          if (!getRarityValue) return 0;
-          return getRarityValue(b.id) - getRarityValue(a.id);
+sortCards(
+  cards: SortableCard[],
+  sortBy: 'name' | 'amount' | 'faction' | 'rarity',
+  getRarityValue?: (id: string) => string
+): SortableCard[] {
+
+  const list = [...cards];
+
+  const rarityOrder: Record<string, number> = {
+    legendary: 4,
+    epic: 3,
+    rare: 2,
+    common: 1
+  };
+
+  return list.sort((a, b) => {
+
+    switch (sortBy) {
+
+      case 'amount':
+        return b.amount - a.amount;
+
+      case 'name':
+        return a.name.localeCompare(
+          b.name,
+          'es',
+          { sensitivity: 'base' }
+        );
+
+      case 'faction':
+        return a.faction.localeCompare(
+          b.faction,
+          'es',
+          { sensitivity: 'base' }
+        );
+
+      case 'rarity': {
+        if (!getRarityValue) return 0;
+
+        const ra = rarityOrder[getRarityValue(a.id)] ?? 0;
+        const rb = rarityOrder[getRarityValue(b.id)] ?? 0;
+
+        if (rb !== ra) return rb - ra;
+
+        // desempate consistente
+        return a.name.localeCompare(
+          b.name,
+          'es',
+          { sensitivity: 'base' }
+        );
       }
-    });
-  }
+
+      default:
+        return 0;
+    }
+  });
+}
+
+
 
   private generateCopyName(baseName: string, existingNames: string[]): string {
     let copyIndex = 1;

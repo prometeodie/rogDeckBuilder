@@ -73,13 +73,13 @@ ngOnChanges(changes: SimpleChanges) {
   applySorting() {
     const sorter = this.deckService.sortCards.bind(this.deckService);
 
-    const mainForSort = this.mainCards.map(c => ({
-      id: c.id,
-      name: c.data?.name ?? '',
-      amount: c.amount,
-      faction: c.data?.faction ?? '',
-      rarity: this.rarityToNumber(c.data?.rarity ?? null)
-    }));
+      const mainForSort = this.mainCards.map(c => ({
+    id: c.id,
+    name: c.data?.name ?? '',
+    amount: c.amount,
+    faction: c.data?.faction ?? ''
+  }));
+
 
     const sideForSort = this.sideCards.map(c => ({
       id: c.id,
@@ -90,10 +90,12 @@ ngOnChanges(changes: SimpleChanges) {
     }));
 
     const getRarityValueForMain = (id: string) =>
-      this.rarityToNumber(this.mainCards.find(x => x.id === id)?.data?.rarity ?? null);
+  this.mainCards.find(x => x.id === id)?.data?.rarity ?? '';
+
 
     const getRarityValueForSide = (id: string) =>
-      this.rarityToNumber(this.sideCards.find(x => x.id === id)?.data?.rarity ?? null);
+  this.sideCards.find(x => x.id === id)?.data?.rarity ?? '';
+
 
     const sortedMain = sorter(mainForSort, this.sortBy, getRarityValueForMain);
     const sortedSide = sorter(sideForSort, this.sortBy, getRarityValueForSide);
