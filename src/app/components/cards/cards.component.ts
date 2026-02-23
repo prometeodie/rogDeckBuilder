@@ -11,7 +11,7 @@ import { DeckCard } from 'src/app/interfaces/deck-card.interface';
 import { addIcons } from 'ionicons';
 import { addOutline, removeOutline } from 'ionicons/icons';
 import { RomanPipe } from 'src/app/pipes/roman-pipe';
-import Swal, { SweetAlertPosition, SweetAlertIcon } from 'sweetalert2';
+import { limitedCards } from 'src/cards/limited.cards';
 
 @Component({
   selector: 'card',
@@ -34,6 +34,7 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
   @Input() deckId?: string;
   @Input() cardData!: Card;
   @Input() mode: 'main' | 'side' = 'main';
+
   @Output() ImgView = new EventEmitter<string>();
   @Output() amountChange = new EventEmitter<{
     id: string;
@@ -43,6 +44,7 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
 
   public count = 0;
   public imgLoaded = false;
+
   private saveSubject = new Subject<number>();
   private sub?: Subscription;
 
@@ -78,7 +80,7 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['initialCount'] && changes['initialCount'].currentValue !== undefined) {
+    if (changes['initialCount']?.currentValue !== undefined) {
       this.count = changes['initialCount'].currentValue;
     }
   }
@@ -87,61 +89,66 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
     this.sub?.unsubscribe();
   }
 
-  getSelloImg(): string {
-    const fac = this.cardData.faction?.toLowerCase();
-    const file = this.selloPorFaccion[fac] ?? 'SELLO-TIERRA.png';
-    return `../../../assets/SELLOS/${file}`;
+  // 🔥 LÍMITE REAL DE LA CARTA
+  private getCardLimit(): number {
+
+    const rule = limitedCards.find(l => l.id === this.cardData.id);
+    if (rule) return rule.copyLimit;
+
+    if (this.cardData.copyLimit && this.cardData.copyLimit > 0) {
+      return this.cardData.copyLimit;
+    }
+
+    return this.rarityLimits[this.cardData.rarity ?? 'common'] ?? 4;
   }
 
-async increase(): Promise<void> {
-  if (!this.deckId) return;
+  async increase(): Promise<void> {
+    if (!this.deckId) return;
 
-  const isUnlimited = this.cardData.isSeal || this.cardData.isToken;
-  const copyLimit = this.cardData.copyLimit ?? 0;
+    const isUnlimited = this.cardData.isSeal || this.cardData.isToken;
 
-  if (!isUnlimited) {
-    if (copyLimit > 0 && this.count >= copyLimit) {
-      const singularPlural = copyLimit === 1 ? 'copia' : 'copias';
+    if (!isUnlimited) {
+
+      const limit = this.getCardLimit();
+
+      const rule = limitedCards.find(l => l.id === this.cardData.id);
+
+    if (limit > 0 && this.count >= limit) {
+
+      if (rule) {
+        const singularPlural = limit === 1 ? 'copia' : 'copias';
+
+        this.deckService.showToast(
+          `Esta carta permite ${limit} ${singularPlural} por reglamento.`,
+          'info',
+          'center'
+        );
+      }
+
+      return;
+}
+    }
+
+    const totalNow = this.mode === 'main'
+      ? await this.deckService.getTotalCardsCountInMain(this.deckId)
+      : await this.deckService.getTotalCardsCountInSide(this.deckId);
+
+    const cap = this.mode === 'main' ? 40 : 15;
+
+    if (totalNow >= cap) {
       this.deckService.showToast(
-        `Esta carta está limitada por reglamento a ${copyLimit} ${singularPlural}.`,
-        'info',
+        this.mode === 'main'
+          ? 'El mazo principal ya está completo.'
+          : 'El Side Deck ya está completo.',
+        'warning',
         'center'
       );
       return;
     }
 
-    if (copyLimit === 0) {
-      const maxRarity =
-        this.rarityLimits[this.cardData.rarity ?? 'common'] ?? 4;
-
-      if (maxRarity > 0 && this.count >= maxRarity) {
-        return;
-      }
-    }
+    this.count++;
+    this.saveSubject.next(this.count);
   }
-
-  const totalNow = this.mode === 'main'
-    ? await this.deckService.getTotalCardsCountInMain(this.deckId)
-    : await this.deckService.getTotalCardsCountInSide(this.deckId);
-
-  const cap = this.mode === 'main' ? 40 : 15;
-
-  if (totalNow >= cap) {
-    this.deckService.showToast(
-      this.mode === 'main'
-        ? 'El mazo principal ya está completo.'
-        : 'El Side Deck ya está completo.',
-      'warning',
-      'center'
-    );
-    return;
-  }
-
-  this.count++;
-  this.saveSubject.next(this.count);
-}
-
-
 
   decrease(): void {
     if (this.count > 0) {
@@ -151,9 +158,11 @@ async increase(): Promise<void> {
   }
 
   private async attemptSave(amount: number): Promise<void> {
+
     if (!this.deckId) return;
 
     const deck = await this.deckService.getDeckById(this.deckId);
+
     let prevSaved = 0;
 
     if (deck) {
@@ -218,12 +227,17 @@ async increase(): Promise<void> {
     });
   }
 
+  getSelloImg(): string {
+    const fac = this.cardData.faction?.toLowerCase();
+    const file = this.selloPorFaccion[fac] ?? 'SELLO-TIERRA.png';
+    return `../../../assets/SELLOS/${file}`;
+  }
+
   showImg(): void {
     this.ImgView.emit(this.cardData.img);
   }
 
   onImgLoad(): void {
-  this.imgLoaded = true;
+    this.imgLoaded = true;
   }
-
 }

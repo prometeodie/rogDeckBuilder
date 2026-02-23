@@ -3,7 +3,9 @@
   <ion-list lines="full" class="list">
 
     <!-- MAIN DECK -->
-    <ion-label class="main-deck-label">MAZO <span>{{mainCardsAmount}}/40</span></ion-label>
+    <ion-label class="main-deck-label">
+      MAZO <span>{{ mainCardsAmount }}/40</span>
+    </ion-label>
 
     @if (mainCards.length === 0) {
       <ion-item>
@@ -14,14 +16,30 @@
     }
 
     @for (card of mainCards; track card.id) {
-      <ion-item class="card-row" (click)="openCloseViewer(card.data!.img)">
-        <ion-label class="card-name">{{ card.data?.name }}</ion-label>
-        <div class="card-amount">x{{ card.amount }}</div>
+      <ion-item
+        class="card-row"
+        (click)="openCloseViewer(card.data!.img)"
+      >
+              <img
+          slot="start"
+          class="thumb"
+          [src]="card.data!.img"
+          alt="card image"
+        />
+        <ion-label class="card-name">
+          {{ card.data?.name }}
+        </ion-label>
+
+        <div class="card-amount">
+          x{{ card.amount }}
+        </div>
       </ion-item>
     }
 
     <!-- SIDE DECK -->
-    <ion-label class="side-deck-label">SIDE DECK <span>{{sideCardsAmount}}/15</span></ion-label>
+    <ion-label class="side-deck-label">
+      SIDE DECK <span>{{ sideCardsAmount }}/15</span>
+    </ion-label>
 
     @if (sideCards.length === 0) {
       <ion-item>
@@ -32,10 +50,21 @@
     }
 
     @for (card of sideCards; track card.id) {
-      <ion-item class="card-row" (click)="openCloseViewer(card.data!.img)">
-        <ion-label class="card-name">{{ card.data?.name }}</ion-label>
-        <div class="card-amount">x{{ card.amount }}</div>
+
+      <ion-item
+        class="card-row"
+        (click)="openCloseViewer(card.data!.img)"
+      >
+        <ion-label class="card-name">
+          {{ card.data?.name }}
+        </ion-label>
+
+        <div class="card-amount">
+          x{{ card.amount }}
+        </div>
+
       </ion-item>
+
     }
 
   </ion-list>
@@ -43,5 +72,8 @@
 </div>
 
 @if (showImg) {
-  <image-viewer (closeViewer)="openCloseViewer('')" [img]="img" />
+  <image-viewer
+    (closeViewer)="openCloseViewer('')"
+    [img]="img"
+  />
 }

@@ -903,5 +903,204 @@ export const MARTE_CARDS: Card[] = [
       "Escudo mágico",
       "Gano"
     ]
+  },
+  {
+    "id": "1771879084853",
+    "name": "Devastadora",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1771875125/marte-rog/devastadora_cugqlt.png",
+    "factionCost": 1,
+    "cost": 0,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": true,
+    "isEstructure": false,
+    "isTerreno": false,
+    "tags": [
+      "Carta",
+      "Criatura",
+      "Equipado",
+      "otorgo",
+      "Robar"
+    ]
+  },
+  {
+    "id": "1771879135913",
+    "name": "Vanguardia Bojevnica",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1771875121/marte-rog/vanguardia_bojevnica_gvzu1v.jpg",
+    "factionCost": 2,
+    "cost": 0,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "isEstructure": false,
+    "isTerreno": false,
+    "tags": [
+      "Cargar",
+      "Gano",
+      "Venganza"
+    ]
+  },
+  {
+    "id": "1771879679149",
+    "name": "Gólem de anulación",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1771875126/marte-rog/golem_de_anulacion_zrdxip.png",
+    "factionCost": 2,
+    "cost": 1,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "isEstructure": false,
+    "isTerreno": false,
+    "tags": [
+      "Asalto",
+      "Gano",
+      "Magia"
+    ]
+  },
+  {
+    "id": "1771879729105",
+    "name": "Guerrero druida de sangre",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1771875122/marte-rog/guerrero_druida_de_sangre_fgtvkq.png",
+    "factionCost": 1,
+    "cost": 2,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "isEstructure": false,
+    "isTerreno": false,
+    "tags": [
+      "Asalto",
+      "Coste"
+    ]
+  },
+  {
+    "id": "1771879789248",
+    "name": "Gigante anciano",
+    "faction": "marte",
+    "rarity": "legendary",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1771875123/marte-rog/gigante_anciano_l0t7qe.png",
+    "factionCost": 2,
+    "cost": 2,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "isEstructure": false,
+    "isTerreno": false,
+    "tags": [
+      "Asalto"
+    ]
+  },
+  {
+    "id": "1771879830846",
+    "name": "Jefe orco del fuerte",
+    "faction": "marte",
+    "rarity": "legendary",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1771875123/marte-rog/jefe_orco_del_fuerte_nsxqms.png",
+    "factionCost": 4,
+    "cost": 0,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "isEstructure": false,
+    "isTerreno": false,
+    "tags": [
+      "Cargar"
+    ]
+  },
+  {
+    "id": "1771879888540",
+    "name": "Vanguardia Bjolnar",
+    "faction": "marte",
+    "rarity": "common",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1771875126/marte-rog/vanguardia_bjolnar_xk7kbr.png",
+    "factionCost": 2,
+    "cost": 2,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "isEstructure": false,
+    "isTerreno": false,
+    "tags": [
+      "Asalto",
+      "Ataque 360",
+      "Criatura",
+      "Entro"
+    ]
+  },
+  {
+    "id": "1771879964968",
+    "name": "Campeón de arena de sangre",
+    "faction": "marte",
+    "rarity": "rare",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1771875123/marte-rog/campeon_de_arena_de_sangre_c5bk5e.png",
+    "factionCost": 2,
+    "cost": 3,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "isEstructure": false,
+    "isTerreno": false,
+    "tags": [
+      "Daño",
+      "Finalizar",
+      "inflinjo"
+    ]
+  },
+  {
+    "id": "1771880027868",
+    "name": "Cazatalentos Jenkos",
+    "faction": "marte",
+    "rarity": "legendary",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1771875121/marte-rog/cazatalentos_jenkos_ycxy6o.jpg",
+    "factionCost": 2,
+    "cost": 3,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": false,
+    "isArtifact": false,
+    "isEstructure": false,
+    "isTerreno": false,
+    "tags": [
+      "Asalto",
+      "Busco",
+      "Criatura",
+      "Daño",
+      "inflinjo",
+      "Último suspiro"
+    ]
   }
 ]

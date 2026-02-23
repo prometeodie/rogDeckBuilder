@@ -7,7 +7,8 @@ export type Faction =
   | 'pluton'
   | 'saturno'
   | 'tierra'
-  | 'neptuno';
+  | 'neptuno'
+  | 'mercurio';
 
 @Injectable({ providedIn: 'root' })
 export class CardsLoaderService {
@@ -37,6 +38,9 @@ export class CardsLoaderService {
 
     neptuno: async () =>
       (await import('../../cards/neptuno.cards')).NEPTUNO_CARDS,
+
+    mercurio: async () =>
+      (await import('../../cards/mercurio.cards')).MERCURIO_CARDS,
   };
 
   /** Carga una facción (lazy + cache) */

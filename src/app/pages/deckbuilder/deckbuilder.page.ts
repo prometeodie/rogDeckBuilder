@@ -59,7 +59,8 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
   { img: 'SELLO-PLUTON.png',  faction: 'pluton' },
   { img: 'SELLO-SATURNO.png', faction: 'saturno' },
   { img: 'SELLO-TIERRA.png',  faction: 'tierra' },
-  { img: 'SELLO-NEPTUNO.png', faction: 'neptuno' }
+  { img: 'SELLO-NEPTUNO.png', faction: 'neptuno' },
+  { img: 'SELLO-MERCURIO.png', faction: 'mercurio' }
 ];
 
 
@@ -398,6 +399,8 @@ async filterCardsByFaction(faction: Faction) {
       e.stopPropagation();
     }
   }
+
+
 
   applySorting(sortBy: SortBy): void {
     this.sortBy = sortBy;

@@ -3,7 +3,13 @@
 
 
     <!-- back -->
-    <ion-icon slot="start" name="arrow-back-outline" class="icon icon-l" routerLink="/home"></ion-icon>
+   <ion-icon
+  slot="start"
+  name="arrow-back-outline"
+  class="icon icon-l"
+  routerLink="/home"
+  (click)="$event.stopPropagation()">
+</ion-icon>
 
     <!-- título editable -->
     <div class="editable-title">

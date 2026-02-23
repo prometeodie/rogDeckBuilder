@@ -324,8 +324,6 @@ sortCards(
   });
 }
 
-
-
   private generateCopyName(baseName: string, existingNames: string[]): string {
     let copyIndex = 1;
     let newName = `${baseName} (copia)`;
@@ -354,7 +352,7 @@ sortCards(
     return deck.sideDeck.cards.reduce((acc, c) => acc + (c.amount ?? 0), 0);
   }
 
- public checkLimitedCards(deck: Deck): {
+public checkLimitedCards(deck: Deck): {
   deck: Deck;
   modifiedCards: {
     id: string;
@@ -362,7 +360,11 @@ sortCards(
     copyLimit: number;
   }[];
 } {
+
+  const BASE_LIMIT = 3;
+
   const normalizedDeck = this.normalize(structuredClone(deck));
+
   const modifiedCards: {
     id: string;
     cardName: string;
@@ -370,18 +372,24 @@ sortCards(
   }[] = [];
 
   const applyLimits = (cards: DeckCard[]) => {
-    for (const limited of limitedCards) {
-      const card = cards.find(c => c.id === limited.id);
-      if (!card) continue;
 
-      if ((card.amount ?? 0) > limited.copyLimit) {
+    for (const card of cards) {
+
+      const rule = limitedCards.find(l => l.id === card.id);
+
+      const allowedCopies = rule
+        ? rule.copyLimit
+        : Math.max(BASE_LIMIT, card.amount ?? 0);
+
+      if ((card.amount ?? 0) > allowedCopies) {
+
         modifiedCards.push({
-          id: limited.id,
-          cardName: limited.cardName,
-          copyLimit: limited.copyLimit,
+          id: card.id,
+          cardName: rule?.cardName ?? card.id,
+          copyLimit: allowedCopies
         });
 
-        card.amount = limited.copyLimit;
+        card.amount = allowedCopies;
       }
     }
   };
@@ -394,7 +402,6 @@ sortCards(
     modifiedCards
   };
 }
-
 // ALERTS AND TOASTS
 
  public showToast(

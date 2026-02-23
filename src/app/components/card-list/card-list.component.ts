@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { IonContent, IonList, IonItem, IonLabel } from '@ionic/angular/standalone';
+import { IonImg, IonList, IonItem, IonLabel } from '@ionic/angular/standalone';
 import { ExpandedDeckCard } from 'src/app/interfaces/expanded.deck.card.interface';
-import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
+import { ImageViewerComponent } from '../image-viewer/image-viewer.component'
 
 @Component({
   selector: 'card-list',
@@ -11,11 +11,11 @@ import { ImageViewerComponent } from '../image-viewer/image-viewer.component';
   standalone: true,
     imports: [
     CommonModule,
-    IonList,
+     IonList,
     IonItem,
     IonLabel,
-    ImageViewerComponent
-  ]
+    ImageViewerComponent,
+]
 })
 export class CardListComponent{
 

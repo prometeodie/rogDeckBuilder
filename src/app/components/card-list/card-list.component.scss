@@ -119,6 +119,15 @@ ion-list {
   padding: 0.75rem 0;
 }
 
+
+.thumb {
+  height: 56px;
+  border-radius: 6px;
+  object-fit: cover;
+  overflow: hidden;
+  padding: 0.3rem 0;
+}
+
 /* =========================================================
    ===================== MEDIA QUERIES ======================
    ========================================================= */
@@ -128,3 +137,5 @@ ion-list {
     margin: 1rem 0;
   }
 }
+
+
