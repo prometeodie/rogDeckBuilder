@@ -55,6 +55,13 @@
         class="card-row"
         (click)="openCloseViewer(card.data!.img)"
       >
+                 <img
+          slot="start"
+          class="thumb"
+          [src]="card.data!.img"
+          alt="card image"
+        />
+
         <ion-label class="card-name">
           {{ card.data?.name }}
         </ion-label>
