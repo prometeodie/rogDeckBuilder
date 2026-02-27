@@ -41,7 +41,8 @@ export class EstadisticsComponent implements AfterViewInit, OnChanges {
     pluton: '#6662c1',
     saturno: '#059c6a',
     neptuno: '#0c9bc1',
-    jupiter: '#d49f43'
+    jupiter: '#d49f43',
+    mercurio: '#19CFE0',
   };
 
   ngAfterViewInit() {
