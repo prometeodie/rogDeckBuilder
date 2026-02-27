@@ -40,7 +40,7 @@ export class EstadisticsComponent implements AfterViewInit, OnChanges {
     tierra: '#a4a37c',
     pluton: '#6662c1',
     saturno: '#059c6a',
-    neptuno: '#0c9bc1',
+    neptuno: '#1E3F66',
     jupiter: '#d49f43',
     mercurio: '#19CFE0',
   };
