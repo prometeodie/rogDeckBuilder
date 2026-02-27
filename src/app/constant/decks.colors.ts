@@ -5,7 +5,8 @@ export const DECK_COLORS: Record<string, string> = {
   tierra: '#a4a37c',
   pluton: '#6662c1',
   saturno: '#059c6a',
-  neptuno: '#0c9bc1',
+  neptuno: '#1E3F66',
   jupiter: '#d49f43',
+  mercurio: '#19CFE0',
   ionic: IONIC_DEFAULT_GRAY
 };
