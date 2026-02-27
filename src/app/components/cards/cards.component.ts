@@ -62,7 +62,8 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
     pluton: 'SELLO-PLUTON.png',
     saturno: 'SELLO-SATURNO.png',
     tierra: 'SELLO-TIERRA.png',
-    neptuno: 'SELLO-NEPTUNO.png'
+    neptuno: 'SELLO-NEPTUNO.png',
+    mercurio: 'SELLO-MERCURIO.png'
   };
 
   constructor(private deckService: DecksCardsService) {
