@@ -80,16 +80,17 @@
 <ion-content class="deck-layout" (click)="closeSearch()">
   <div class="main-container">
 
- <side-bar
+<side-bar
   [deckMode]="deckMode()"
   [totalSelected]="totalSelected"
   [selectedCards]="selectedCards"
   [savedAmounts]="savedAmounts"
   [deckId]="deckId()!"
-
+  [sortBy]="sortBy"
   (setMode)="setDeckMode($event)"
   (removeCard)="removeCard($event)"
-  (sortChanged)="applySorting($event)"/>
+  (sortChanged)="applySorting($event)"
+/>
 
     <div class="content-area" >
       <h2 class="faction-selected">{{selectedFactionTitle | titlecase}}</h2>

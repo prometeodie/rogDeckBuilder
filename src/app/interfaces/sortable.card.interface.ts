@@ -3,5 +3,6 @@ export interface SortableCard {
   name: string;
   amount: number;
   faction: string;
+  cost?: number;
   banned?: boolean;
 }

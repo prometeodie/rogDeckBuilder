@@ -13,9 +13,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { colorPaletteOutline, gridOutline } from 'ionicons/icons';
 import { DeckColorComponent } from '../deck-color/deck-color.component';
+import { SortBy } from 'src/app/interfaces/sort.types.interfaces';
 
 export type DeckMode = 'main' | 'side';
-export type SortBy = 'name' | 'amount' | 'faction' | 'rarity';
 
 @Component({
   selector: 'side-bar',

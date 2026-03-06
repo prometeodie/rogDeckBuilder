@@ -7,8 +7,8 @@ import { gridOutline } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { FormsModule } from '@angular/forms';
 import { DecksCardsService } from 'src/app/services/decks-cards';
+import { SortBy } from 'src/app/interfaces/sort.types.interfaces';
 
-type SortBy = 'name' | 'amount' | 'faction' | 'rarity';
 
 @Component({
   selector: 'deck-cards',
@@ -70,46 +70,78 @@ ngOnChanges(changes: SimpleChanges) {
   /** =========================================
    *    APLICAR ORDENAMIENTO USANDO EL SERVICIO
    * ========================================= */
-  applySorting() {
-    const sorter = this.deckService.sortCards.bind(this.deckService);
 
-      const mainForSort = this.mainCards.map(c => ({
-    id: c.id,
-    name: c.data?.name ?? '',
-    amount: c.amount,
-    faction: c.data?.faction ?? ''
+  applySorting() {
+
+  const sorter = this.deckService.sortCards.bind(this.deckService);
+
+ const mainForSort = this.mainCards.map(c => ({
+  id: c.id,
+  name: c.data?.name ?? '',
+  amount: c.amount,
+  faction: c.data?.faction ?? '',
+  cost: (c.data?.cost ?? 0) + (c.data?.factionCost ?? 0),
+  rarity: c.data?.rarity ?? ''
+}));
+
+const sideForSort = this.sideCards.map(c => ({
+  id: c.id,
+  name: c.data?.name ?? '',
+  amount: c.amount,
+  faction: c.data?.faction ?? '',
+  cost: (c.data?.cost ?? 0) + (c.data?.factionCost ?? 0),
+    rarity: this.rarityToNumber(c.data?.rarity ?? null)
   }));
 
 
-    const sideForSort = this.sideCards.map(c => ({
-      id: c.id,
-      name: c.data?.name ?? '',
-      amount: c.amount,
-      faction: c.data?.faction ?? '',
-      rarity: this.rarityToNumber(c.data?.rarity ?? null)
-    }));
+  // ===== RARITY =====
+  const getRarityValueForMain = (id: string) =>
+    this.mainCards.find(x => x.id === id)?.data?.rarity ?? '';
 
-    const getRarityValueForMain = (id: string) =>
-  this.mainCards.find(x => x.id === id)?.data?.rarity ?? '';
+  const getRarityValueForSide = (id: string) =>
+    this.sideCards.find(x => x.id === id)?.data?.rarity ?? '';
 
 
-    const getRarityValueForSide = (id: string) =>
-  this.sideCards.find(x => x.id === id)?.data?.rarity ?? '';
+
+  // ===== COST =====
+  const getCostValueForMain = (id: string) => {
+    const card = this.mainCards.find(x => x.id === id)?.data;
+    return (card?.cost ?? 0) + (card?.factionCost ?? 0);
+  };
+
+  const getCostValueForSide = (id: string) => {
+    const card = this.sideCards.find(x => x.id === id)?.data;
+    return (card?.cost ?? 0) + (card?.factionCost ?? 0);
+  };
 
 
-    const sortedMain = sorter(mainForSort, this.sortBy, getRarityValueForMain);
-    const sortedSide = sorter(sideForSort, this.sortBy, getRarityValueForSide);
 
-    this.mainCards = sortedMain.map(s => {
-      const orig = this.mainCards.find(c => c.id === s.id)!;
-      return { ...orig, amount: s.amount };
-    });
+  const sortedMain = sorter(
+    mainForSort,
+    this.sortBy,
+    getRarityValueForMain,
+    getCostValueForMain
+  );
 
-    this.sideCards = sortedSide.map(s => {
-      const orig = this.sideCards.find(c => c.id === s.id)!;
-      return { ...orig, amount: s.amount };
-    });
-  }
+  const sortedSide = sorter(
+    sideForSort,
+    this.sortBy,
+    getRarityValueForSide,
+    getCostValueForSide
+  );
+
+
+  this.mainCards = sortedMain.map(s => {
+    const orig = this.mainCards.find(c => c.id === s.id)!;
+    return { ...orig, amount: s.amount };
+  });
+
+  this.sideCards = sortedSide.map(s => {
+    const orig = this.sideCards.find(c => c.id === s.id)!;
+    return { ...orig, amount: s.amount };
+  });
+
+}
 
   onSortChangeAndClose() {
     this.sortMenuOpen = !this.sortMenuOpen;

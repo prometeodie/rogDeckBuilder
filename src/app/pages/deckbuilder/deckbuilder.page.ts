@@ -27,10 +27,10 @@ import { SideBarComponent } from 'src/app/components/side-bar/side-bar.component
 import { SortableCard } from 'src/app/interfaces/sortable.card.interface';
 import { AlertController } from '@ionic/angular';
 import { CardsLoaderService, Faction } from 'src/app/services/cards-loader-service';
+import { SortBy } from 'src/app/interfaces/sort.types.interfaces';
 
 addIcons({ searchOutline, arrowBackOutline });
 
-export type SortBy = 'name' | 'amount' | 'faction' | 'rarity';
 
 @Component({
   selector: 'deckbuilder',
@@ -133,9 +133,10 @@ async ngOnInit(): Promise<void> {
 
  this.rebuildSavedAmounts(this.currentDeck);
 
-  this.updateSelectedCardsList();
+this.updateSelectedCardsList();
+this.applySorting('amount');
 
-  const result = this.deckService.checkLimitedCards(this.currentDeck);
+const result = this.deckService.checkLimitedCards(this.currentDeck);
 
  if (result.modifiedCards.length > 0) {
   this.currentDeck = result.deck;
@@ -242,17 +243,18 @@ private rebuildSavedAmounts(deck: Deck) {
       : this.currentDeck.sideDeck.cards;
 
     this.selectedCards = source
-      .map((c: any) => {
-        const card = this.allCards.find(t => t.id === c.id);
-        return {
-          id: c.id,
-          name: card?.name ?? 'Sin nombre',
-          amount: c.amount ?? 0,
-          faction: card?.faction ?? 'neutral',
-          banned: card?.banned ?? false
-        };
-      })
-      .filter(c => c.amount > 0);
+  .map((c: any) => {
+    const card = this.allCards.find(t => t.id === c.id);
+
+    return {
+      id: c.id,
+      name: card?.name ?? 'Sin nombre',
+      amount: c.amount ?? 0,
+      faction: card?.faction ?? 'neutral',
+      cost: (card?.cost ?? 0) + (card?.factionCost ?? 0),
+      banned: card?.banned ?? false
+    };
+  })
 
     const oldTotal = this.totalSelected;
     this.totalSelected = this.selectedCards.reduce((a, c) => a + c.amount, 0);

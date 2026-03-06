@@ -268,8 +268,9 @@ async saveImportedDeck(deck: Deck): Promise<Deck> {
 
 sortCards(
   cards: SortableCard[],
-  sortBy: 'name' | 'amount' | 'faction' | 'rarity',
-  getRarityValue?: (id: string) => string
+  sortBy: 'name' | 'amount' | 'faction' | 'rarity' | 'cost',
+  getRarityValue?: (id: string) => string,
+  getCostValue?: (id: string) => number
 ): SortableCard[] {
 
   const list = [...cards];
@@ -303,6 +304,7 @@ sortCards(
         );
 
       case 'rarity': {
+
         if (!getRarityValue) return 0;
 
         const ra = rarityOrder[getRarityValue(a.id)] ?? 0;
@@ -310,13 +312,21 @@ sortCards(
 
         if (rb !== ra) return rb - ra;
 
-        // desempate consistente
         return a.name.localeCompare(
           b.name,
           'es',
           { sensitivity: 'base' }
         );
       }
+
+    case 'cost': {
+  const ca = a.cost ?? 0;
+  const cb = b.cost ?? 0;
+
+  if (cb !== ca) return cb - ca;
+
+  return a.name.localeCompare(b.name, 'es', { sensitivity: 'base' });
+}
 
       default:
         return 0;
