@@ -139,6 +139,9 @@
   margin-left: 0.25rem;
 }
 
+.item-img{
+  display: none;
+}
 
 /* ======================================================
    ================== DELETE ============================
@@ -358,5 +361,11 @@ $faction-colors: (
 
   .sb-btn {
     width: 3.5rem;
+  }
+
+  .item-img{
+    display: block;
+    width: 2rem;
+    object-fit: cover;
   }
 }

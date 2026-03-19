@@ -40,6 +40,7 @@ export class SideBarComponent {
     name: string;
     amount: number;
     faction: string;
+    img?:string;
     banned?: boolean;
   }[] = [];
   @Input() savedAmounts: { [id: string]: number | undefined } = {};

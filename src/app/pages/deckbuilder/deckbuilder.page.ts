@@ -242,18 +242,20 @@ private rebuildSavedAmounts(deck: Deck) {
       ? this.currentDeck.cards
       : this.currentDeck.sideDeck.cards;
 
-    this.selectedCards = source
-  .map((c: any) => {
-    const card = this.allCards.find(t => t.id === c.id);
+  const cardMap = new Map(this.allCards.map(c => [c.id, c]));
 
-    return {
-      id: c.id,
-      name: card?.name ?? 'Sin nombre',
-      amount: c.amount ?? 0,
-      faction: card?.faction ?? 'neutral',
-      cost: (card?.cost ?? 0) + (card?.factionCost ?? 0),
-      banned: card?.banned ?? false
-    };
+this.selectedCards = source.map((c: any) => {
+  const card = cardMap.get(c.id);
+
+  return {
+    id: c.id,
+    name: card?.name ?? 'Sin nombre',
+    amount: c.amount ?? 0,
+    faction: card?.faction ?? 'neutral',
+    cost: (card?.cost ?? 0) + (card?.factionCost ?? 0),
+    banned: card?.banned ?? false,
+    img: card?.img ?? ''
+  };
   })
 
     const oldTotal = this.totalSelected;

@@ -67,6 +67,7 @@
     <ul class="selected-list">
       @for (item of selectedCards; track item.id) {
         <li class="sidebar-item" [ngClass]="item.faction">
+          <img [src]="item.img" class="item-img" [alt]="item.name">
           <span class="item-name">{{ item.name }}</span>
           <span class="item-amount">x{{ item.amount }}</span>
           <button class="delete-x" (click)="onRemoveCard(item.id)">✕</button>

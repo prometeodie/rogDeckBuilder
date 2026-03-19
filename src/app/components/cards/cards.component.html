@@ -25,29 +25,38 @@
 </ion-card>
 
 
-  <ion-card-content class="card-content">
-    <div class="cost-bar">
-      <div class="cost">
-        <img class="cost-img"
-             [src]="getSelloImg()">
-             <span class="cost-text">
-               X{{ cardData.factionCost }}
-             </span>
-      </div>
-      <div class="roman"> @if(cardData.cost > 0){{{ cardData.cost | roman }}} @else {-}</div>
+ <ion-card-content
+  class="card-content"
+  [class.has-copies]="count > 0"
+>
+  <div class="cost-bar">
+    <div class="cost">
+      <img class="cost-img" [src]="getSelloImg()">
+      <span class="cost-text">
+        X{{ cardData.factionCost }}
+      </span>
     </div>
 
-    <div class="counter-box">
-      <ion-button fill="clear" class="counter-btn" (click)="decrease()">
-        <ion-icon name="remove"></ion-icon>
-      </ion-button>
-
-      <span class="count">{{ count }}</span>
-
-      <ion-button fill="clear" class="counter-btn" (click)="increase()">
-        <ion-icon name="add"></ion-icon>
-      </ion-button>
+    <div class="roman">
+      @if(cardData.cost > 0) {
+        {{ cardData.cost | roman }}
+      } @else {
+        -
+      }
     </div>
-  </ion-card-content>
+  </div>
+
+  <div class="counter-box">
+    <ion-button fill="clear" class="counter-btn" (click)="decrease()">
+      <ion-icon name="remove"></ion-icon>
+    </ion-button>
+
+    <span class="count">{{ count }}</span>
+
+    <ion-button fill="clear" class="counter-btn" (click)="increase()">
+      <ion-icon name="add"></ion-icon>
+    </ion-button>
+  </div>
+</ion-card-content>
 
 </ion-card>
