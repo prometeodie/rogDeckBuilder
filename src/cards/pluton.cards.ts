@@ -1372,6 +1372,28 @@ export const PLUTON_CARDS: Card[] =[
       "Enemiga",
       "Selecciona"
     ]
+  },{
+    "id": "1773949645586",
+    "name": "Avalancha Revolucionaria",
+    "faction": "pluton",
+    "rarity": "epic",
+    "img": "https://res.cloudinary.com/dzkxl45xy/image/upload/v1773949625/pluton-rog/avalancha_revolucionaria_b4tuzc.png",
+    "factionCost": 2,
+    "cost": 2,
+    "banned": false,
+    "isSeal": false,
+    "isToken": false,
+    "isQuickSpell": false,
+    "isSlowSpell": true,
+    "isArtifact": false,
+    "isEstructure": false,
+    "isTerreno": false,
+    "tags": [
+      "Campo",
+      "Criatura",
+      "Daño",
+      "inflinjo"
+    ]
   },
   {
     "id": "1771880451928",
