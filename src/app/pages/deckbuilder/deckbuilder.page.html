@@ -99,14 +99,16 @@
           @if (currentCards.length > 0) {
           @for (card of currentCards; track card.id) {
             <card
-              class="card"
-              [deckId]="deckId()!"
-              [cardData]="card"
-              [mode]="deckMode()"
-              [initialCount]="savedAmounts[card.id] ?? 0"
-              (ImgView)="openImageViewer($event)"
-              (amountChange)="refreshDeck()">
-            </card>
+            class="card"
+            [deckId]="deckId()!"
+            [cardData]="card"
+            [mode]="deckMode()"
+            [initialCount]="savedAmounts[card.id] ?? 0"
+            [mainAmount]="getMainAmount(card.id)"
+            [sideAmount]="getSideAmount(card.id)"
+            (ImgView)="openImageViewer($event)"
+            (amountChange)="refreshDeck()">
+          </card>
           }
         }
 

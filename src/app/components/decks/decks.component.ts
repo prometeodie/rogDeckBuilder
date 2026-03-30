@@ -19,12 +19,12 @@ import {
   eyeOutline,
   pencilOutline,
   imageOutline,
+  duplicateOutline,
 } from 'ionicons/icons';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { DecksCardsService } from 'src/app/services/decks-cards';
 import { ExportDeckImageService } from 'src/app/services/export-deck-image-service';
 import { Card } from 'src/app/interfaces/card.interface';
-// import { Cards } from 'src/app/cards-testing';
 import { NavController } from '@ionic/angular';
 import { DeckExportComponentComponent } from '../deck-export-component/deck-export-component.component';
 import { ExportCard } from 'src/app/interfaces/export.card.interface';
@@ -32,6 +32,7 @@ import { User } from 'src/app/services/user';
 import { UserIdentityData } from 'src/app/interfaces/user.interface';
 import Swal from 'sweetalert2';
 import { CardsLoaderService } from 'src/app/services/cards-loader-service';
+import { DECK_COLORS } from 'src/app/constant/decks.colors';
 
 @Component({
   selector: 'decks',
@@ -60,6 +61,7 @@ export class DecksComponent {
   private nav:NavController  = inject(NavController);
   private cdr = inject(ChangeDetectorRef);
   private cardsLoader = inject(CardsLoaderService);
+  private router = inject(Router);
 
   public mainDeck!:ExportCard[];
   public sideDeck!:ExportCard[];
@@ -73,7 +75,8 @@ export class DecksComponent {
       'pencil-outline': pencilOutline,
       'download-outline': downloadOutline,
       'image-outline': imageOutline,
-      'eye-outline': eyeOutline
+      'eye-outline': eyeOutline,
+      'duplicate-outline': duplicateOutline
     });
   }
 
@@ -84,10 +87,19 @@ goToDeck(deckId: string) {
 }
   public allCards: Card[] = [];
   public deckColor = this.deckService.deckColor;
+  private cardMap: Record<string, Card> = {};
 
 async ngOnInit() {
   await this.cardsLoader.loadAll();
+
   this.allCards = this.cardsLoader.allCards();
+
+  // 🔥 MAPA PARA ACCESO O(1)
+  this.cardMap = {};
+
+for (const c of this.allCards) {
+  this.cardMap[c.id] = c;
+}
 }
 
 
@@ -174,9 +186,6 @@ async downloadDeckImage(deckId: string): Promise<void> {
   }
 }
 
-
-
-
 getDeckBackground(deck: Deck): string {
   return deck.color
     ? `linear-gradient(135deg, #1f1f1f 0%, ${deck.color} 100%)`
@@ -195,6 +204,68 @@ async downloadDeck(id: string) {
   this.deckExportService.downloadDeck(deck, this.user?.nickname!);
 }
 
+async duplicateDeck(id: string) {
+  const alert = await this.deckService['alertCtrl'].create({
+    header: 'Duplicar mazo',
+    buttons: [
+      {
+        text: 'Cancelar',
+        role: 'cancel'
+      },
+      {
+        text: 'OK',
+        role: 'confirm',
+        handler: async () => {
+          const newDeck = await this.deckService.duplicateDeck(id);
+
+          if (newDeck) {
+            this.deckService.showToast('Mazo duplicado', 'success');
+
+            // 🔹 navegar al nuevo mazo
+            this.router.navigate(['/deckbuilder', newDeck.id]);
+          }
+        }
+      }
+    ],
+    backdropDismiss: false
+  });
+
+  await alert.present();
+}
+
+getFactionDistribution(deck: Deck): {
+  faction: string;
+  percentage: number;
+}[] {
+
+  if (!deck?.cards?.length) return [];
+
+  const total = deck.cards.reduce((acc, c) => acc + (c.amount ?? 0), 0);
+  if (total === 0) return [];
+
+  const factionMap: Record<string, number> = {};
+
+  for (const c of deck.cards) {
+
+    const cardData = this.cardMap[c.id];
+    if (!cardData) continue;
+
+    const faction = cardData.faction ?? 'neutral';
+
+    factionMap[faction] = (factionMap[faction] || 0) + (c.amount ?? 0);
+  }
+
+  return Object.entries(factionMap)
+    .map(([faction, amount]) => ({
+      faction,
+      percentage: Math.round((amount / total) * 100)
+    }))
+    .sort((a, b) => b.percentage - a.percentage); // 🔥 ordenado
+}
+
+getFactionColor(faction: string): string {
+  return DECK_COLORS[faction] ?? '#999';
+}
 
 private showDownloadingToast(message: string = 'Descargando...'): void {
   Swal.fire({

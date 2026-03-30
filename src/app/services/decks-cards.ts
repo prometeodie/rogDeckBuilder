@@ -103,6 +103,34 @@ export class DecksCardsService {
   }
 
   // =============================
+  // DUPLICATE DECK
+  // =============================
+      async duplicateDeck(deckId: string): Promise<Deck | null> {
+        const decks = await this.getDecks();
+        const original = decks.find(d => d.id === deckId);
+
+        if (!original) return null;
+
+        // 🔹 clonar para no mutar el original
+        const duplicatedDeck: Deck = this.normalize(structuredClone(original));
+
+        // 🔹 nuevo ID
+        duplicatedDeck.id = crypto.randomUUID();
+
+        // 🔹 generar nombre único
+        const existingNames = decks.map(d => d.name);
+        duplicatedDeck.name = this.generateCopyName(
+          duplicatedDeck.name,
+          existingNames
+        );
+
+        // 🔹 guardar
+        decks.push(duplicatedDeck);
+        await this.saveDecks(decks);
+
+        return duplicatedDeck;
+      }
+  // =============================
   // DELETE
   // =============================
   async deleteDeck(id: string): Promise<void> {
@@ -127,42 +155,101 @@ export class DecksCardsService {
   // =============================
   // UPSERT CARD
   // =============================
-  async upsertCardInDeck(deckId: string, deckCard: DeckCard, mode: 'main' | 'side' = 'main'): Promise<number> {
-    const decks = await this.getDecks();
-    const deckIndex = decks.findIndex(d => d.id === deckId);
-    if (deckIndex === -1) return 0;
+async upsertCardInDeck(
+  deckId: string,
+  deckCard: DeckCard,
+  mode: 'main' | 'side' = 'main'
+): Promise<number> {
 
-    const deck = this.normalize(decks[deckIndex]);
-    const target = mode === 'main' ? deck.cards : deck.sideDeck.cards;
+  const decks = await this.getDecks();
+  const deckIndex = decks.findIndex(d => d.id === deckId);
+  if (deckIndex === -1) return 0;
 
-    const existingIndex = target.findIndex(c => c.id === deckCard.id);
-    const existingAmount = existingIndex !== -1 ? (target[existingIndex].amount ?? 0) : 0;
+  const deck = this.normalize(decks[deckIndex]);
+  const target = mode === 'main' ? deck.cards : deck.sideDeck.cards;
 
-    if (deckCard.amount <= 0) {
-      if (existingIndex !== -1) target.splice(existingIndex, 1);
-      if (mode === 'main') deck.cards = target; else deck.sideDeck.cards = target;
-      decks[deckIndex] = deck;
-      await this.saveDecks(decks);
-      return 0;
-    }
+  const existingIndex = target.findIndex(c => c.id === deckCard.id);
+  const existingAmount = existingIndex !== -1 ? (target[existingIndex].amount ?? 0) : 0;
 
-    const isSide = mode === 'side';
-    const cap = isSide ? 15 : 40;
-    const totalExcludingThis = target.reduce((acc, c) => c.id === deckCard.id ? acc : acc + (c.amount ?? 0), 0);
-    const maxForThisGivenCap = cap - totalExcludingThis;
-    if (maxForThisGivenCap <= 0) return existingAmount;
-
-    const finalAmount = Math.min(deckCard.amount, maxForThisGivenCap);
-
-    if (existingIndex !== -1) target[existingIndex].amount = finalAmount;
-    else target.push({ id: deckCard.id, faction: deckCard.faction, amount: finalAmount });
-
+  // 🔹 eliminar si amount <= 0
+  if (deckCard.amount <= 0) {
+    if (existingIndex !== -1) target.splice(existingIndex, 1);
     if (mode === 'main') deck.cards = target; else deck.sideDeck.cards = target;
     decks[deckIndex] = deck;
-
     await this.saveDecks(decks);
-    return finalAmount;
+    return 0;
   }
+
+  // =============================
+  // 🔥 LÍMITE POR DECK (40 / 15)
+  // =============================
+  const isSide = mode === 'side';
+  const cap = isSide ? 15 : 40;
+
+  const totalExcludingThis = target.reduce(
+    (acc, c) => c.id === deckCard.id ? acc : acc + (c.amount ?? 0),
+    0
+  );
+
+  const maxForThisGivenCap = cap - totalExcludingThis;
+  if (maxForThisGivenCap <= 0) return existingAmount;
+
+  // =============================
+  // 🔥 LÍMITE GLOBAL (MAIN + SIDE)
+  // =============================
+
+  const getCardLimit = (cardId: string): number => {
+    const rule = limitedCards.find(l => l.id === cardId);
+    if (rule) return rule.copyLimit;
+
+    return 3; // fallback
+  };
+
+  const limit = getCardLimit(deckCard.id);
+
+  const mainCards = deck.cards ?? [];
+  const sideCards = deck.sideDeck.cards ?? [];
+
+  const mainAmount = mainCards.find(c => c.id === deckCard.id)?.amount ?? 0;
+  const sideAmount = sideCards.find(c => c.id === deckCard.id)?.amount ?? 0;
+
+  const otherAmount = mode === 'main' ? sideAmount : mainAmount;
+
+  const remainingCrossDeck = limit - otherAmount;
+
+  if (remainingCrossDeck <= 0) {
+    return existingAmount;
+  }
+
+  // =============================
+  // 🔥 RESULTADO FINAL
+  // =============================
+  const finalAmount = Math.min(
+    deckCard.amount,
+    maxForThisGivenCap,
+    remainingCrossDeck
+  );
+
+  // 🔹 insertar o actualizar
+  if (existingIndex !== -1) {
+    target[existingIndex].amount = finalAmount;
+  } else {
+    target.push({
+      id: deckCard.id,
+      faction: deckCard.faction,
+      amount: finalAmount
+    });
+  }
+
+  if (mode === 'main') deck.cards = target;
+  else deck.sideDeck.cards = target;
+
+  decks[deckIndex] = deck;
+
+  await this.saveDecks(decks);
+
+  return finalAmount;
+}
 
   // =============================
   // SIDE DECK
@@ -411,6 +498,38 @@ public checkLimitedCards(deck: Deck): {
     deck: normalizedDeck,
     modifiedCards
   };
+}
+
+//faction distribution
+
+async getFactionDistribution(
+  deckId: string,
+  allCards: Card[]
+): Promise<{ faction: string; percentage: number }[]> {
+
+  const deck = await this.getDeckById(deckId);
+  if (!deck || !deck.cards.length) return [];
+
+  const total = deck.cards.reduce((acc, c) => acc + (c.amount ?? 0), 0);
+  if (total === 0) return [];
+
+  const factionMap: Record<string, number> = {};
+
+  for (const c of deck.cards) {
+    const cardData = allCards.find(card => card.id === c.id);
+    if (!cardData) continue;
+
+    const faction = cardData.faction ?? 'neutral';
+
+    factionMap[faction] = (factionMap[faction] || 0) + (c.amount ?? 0);
+  }
+
+  return Object.entries(factionMap)
+    .map(([faction, amount]) => ({
+      faction,
+      percentage: Math.round((amount / total) * 100)
+    }))
+    .sort((a, b) => b.percentage - a.percentage); // opcional (queda mejor)
 }
 // ALERTS AND TOASTS
 

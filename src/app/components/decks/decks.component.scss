@@ -68,3 +68,53 @@
   background: var(--app-bg);
   color: var(--app-text);
 }
+
+/* =========================================================
+   =================== FACTION DISTRIBUTION ====================
+   ========================================================= */
+
+.factions {
+  display: flex;
+  flex-wrap: wrap;   // 🔥 CLAVE
+  gap: 0.4rem;
+  margin-top: 0.3rem;
+}
+
+.faction-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+  opacity: 0.85;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.percent {
+  font-weight: 600;
+}
+
+.deck-item {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* HEADER */
+.deck-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* FOOTER */
+.deck-footer {
+  display: flex;
+  flex-wrap: wrap; // 🔥 clave para mobile
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}

@@ -1,18 +1,45 @@
 <ion-list class="decks">
   @for (deck of decks; track deck.id; let last = $last) {
-    <ion-item [class.last-item]="last"  [style.--background]="getDeckBackground(deck)">
-      <ion-label>
-        <span class="deck-title">{{ deck.name }}</span>
-      </ion-label>
+    <ion-item
+  [class.last-item]="last"
+  [style.--background]="getDeckBackground(deck)"
+>
 
-      <div class="actions" slot="end">
+  <div class="deck-item">
+
+    <!-- 🔹 HEADER -->
+    <div class="deck-header">
+      <span class="deck-title">{{ deck.name }}</span>
+
+      <div class="actions">
         <ion-icon name="eye-outline" routerLink="/deckviewer/{{ deck.id }}"></ion-icon>
         <ion-icon name="pencil-outline" (click)="goToDeck(deck.id)"></ion-icon>
         <ion-icon name="image-outline" (click)="downloadDeckImage(deck.id)"></ion-icon>
-        <ion-icon name="download-outline"(click)="downloadDeck(deck.id)"></ion-icon>
+        <ion-icon name="download-outline" (click)="downloadDeck(deck.id)"></ion-icon>
+        <ion-icon name="duplicate-outline" (click)="duplicateDeck(deck.id)"></ion-icon>
         <ion-icon name="trash-outline" (click)="deleteDeck(deck.id)"></ion-icon>
       </div>
-    </ion-item>
+    </div>
+
+    <!-- 🔹 FOOTER (facciones) -->
+    <div class="deck-footer">
+      @for (f of getFactionDistribution(deck); track f.faction) {
+        <div class="faction-item">
+          <span
+            class="dot"
+            [style.background]="getFactionColor(f.faction)">
+          </span>
+
+          <span class="percent">
+            {{ f.percentage }}%
+          </span>
+        </div>
+      }
+    </div>
+
+  </div>
+
+</ion-item>
   }
 </ion-list>
 @if (showExport) {

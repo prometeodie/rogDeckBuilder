@@ -404,7 +404,15 @@ async filterCardsByFaction(faction: Faction) {
     }
   }
 
+    getMainAmount(cardId: string): number {
+      return this.currentDeck?.cards
+        ?.find(c => c.id === cardId)?.amount ?? 0;
+    }
 
+    getSideAmount(cardId: string): number {
+      return this.currentDeck?.sideDeck?.cards
+        ?.find(c => c.id === cardId)?.amount ?? 0;
+    }
 
   applySorting(sortBy: SortBy): void {
     this.sortBy = sortBy;

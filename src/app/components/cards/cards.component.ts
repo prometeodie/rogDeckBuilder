@@ -33,6 +33,8 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
   @Input() initialCount = 0;
   @Input() deckId?: string;
   @Input() cardData!: Card;
+  @Input() mainAmount: number = 0;
+  @Input() sideAmount: number = 0;
   @Input() mode: 'main' | 'side' = 'main';
 
   @Output() ImgView = new EventEmitter<string>();
@@ -227,6 +229,18 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
       mode: this.mode
     });
   }
+
+  getOtherDeckAmount(): number {
+  return this.mode === 'side'
+    ? this.mainAmount
+    : this.sideAmount;
+}
+
+getOtherDeckLabel(): string {
+  return this.mode === 'side'
+    ? 'MD'
+    : 'SD';
+}
 
   getSelloImg(): string {
     const fac = this.cardData.faction?.toLowerCase();

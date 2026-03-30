@@ -7,6 +7,12 @@
       <div class="img-skeleton shimmer"></div>
     }
 
+   @if (getOtherDeckAmount() > 0) {
+  <span class="other-deck-indicator">
+    {{ getOtherDeckLabel() }}: {{ getOtherDeckAmount() }}
+  </span>
+}
+
     <!-- Imagen real -->
     <ion-img
       [src]="cardData.img"
@@ -20,6 +26,7 @@
   @if (cardData.banned) {
     <h4 class="banned-stamp">baneada</h4>
   }
+
 
   <!-- resto del contenido -->
 </ion-card>
