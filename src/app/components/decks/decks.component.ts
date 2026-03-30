@@ -43,7 +43,6 @@ import { DECK_COLORS } from 'src/app/constant/decks.colors';
     CommonModule,
     IonList,
     IonItem,
-    IonLabel,
     IonIcon,
     RouterModule,
     DeckExportComponentComponent
@@ -205,32 +204,18 @@ async downloadDeck(id: string) {
 }
 
 async duplicateDeck(id: string) {
-  const alert = await this.deckService['alertCtrl'].create({
-    header: 'Duplicar mazo',
-    buttons: [
-      {
-        text: 'Cancelar',
-        role: 'cancel'
-      },
-      {
-        text: 'OK',
-        role: 'confirm',
-        handler: async () => {
-          const newDeck = await this.deckService.duplicateDeck(id);
 
-          if (newDeck) {
-            this.deckService.showToast('Mazo duplicado', 'success');
+  const shouldDuplicate = window.confirm('¿Querés duplicar este mazo?');
 
-            // 🔹 navegar al nuevo mazo
-            this.router.navigate(['/deckbuilder', newDeck.id]);
-          }
-        }
-      }
-    ],
-    backdropDismiss: false
-  });
+  if (!shouldDuplicate) return;
 
-  await alert.present();
+  const newDeck = await this.deckService.duplicateDeck(id);
+
+  if (newDeck) {
+    this.deckService.showToast('Mazo duplicado', 'success');
+
+    this.router.navigate(['/deckbuilder', newDeck.id]);
+  }
 }
 
 getFactionDistribution(deck: Deck): {
@@ -246,7 +231,6 @@ getFactionDistribution(deck: Deck): {
   const factionMap: Record<string, number> = {};
 
   for (const c of deck.cards) {
-
     const cardData = this.cardMap[c.id];
     if (!cardData) continue;
 
@@ -255,18 +239,38 @@ getFactionDistribution(deck: Deck): {
     factionMap[faction] = (factionMap[faction] || 0) + (c.amount ?? 0);
   }
 
-  return Object.entries(factionMap)
+  // 🔹 calcular porcentajes reales
+  const raw = Object.entries(factionMap)
     .map(([faction, amount]) => ({
       faction,
-      percentage: Math.round((amount / total) * 100)
+      raw: (amount / total) * 100
     }))
-    .sort((a, b) => b.percentage - a.percentage); // 🔥 ordenado
-}
+    .sort((a, b) => b.raw - a.raw);
 
+  // 🔹 floor inicial
+  let sum = 0;
+  const result = raw.map(r => {
+    const value = Math.floor(r.raw);
+    sum += value;
+    return {
+      faction: r.faction,
+      percentage: value
+    };
+  });
+
+  // 🔹 repartir lo que falta hasta 100
+  let diff = 100 - sum;
+
+  for (let i = 0; i < result.length && diff > 0; i++) {
+    result[i].percentage += 1;
+    diff--;
+  }
+
+  return result;
+}
 getFactionColor(faction: string): string {
   return DECK_COLORS[faction] ?? '#999';
 }
-
 private showDownloadingToast(message: string = 'Descargando...'): void {
   Swal.fire({
     toast: true,

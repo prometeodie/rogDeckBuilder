@@ -169,68 +169,73 @@ async upsertCardInDeck(
   const target = mode === 'main' ? deck.cards : deck.sideDeck.cards;
 
   const existingIndex = target.findIndex(c => c.id === deckCard.id);
-  const existingAmount = existingIndex !== -1 ? (target[existingIndex].amount ?? 0) : 0;
+  const existingAmount = existingIndex !== -1
+    ? (target[existingIndex].amount ?? 0)
+    : 0;
 
-  // 🔹 eliminar si amount <= 0
+  // =============================
+  // 🔹 ELIMINAR CARTA
+  // =============================
   if (deckCard.amount <= 0) {
     if (existingIndex !== -1) target.splice(existingIndex, 1);
-    if (mode === 'main') deck.cards = target; else deck.sideDeck.cards = target;
+
+    if (mode === 'main') deck.cards = target;
+    else deck.sideDeck.cards = target;
+
     decks[deckIndex] = deck;
     await this.saveDecks(decks);
+
     return 0;
   }
 
   // =============================
-  // 🔥 LÍMITE POR DECK (40 / 15)
+  // 🔥 CAP DEL MAZO (40 / 15)
   // =============================
   const isSide = mode === 'side';
   const cap = isSide ? 15 : 40;
 
-  const totalExcludingThis = target.reduce(
-    (acc, c) => c.id === deckCard.id ? acc : acc + (c.amount ?? 0),
+  const currentTotal = target.reduce(
+    (acc, c) => acc + (c.amount ?? 0),
     0
   );
 
-  const maxForThisGivenCap = cap - totalExcludingThis;
-  if (maxForThisGivenCap <= 0) return existingAmount;
+  // 🔹 permite modificar sin romper el total
+  const spaceLeft = cap - currentTotal + existingAmount;
 
   // =============================
-  // 🔥 LÍMITE GLOBAL (MAIN + SIDE)
+  // 🔥 LÍMITE POR CARTA (GLOBAL)
   // =============================
-
   const getCardLimit = (cardId: string): number => {
     const rule = limitedCards.find(l => l.id === cardId);
-    if (rule) return rule.copyLimit;
-
-    return 3; // fallback
+    return rule ? rule.copyLimit : 9999;
   };
 
   const limit = getCardLimit(deckCard.id);
 
-  const mainCards = deck.cards ?? [];
-  const sideCards = deck.sideDeck.cards ?? [];
+  const mainAmount = deck.cards.find(c => c.id === deckCard.id)?.amount ?? 0;
+  const sideAmount = deck.sideDeck.cards.find(c => c.id === deckCard.id)?.amount ?? 0;
 
-  const mainAmount = mainCards.find(c => c.id === deckCard.id)?.amount ?? 0;
-  const sideAmount = sideCards.find(c => c.id === deckCard.id)?.amount ?? 0;
+  // 🔹 restamos existingAmount porque ya está contado
+  const totalCopies = mainAmount + sideAmount - existingAmount;
 
-  const otherAmount = mode === 'main' ? sideAmount : mainAmount;
+  const remainingCopies = limit - totalCopies;
 
-  const remainingCrossDeck = limit - otherAmount;
-
-  if (remainingCrossDeck <= 0) {
+  // =============================
+  // 🔥 VALIDACIÓN FINAL
+  // =============================
+  if (spaceLeft <= 0 || remainingCopies <= 0) {
     return existingAmount;
   }
 
-  // =============================
-  // 🔥 RESULTADO FINAL
-  // =============================
   const finalAmount = Math.min(
     deckCard.amount,
-    maxForThisGivenCap,
-    remainingCrossDeck
+    spaceLeft,
+    remainingCopies
   );
 
-  // 🔹 insertar o actualizar
+  // =============================
+  // 🔹 INSERT / UPDATE
+  // =============================
   if (existingIndex !== -1) {
     target[existingIndex].amount = finalAmount;
   } else {
@@ -241,13 +246,20 @@ async upsertCardInDeck(
     });
   }
 
-  if (mode === 'main') deck.cards = target;
-  else deck.sideDeck.cards = target;
+  // =============================
+  // 🔹 GUARDAR
+  // =============================
+  if (mode === 'main') {
+    deck.cards = target;
+  } else {
+    deck.sideDeck.cards = target;
+  }
 
   decks[deckIndex] = deck;
 
   await this.saveDecks(decks);
 
+  // ✅ SIEMPRE DEVOLVER
   return finalAmount;
 }
 
@@ -458,7 +470,7 @@ public checkLimitedCards(deck: Deck): {
   }[];
 } {
 
-  const BASE_LIMIT = 3;
+  const BASE_LIMIT = 9999;
 
   const normalizedDeck = this.normalize(structuredClone(deck));
 
@@ -474,10 +486,10 @@ public checkLimitedCards(deck: Deck): {
 
       const rule = limitedCards.find(l => l.id === card.id);
 
-      const allowedCopies = rule
-        ? rule.copyLimit
-        : Math.max(BASE_LIMIT, card.amount ?? 0);
 
+const allowedCopies = rule
+  ? rule.copyLimit
+  : BASE_LIMIT;
       if ((card.amount ?? 0) > allowedCopies) {
 
         modifiedCards.push({
