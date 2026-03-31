@@ -162,25 +162,35 @@ async upsertCardInDeck(
 ): Promise<number> {
 
   const decks = await this.getDecks();
+
   const deckIndex = decks.findIndex(d => d.id === deckId);
   if (deckIndex === -1) return 0;
 
   const deck = this.normalize(decks[deckIndex]);
-  const target = mode === 'main' ? deck.cards : deck.sideDeck.cards;
+
+  const target =
+    mode === 'main'
+      ? deck.cards
+      : deck.sideDeck.cards;
 
   const existingIndex = target.findIndex(c => c.id === deckCard.id);
-  const existingAmount = existingIndex !== -1
-    ? (target[existingIndex].amount ?? 0)
-    : 0;
 
-  // =============================
-  // 🔹 ELIMINAR CARTA
-  // =============================
+  const existingAmount =
+    existingIndex !== -1
+      ? (target[existingIndex].amount ?? 0)
+      : 0;
+
+  // ❌ Eliminar carta si amount <= 0
   if (deckCard.amount <= 0) {
-    if (existingIndex !== -1) target.splice(existingIndex, 1);
+    if (existingIndex !== -1) {
+      target.splice(existingIndex, 1);
+    }
 
-    if (mode === 'main') deck.cards = target;
-    else deck.sideDeck.cards = target;
+    if (mode === 'main') {
+      deck.cards = target;
+    } else {
+      deck.sideDeck.cards = target;
+    }
 
     decks[deckIndex] = deck;
     await this.saveDecks(decks);
@@ -188,54 +198,26 @@ async upsertCardInDeck(
     return 0;
   }
 
-  // =============================
-  // 🔥 CAP DEL MAZO (40 / 15)
-  // =============================
   const isSide = mode === 'side';
   const cap = isSide ? 15 : 40;
 
-  const currentTotal = target.reduce(
-    (acc, c) => acc + (c.amount ?? 0),
-    0
-  );
+  // Total sin contar esta carta
+  const totalExcludingThis = target.reduce((acc, c) => {
+    if (c.id === deckCard.id) return acc;
+    return acc + (c.amount ?? 0);
+  }, 0);
 
-  // 🔹 permite modificar sin romper el total
-  const spaceLeft = cap - currentTotal + existingAmount;
+  const maxForThisGivenCap = cap - totalExcludingThis;
 
-  // =============================
-  // 🔥 LÍMITE POR CARTA (GLOBAL)
-  // =============================
-  const getCardLimit = (cardId: string): number => {
-    const rule = limitedCards.find(l => l.id === cardId);
-    return rule ? rule.copyLimit : 9999;
-  };
-
-  const limit = getCardLimit(deckCard.id);
-
-  const mainAmount = deck.cards.find(c => c.id === deckCard.id)?.amount ?? 0;
-  const sideAmount = deck.sideDeck.cards.find(c => c.id === deckCard.id)?.amount ?? 0;
-
-  // 🔹 restamos existingAmount porque ya está contado
-  const totalCopies = mainAmount + sideAmount - existingAmount;
-
-  const remainingCopies = limit - totalCopies;
-
-  // =============================
-  // 🔥 VALIDACIÓN FINAL
-  // =============================
-  if (spaceLeft <= 0 || remainingCopies <= 0) {
+  if (maxForThisGivenCap <= 0) {
     return existingAmount;
   }
 
   const finalAmount = Math.min(
     deckCard.amount,
-    spaceLeft,
-    remainingCopies
+    maxForThisGivenCap
   );
 
-  // =============================
-  // 🔹 INSERT / UPDATE
-  // =============================
   if (existingIndex !== -1) {
     target[existingIndex].amount = finalAmount;
   } else {
@@ -246,9 +228,6 @@ async upsertCardInDeck(
     });
   }
 
-  // =============================
-  // 🔹 GUARDAR
-  // =============================
   if (mode === 'main') {
     deck.cards = target;
   } else {
@@ -259,7 +238,6 @@ async upsertCardInDeck(
 
   await this.saveDecks(decks);
 
-  // ✅ SIEMPRE DEVOLVER
   return finalAmount;
 }
 
@@ -317,7 +295,7 @@ async saveImportedDeck(deck: Deck): Promise<Deck> {
 
   decks.push(normalizedDeck);
   await this.saveDecks(decks);
-
+console.log(normalizedDeck)
   return normalizedDeck;
 }
 

@@ -105,53 +105,66 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
     return this.rarityLimits[this.cardData.rarity ?? 'common'] ?? 4;
   }
 
-  async increase(): Promise<void> {
-    if (!this.deckId) return;
+async increase(): Promise<void> {
+  if (!this.deckId) return;
 
-    const isUnlimited = this.cardData.isSeal || this.cardData.isToken;
+  const isUnlimited = this.cardData.isSeal || this.cardData.isToken;
 
-    if (!isUnlimited) {
+  if (!isUnlimited) {
 
-      const limit = this.getCardLimit();
+    const limit = this.getCardLimit();
 
-      const rule = limitedCards.find(l => l.id === this.cardData.id);
+    const rule = limitedCards.find(l => l.id === this.cardData.id);
 
-    if (limit > 0 && this.count >= limit) {
+    // 🔥 cantidad actual en ambos decks
+    const mainCount = await this.deckService.getCardAmount(this.deckId, this.cardData.id);
+    const sideCount = await this.deckService.countCardInSideDeck(this.deckId, this.cardData.id);
 
+    const currentTotal = mainCount + sideCount;
+    // 🚫 VALIDACIÓN GLOBAL (MD + SD)
+    if (limit > 0 && currentTotal >= limit) {
+
+      // 🔥 SOLO SI TIENE LÍMITE ESPECIAL
       if (rule) {
         const singularPlural = limit === 1 ? 'copia' : 'copias';
 
         this.deckService.showToast(
-          `Esta carta permite ${limit} ${singularPlural} por reglamento.`,
+          `El límite de esta carta es ${limit} ${singularPlural} por reglamento.`,
           'info',
           'center'
         );
       }
 
       return;
-}
     }
-
-    const totalNow = this.mode === 'main'
-      ? await this.deckService.getTotalCardsCountInMain(this.deckId)
-      : await this.deckService.getTotalCardsCountInSide(this.deckId);
-
-    const cap = this.mode === 'main' ? 40 : 15;
-
-    if (totalNow >= cap) {
-      this.deckService.showToast(
-        this.mode === 'main'
-          ? 'El mazo principal ya está completo.'
-          : 'El Side Deck ya está completo.',
-        'warning',
-        'center'
-      );
-      return;
-    }
-
-    this.count++;
-    this.saveSubject.next(this.count);
   }
+
+  // =============================
+  // 🔥 CAP DEL MAZO
+  // =============================
+  const totalNow = this.mode === 'main'
+    ? await this.deckService.getTotalCardsCountInMain(this.deckId)
+    : await this.deckService.getTotalCardsCountInSide(this.deckId);
+
+  const cap = this.mode === 'main' ? 40 : 15;
+
+  if (totalNow >= cap) {
+    this.deckService.showToast(
+      this.mode === 'main'
+        ? 'El mazo principal ya está completo.'
+        : 'El Side Deck ya está completo.',
+      'warning',
+      'center'
+    );
+    return;
+  }
+
+  // =============================
+  // ✅ INCREMENTO
+  // =============================
+  this.count++;
+  this.saveSubject.next(this.count);
+}
 
   decrease(): void {
     if (this.count > 0) {
