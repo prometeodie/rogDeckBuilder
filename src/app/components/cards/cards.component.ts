@@ -173,75 +173,134 @@ async increase(): Promise<void> {
     }
   }
 
-  private async attemptSave(amount: number): Promise<void> {
+private async attemptSave(amount: number): Promise<void> {
 
-    if (!this.deckId) return;
+  if (!this.deckId) return;
 
-    const deck = await this.deckService.getDeckById(this.deckId);
+  const deck = await this.deckService.getDeckById(this.deckId);
 
-    let prevSaved = 0;
+  let prevSaved = 0;
 
-    if (deck) {
-      const source = this.mode === 'main'
-        ? (deck.cards ?? [])
-        : (deck.sideDeck?.cards ?? []);
+  if (deck) {
+    const source = this.mode === 'main'
+      ? (deck.cards ?? [])
+      : (deck.sideDeck?.cards ?? []);
 
-      const found = source.find(c => c.id === this.cardData.id);
-      prevSaved = found ? (found.amount ?? 0) : 0;
-    }
-
-    const deckCard: DeckCard = {
-      id: this.cardData.id,
-      faction: this.cardData.faction,
-      amount
-    };
-
-    const finalAmount = await this.deckService.upsertCardInDeck(
-      this.deckId,
-      deckCard,
-      this.mode
-    );
-
-    if (finalAmount !== this.count) {
-      this.count = finalAmount;
-
-      if (finalAmount < amount) {
-        this.deckService.showToast(
-          this.mode === 'main'
-            ? 'Se alcanzó el límite del mazo principal. Cantidad ajustada.'
-            : 'Se alcanzó el límite del Side Deck. Cantidad ajustada.',
-          'warning',
-          'center'
-        );
-      }
-    }
-
-    const added = finalAmount > prevSaved;
-
-    if (added) {
-      if (this.cardData.banned) {
-        this.deckService.showToast(
-          'Atención: agregaste una carta BANEADA.',
-          'error',
-          'top'
-        );
-      }
-
-      if ((this.cardData as any).isToken) {
-        this.deckService.showToast(
-          'Agregaste un TOKEN al mazo.',
-          'info',
-          'top'
-        );
-      }
-    }
-
-    this.amountChange.emit({
-      id: this.cardData.id,
-      amount: finalAmount,
-      mode: this.mode
-    });
+    const found = source.find(c => c.id === this.cardData.id);
+    prevSaved = found ? (found.amount ?? 0) : 0;
   }
+
+  // =============================
+  // 🔥 VALIDACIÓN GLOBAL + CLAMP
+  // =============================
+  const isUnlimited = this.cardData.isSeal || this.cardData.isToken;
+
+  let adjustedAmount = amount;
+
+  if (!isUnlimited) {
+
+    const limit = this.getCardLimit();
+    const rule = limitedCards.find(l => l.id === this.cardData.id);
+
+    const mainCount = await this.deckService.getCardAmount(this.deckId, this.cardData.id);
+    const sideCount = await this.deckService.countCardInSideDeck(this.deckId, this.cardData.id);
+
+    const currentTotal = mainCount + sideCount;
+
+    // 🔥 total sin lo que ya está en este slot
+    const totalWithoutCurrent = currentTotal - prevSaved;
+
+    // 🔥 total final deseado
+    const totalAfter = totalWithoutCurrent + amount;
+
+    console.log('🧮 attemptSave CHECK', {
+      currentTotal,
+      prevSaved,
+      requested: amount,
+      totalWithoutCurrent,
+      totalAfter,
+      limit
+    });
+
+    // 🔥 CLAMP (NO BLOQUEA)
+    if (limit > 0 && totalAfter > limit) {
+
+      adjustedAmount = Math.max(0, limit - totalWithoutCurrent);
+
+      const singularPlural = limit === 1 ? 'copia' : 'copias';
+
+      this.deckService.showToast(
+        `Máximo ${limit} ${singularPlural} entre Main y Side Deck.`,
+        'warning',
+        'center'
+      );
+    }
+  }
+
+  // =============================
+  // 🔹 GUARDAR
+  // =============================
+  const deckCard: DeckCard = {
+    id: this.cardData.id,
+    faction: this.cardData.faction,
+    amount: adjustedAmount
+  };
+
+  const finalAmount = await this.deckService.upsertCardInDeck(
+    this.deckId,
+    deckCard,
+    this.mode
+  );
+
+  // =============================
+  // 🔄 SINCRONIZACIÓN UI
+  // =============================
+  if (finalAmount !== this.count) {
+    this.count = finalAmount;
+
+    if (finalAmount < amount) {
+      this.deckService.showToast(
+        this.mode === 'main'
+          ? 'Se ajustó la cantidad por límite de copias.'
+          : 'Se ajustó la cantidad por límite de copias.',
+        'warning',
+        'center'
+      );
+    }
+  }
+
+  // =============================
+  // 🔔 TOASTS EXTRA
+  // =============================
+  const added = finalAmount > prevSaved;
+
+  if (added) {
+    if (this.cardData.banned) {
+      this.deckService.showToast(
+        'Atención: agregaste una carta BANEADA.',
+        'error',
+        'top'
+      );
+    }
+
+    if ((this.cardData as any).isToken) {
+      this.deckService.showToast(
+        'Agregaste un TOKEN al mazo.',
+        'info',
+        'top'
+      );
+    }
+  }
+
+  // =============================
+  // 📤 EMIT
+  // =============================
+  this.amountChange.emit({
+    id: this.cardData.id,
+    amount: finalAmount,
+    mode: this.mode
+  });
+}
 
   getOtherDeckAmount(): number {
   return this.mode === 'side'
