@@ -54,8 +54,8 @@ export class HomePage implements OnInit {
   public decks: Deck[] = [];
   public showSplash: boolean = false;
   public showNotes: boolean = false;
-  public currentNotesId: string = '8';
-  public noteImg: string = 'https://res.cloudinary.com/dzkxl45xy/image/upload/v1767813929/notes/WhatsApp_Image_2026-01-07_at_00.57.40_gzifby.jpg';
+  public currentNotesId: string = '9';
+  public noteImg: string = 'https://res.cloudinary.com/dzkxl45xy/image/upload/v1775699087/notes/WhatsApp_Image_2026-04-06_at_11.01.26_uvyxbk.jpg';
 
   constructor() {
       addIcons({

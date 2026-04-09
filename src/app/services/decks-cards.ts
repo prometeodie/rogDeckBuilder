@@ -152,6 +152,23 @@ export class DecksCardsService {
     return found ? found.amount : 0;
   }
 
+  async getLegendaryCardsCount(
+  deckId: string,
+  allCards: Card[]
+): Promise<number> {
+
+  const deck = await this.getDeckById(deckId);
+  if (!deck) return 0;
+
+  return deck.cards.reduce((acc, c) => {
+    const cardData = allCards.find(card => card.id === c.id);
+    if (cardData?.rarity === 'legendary') {
+      return acc + (c.amount ?? 0);
+    }
+    return acc;
+  }, 0);
+}
+
   // =============================
   // UPSERT CARD
   // =============================

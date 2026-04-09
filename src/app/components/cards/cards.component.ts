@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   IonCard, IonCardContent, IonButton, IonIcon, IonImg
@@ -49,6 +49,7 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
 
   private saveSubject = new Subject<number>();
   private sub?: Subscription;
+  private deckService = inject(DecksCardsService);
 
   private rarityLimits: Record<string, number> = {
     common: 4,
@@ -68,7 +69,7 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
     mercurio: 'SELLO-MERCURIO.png'
   };
 
-  constructor(private deckService: DecksCardsService) {
+  constructor() {
     addIcons({ 'remove': removeOutline, 'add': addOutline });
   }
 
@@ -212,15 +213,6 @@ private async attemptSave(amount: number): Promise<void> {
 
     // 🔥 total final deseado
     const totalAfter = totalWithoutCurrent + amount;
-
-    console.log('🧮 attemptSave CHECK', {
-      currentTotal,
-      prevSaved,
-      requested: amount,
-      totalWithoutCurrent,
-      totalAfter,
-      limit
-    });
 
     // 🔥 CLAMP (NO BLOQUEA)
     if (limit > 0 && totalAfter > limit) {
