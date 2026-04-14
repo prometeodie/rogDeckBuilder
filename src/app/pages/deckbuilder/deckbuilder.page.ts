@@ -145,19 +145,7 @@ const legendaryCount = this.deckService.getLegendaryCardsCountFromDeck(
   cardsMap
 );
 
-// 🔍 DEBUG
-console.log({
-  legendaryCount,
-  max: this.maxLegendsCardsAmount,
-  deckCards: this.currentDeck.cards,
-  sampleCard: this.allCards[0]
-});
-
-
 if (legendaryCount > this.maxLegendsCardsAmount) {
-  // await this.deckService.showConfirmAlert(
-  //   `Este mazo tiene ${legendaryCount} cartas legendarias, superando el límite actual de ${this.maxLegendsCardsAmount}.`
-  // );
 const confirmResult = window.confirm(
   `Este mazo tiene ${legendaryCount} cartas legendarias, superando el límite actual de ${this.maxLegendsCardsAmount}.`
 );
