@@ -79,7 +79,6 @@ export const NEPTUNO_CARDS: Card[] =[
       "Creo",
       "Cofre Codicia"
     ],
-    "copyLimit": 2
   },
   {
     "id": "1766788483837",

@@ -12,6 +12,7 @@ import { addIcons } from 'ionicons';
 import { addOutline, removeOutline } from 'ionicons/icons';
 import { RomanPipe } from 'src/app/pipes/roman-pipe';
 import { limitedCards } from 'src/cards/limited.cards';
+import { CardsLoaderService } from 'src/app/services/cards-loader-service';
 
 @Component({
   selector: 'card',
@@ -46,10 +47,12 @@ export class CardsComponent implements OnInit, OnDestroy, OnChanges {
 
   public count = 0;
   public imgLoaded = false;
+  public maxLegendsCardsAmount:number = 6;
 
   private saveSubject = new Subject<number>();
   private sub?: Subscription;
   private deckService = inject(DecksCardsService);
+  private cardsService = inject(CardsLoaderService);
 
   private rarityLimits: Record<string, number> = {
     common: 4,
@@ -110,22 +113,28 @@ async increase(): Promise<void> {
   if (!this.deckId) return;
 
   const isUnlimited = this.cardData.isSeal || this.cardData.isToken;
+  const cards = this.cardsService.allCards();
 
+  const cardsMap = new Map(cards.map(card => [card.id, card]));
+
+  const deck = await this.deckService.getDeckById(this.deckId);
+  if (!deck) return;
+
+  // =============================
+  // 🔥 VALIDACIÓN POR CARTA
+  // =============================
   if (!isUnlimited) {
 
     const limit = this.getCardLimit();
-
     const rule = limitedCards.find(l => l.id === this.cardData.id);
 
-    // 🔥 cantidad actual en ambos decks
     const mainCount = await this.deckService.getCardAmount(this.deckId, this.cardData.id);
     const sideCount = await this.deckService.countCardInSideDeck(this.deckId, this.cardData.id);
 
     const currentTotal = mainCount + sideCount;
-    // 🚫 VALIDACIÓN GLOBAL (MD + SD)
+
     if (limit > 0 && currentTotal >= limit) {
 
-      // 🔥 SOLO SI TIENE LÍMITE ESPECIAL
       if (rule) {
         const singularPlural = limit === 1 ? 'copia' : 'copias';
 
@@ -141,7 +150,7 @@ async increase(): Promise<void> {
   }
 
   // =============================
-  // 🔥 CAP DEL MAZO
+  // 🔥 CAP DEL MAZO (PRIORIDAD ALTA)
   // =============================
   const totalNow = this.mode === 'main'
     ? await this.deckService.getTotalCardsCountInMain(this.deckId)
@@ -155,6 +164,28 @@ async increase(): Promise<void> {
         ? 'El mazo principal ya está completo.'
         : 'El Side Deck ya está completo.',
       'warning',
+      'center'
+    );
+    return;
+  }
+
+  // =============================
+  // 🔥 VALIDACIÓN LEGENDARIAS
+  // =============================
+  const legendaryCount = deck.cards.reduce((acc, c) => {
+    const card = cardsMap.get(c.id);
+    return card?.rarity === 'legendary'
+      ? acc + (c.amount ?? 0)
+      : acc;
+  }, 0);
+
+  const isLegendary = this.cardData.rarity === 'legendary';
+  const nextLegendaryCount = isLegendary ? legendaryCount + 1 : legendaryCount;
+
+  if (nextLegendaryCount > this.maxLegendsCardsAmount) {
+    this.deckService.showToast(
+      `No podés tener más de ${this.maxLegendsCardsAmount} cartas legendarias en el mazo.`,
+      'info',
       'center'
     );
     return;

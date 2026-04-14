@@ -79,6 +79,7 @@ export class DeckbuilderPage implements OnInit, AfterViewInit {
   public selectedFactionTitle: string = 'jupiter';
   public searchTerm: string = '';
   public sortBy: SortBy = 'amount';
+  public maxLegendsCardsAmount: number = 6;
 
 
   public editingTitle = false;
@@ -135,6 +136,21 @@ async ngOnInit(): Promise<void> {
 
 this.updateSelectedCardsList();
 this.applySorting('amount');
+
+// 🔥 VALIDAR LEGENDARIAS ACÁ
+const cardsMap = new Map(this.allCards.map(card => [card.id, card]));
+
+const legendaryCount = this.deckService.getLegendaryCardsCountFromDeck(
+  this.currentDeck,
+  cardsMap
+);
+
+if (legendaryCount > this.maxLegendsCardsAmount) {
+  await this.deckService.showConfirmAlert(
+    `Este mazo tiene ${legendaryCount} cartas legendarias, superando el límite actual de ${this.maxLegendsCardsAmount}.`
+  );
+}
+
 
 const result = this.deckService.checkLimitedCards(this.currentDeck);
 
