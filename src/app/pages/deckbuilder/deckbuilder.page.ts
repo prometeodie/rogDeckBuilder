@@ -158,6 +158,12 @@ if (legendaryCount > this.maxLegendsCardsAmount) {
   await this.deckService.showConfirmAlert(
     `Este mazo tiene ${legendaryCount} cartas legendarias, superando el límite actual de ${this.maxLegendsCardsAmount}.`
   );
+const confirmResult = window.confirm(
+  `Este mazo tiene ${legendaryCount} cartas legendarias, superando el límite actual de ${this.maxLegendsCardsAmount}.`
+);
+
+if (!confirmResult) return;
+  return;
 }
 
 
