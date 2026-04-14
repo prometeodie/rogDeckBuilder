@@ -312,7 +312,6 @@ async saveImportedDeck(deck: Deck): Promise<Deck> {
 
   decks.push(normalizedDeck);
   await this.saveDecks(decks);
-console.log(normalizedDeck)
   return normalizedDeck;
 }
 
