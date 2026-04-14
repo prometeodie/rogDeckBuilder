@@ -160,7 +160,10 @@ getLegendaryCardsCountFromDeck(
   return deck.cards.reduce((acc, c) => {
     const cardData = cardsMap.get(c.id);
 
-    return cardData?.rarity === 'legendary'
+    const isLegendary =
+      cardData?.rarity?.toLowerCase().trim() === 'legendary';
+
+    return isLegendary
       ? acc + (c.amount ?? 0)
       : acc;
   }, 0);

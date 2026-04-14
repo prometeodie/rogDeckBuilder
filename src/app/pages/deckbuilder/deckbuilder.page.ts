@@ -145,7 +145,14 @@ const legendaryCount = this.deckService.getLegendaryCardsCountFromDeck(
   cardsMap
 );
 
-console.log('Legendary count:', legendaryCount);
+// 🔍 DEBUG
+console.log({
+  legendaryCount,
+  max: this.maxLegendsCardsAmount,
+  deckCards: this.currentDeck.cards,
+  sampleCard: this.allCards[0]
+});
+
 
 if (legendaryCount > this.maxLegendsCardsAmount) {
   await this.deckService.showConfirmAlert(
