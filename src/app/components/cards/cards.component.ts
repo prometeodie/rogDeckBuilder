@@ -172,23 +172,25 @@ async increase(): Promise<void> {
   // =============================
   // 🔥 VALIDACIÓN LEGENDARIAS
   // =============================
-  const legendaryCount = deck.cards.reduce((acc, c) => {
-    const card = cardsMap.get(c.id);
-    return card?.rarity === 'legendary'
-      ? acc + (c.amount ?? 0)
-      : acc;
-  }, 0);
+  if(this.mode ==='main'){
+    const legendaryCount = deck.cards.reduce((acc, c) => {
+      const card = cardsMap.get(c.id);
+      return card?.rarity === 'legendary'
+        ? acc + (c.amount ?? 0)
+        : acc;
+    }, 0);
 
-  const isLegendary = this.cardData.rarity === 'legendary';
-  const nextLegendaryCount = isLegendary ? legendaryCount + 1 : legendaryCount;
+    const isLegendary = this.cardData.rarity === 'legendary';
+    const nextLegendaryCount = isLegendary ? legendaryCount + 1 : legendaryCount;
 
-  if (nextLegendaryCount > this.maxLegendsCardsAmount) {
-    this.deckService.showToast(
-      `No podés tener más de ${this.maxLegendsCardsAmount} cartas legendarias en el mazo.`,
-      'info',
-      'center'
-    );
-    return;
+    if (nextLegendaryCount > this.maxLegendsCardsAmount) {
+      this.deckService.showToast(
+        `No podés tener más de ${this.maxLegendsCardsAmount} cartas legendarias en el mazo.`,
+        'info',
+        'center'
+      );
+      return;
+    }
   }
 
   // =============================
