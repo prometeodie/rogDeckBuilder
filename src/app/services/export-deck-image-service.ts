@@ -39,8 +39,9 @@ export class ExportDeckImageService {
    *   EXPORTAR COMPONENTE lIST
    * ========================================== *
    */
-  async exportCardList(deckName: string): Promise<void> {
+ async exportCardList(deckName: string): Promise<void> {
   const element = document.getElementById('card-list-export-area');
+  console.log(deckName);
 
   if (!element) {
     console.error('No se encontró #card-list-export-area');
@@ -55,9 +56,12 @@ export class ExportDeckImageService {
 
   const dataUrl = canvas.toDataURL('image/png');
 
+  const now = new Date();
+  const timestamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}`;
+
   const link = document.createElement('a');
   link.href = dataUrl;
-  link.download = `${deckName}-lista.png`;
+  link.download = `${deckName}-lista-${timestamp}.png`;
   link.click();
 }
 

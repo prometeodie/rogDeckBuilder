@@ -39,7 +39,8 @@
            [mainCards]="expandedMain()"
            [sideCards]="expandedSide()"
            [sideCardsAmount]="totalSideCards()"
-           [mainCardsAmount]="totalMainCards()"/>
+           [mainCardsAmount]="totalMainCards()"
+           [deckName] = "deck()!.name" />
     }
 
     @if (currentView() === 'view3') {
