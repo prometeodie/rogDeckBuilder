@@ -138,4 +138,61 @@ ion-list {
   }
 }
 
+/* =========================================================
+   ===================== EXPORT LIST IMG ======================
+   ========================================================= */
 
+.export-area {
+  position: fixed;
+  top: -9999px;
+  left: -9999px;
+  width: 360px;
+  padding: 24px;
+  background: #1a1a2e;
+  color: #ffffff;
+  font-family: inherit;
+
+  .export-title {
+    font-size:smaller;
+    text-align: center;
+  }
+
+  .export-section-title {
+    font-size: 13px;
+    font-weight: bold;
+    color: #aaa;
+    margin: 12px 0 6px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 4px;
+  }
+
+  .export-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+    font-size: 14px;
+
+    .export-qty {
+      color: #ccc;
+      min-width: 30px;
+      text-align: right;
+    }
+  }
+}
+
+.main-deck-label {
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  .label-text {
+    flex: 1;
+    text-align: center;
+  }
+
+  ion-button {
+    --color: #ffffff;
+    position: absolute;
+    right: 1rem;
+  }
+}

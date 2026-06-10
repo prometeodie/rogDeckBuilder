@@ -35,6 +35,32 @@ export class ExportDeckImageService {
     link.click();
   }
 
+   /** ==========================================
+   *   EXPORTAR COMPONENTE lIST
+   * ========================================== *
+   */
+  async exportCardList(deckName: string): Promise<void> {
+  const element = document.getElementById('card-list-export-area');
+
+  if (!element) {
+    console.error('No se encontró #card-list-export-area');
+    return;
+  }
+
+  const canvas = await html2canvas(element, {
+    scale: 2,
+    backgroundColor: null,
+    useCORS: true
+  });
+
+  const dataUrl = canvas.toDataURL('image/png');
+
+  const link = document.createElement('a');
+  link.href = dataUrl;
+  link.download = `${deckName}-lista.png`;
+  link.click();
+}
+
   /** ==========================================
    *   Esperar carga de imágenes
    * ========================================== */

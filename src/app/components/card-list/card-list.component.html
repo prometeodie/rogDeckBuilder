@@ -4,8 +4,11 @@
 
     <!-- MAIN DECK -->
     <ion-label class="main-deck-label">
-      MAZO <span>{{ mainCardsAmount }}/40</span>
-    </ion-label>
+    <span class="label-text">MAZO <span class="amount">{{ mainCardsAmount }}/40</span></span>
+    <ion-button fill="clear" size="default" (click)="exportList()">
+      <ion-icon name="download-outline" slot="icon-only" />
+    </ion-button>
+  </ion-label>
 
     @if (mainCards.length === 0) {
       <ion-item>
@@ -20,7 +23,7 @@
         class="card-row"
         (click)="openCloseViewer(card.data!.img)"
       >
-              <img
+        <img
           slot="start"
           class="thumb"
           [src]="card.data!.img"
@@ -50,18 +53,16 @@
     }
 
     @for (card of sideCards; track card.id) {
-
       <ion-item
         class="card-row"
         (click)="openCloseViewer(card.data!.img)"
       >
-                 <img
+        <img
           slot="start"
           class="thumb"
           [src]="card.data!.img"
           alt="card image"
         />
-
         <ion-label class="card-name">
           {{ card.data?.name }}
         </ion-label>
@@ -69,9 +70,7 @@
         <div class="card-amount">
           x{{ card.amount }}
         </div>
-
       </ion-item>
-
     }
 
   </ion-list>
@@ -84,3 +83,24 @@
     [img]="img"
   />
 }
+
+<!-- DIV OCULTO PARA EXPORTAR -->
+<div id="card-list-export-area" class="export-area">
+
+  <div class="export-section-title">MAZO ({{ mainCardsAmount }}/40)</div>
+  @for (card of sortedMainCards; track card.id) {
+    <div class="export-row">
+      <span class="export-name">{{ card.data?.name }}</span>
+      <span class="export-qty">x{{ card.amount }}</span>
+    </div>
+  }
+
+  <div class="export-section-title">SIDE DECK ({{ sideCardsAmount }}/15)</div>
+  @for (card of sortedSideCards; track card.id) {
+    <div class="export-row">
+      <span class="export-name">{{ card.data?.name }}</span>
+      <span class="export-qty">x{{ card.amount }}</span>
+    </div>
+  }
+  <h6 class="export-title">BY: SHO</h6>
+</div>
