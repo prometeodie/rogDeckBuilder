@@ -41,7 +41,6 @@ export class ExportDeckImageService {
    */
  async exportCardList(deckName: string): Promise<void> {
   const element = document.getElementById('card-list-export-area');
-  console.log(deckName);
 
   if (!element) {
     console.error('No se encontró #card-list-export-area');
